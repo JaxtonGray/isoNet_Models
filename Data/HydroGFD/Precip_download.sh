@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --account=def-stadnykt-ab
-#SBATCH --job-name=Wind_Download
+#SBATCH --job-name=Precip_Download
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=16
 #SBATCH --mem=64000MB
