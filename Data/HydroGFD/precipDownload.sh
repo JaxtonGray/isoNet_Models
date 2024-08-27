@@ -17,9 +17,3 @@ pip install --no-index -r req_download.txt
 
 # Run the program
 python downloadPrecip.py
-
-# Extract the zip file within the datasets folder
-unzip -o datasets/precipDownload.zip -d datasets/
-
-# Remove the zip file
-rm datasets/precipDownload.zip
