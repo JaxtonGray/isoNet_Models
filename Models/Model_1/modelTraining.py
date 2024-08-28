@@ -61,5 +61,13 @@ es = EarlyStopping(monitor='val_loss', mode='min', verbose=1, patience=100, rest
 model.fit(xTrain, yTrain, epochs=1000, batch_size=32, validation_data=(xVal, yVal), callbacks=[es], verbose=0)
 
 
+# Export model testing data
+testData = pd.DataFrame(xTest, columns=features.columns)
+testData['O18 (‰) Actual'] = yTest[:,0]
+testData['H2 (‰) Actual'] = yTest[:,1]
+testData['O18 (‰) Predicted'] = model.predict(xTest)[:,0]
+testData['H2 (‰) Predicted'] = model.predict(xTest)[:,1]
+testData.to_csv('Model_1_TestData.csv', index=False)
+
 # Save the model
 model.save('model.keras')
