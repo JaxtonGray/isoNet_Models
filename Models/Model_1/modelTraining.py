@@ -1,7 +1,6 @@
 # Importing the correct libraries
 import numpy as np
 import pandas as pd
-import datetime as dt
 
 # TensorFlow and Scikit Learn libraries
 import tensorflow as tf
@@ -15,7 +14,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler
 
 # Importing the data
-dataset = pd.read_csv('DataCleaned.csv')
+dataset = pd.read_csv('Data/GNIP/GNIP_Cleaned.csv')
 
 # Separate into targets and features
 targets = dataset[['O18 (‰)', 'H2 (‰)']]
