@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --account=def-stadnykt-ab
-#SBATCH --job-name=pythonTest1
+#SBATCH --job-name=model_training
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=64000MB
