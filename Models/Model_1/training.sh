@@ -2,6 +2,7 @@
 #SBATCH --account=def-stadnykt-ab
 #SBATCH --job-name=model_training
 #SBATCH --nodes=1
+#SBATCH --cpus-per-task=16
 #SBATCH --gpus-per-task=2
 #SBATCH --mem=64000MB
 #SBATCH --time=1:00:00
