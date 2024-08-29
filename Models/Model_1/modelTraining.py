@@ -62,7 +62,7 @@ model.fit(xTrain, yTrain, epochs=1000, batch_size=32, validation_data=(xVal, yVa
 
 
 # Export model testing data
-testData = pd.DataFrame(xTest, columns=features.columns)
+testData = pd.DataFrame(scaler.inverse_transform(xTest), columns=features.columns)
 testData['O18 (‰) Actual'] = yTest[:,0]
 testData['H2 (‰) Actual'] = yTest[:,1]
 testData['O18 (‰) Predicted'] = model.predict(xTest)[:,0]
