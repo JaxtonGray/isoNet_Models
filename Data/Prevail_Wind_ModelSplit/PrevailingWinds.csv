@@ -1,7 +1,7 @@
 Prevailing Wind,Geometry
-PolarWesterlies_NW,"POLYGON((0 30, 0 90, -180 90, -180 30, 0 30))"
-Trade_W,"POLYGON((0 -30, 0 30, -180 30, -180 -30, 0 -30))"
-PolarWesterlies_SW,"POLYGON((0 -30, 0 -90, -180 -90, -180 -30, 0 -30))"
-PolarWesterlies_NE,"POLYGON((0 30, 0 90, 180 90, 180 30, 0 30))"
-Trade_E,"POLYGON((0 -30, 0 30, 180 30, 180 -30, 0 -30))"
-PolarWesterlies_SE,"POLYGON((0 -30, 0 -90, 180 -90, 180 -30, 0 -30))"
+PolarWesterlies_NW,"POLYGON((-17 30, -17 90, -180 90, -180 30, -17 30))"
+Trade_W,"POLYGON((-17 -30, -17 30, -180 30, -180 -30, -17 -30))"
+PolarWesterlies_SW,"POLYGON((-17 -30,-17 -90, -180 -90, -180 -30, -17 -30))"
+PolarWesterlies_NE,"POLYGON((-17 30, -17 90, 180 90, 180 30, -17 30))"
+Trade_E,"POLYGON((-17 -30, -17 30, 180 30, 180 -30, -17 -30))"
+PolarWesterlies_SE,"POLYGON((-17 -30, -17 -90, 180 -90, 180 -30, -17 -30))"
