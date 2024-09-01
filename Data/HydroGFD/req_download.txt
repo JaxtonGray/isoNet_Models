@@ -1,7 +1,0 @@
-cdsapi==0.2.4+computecanada
-certifi==2024.2.2+computecanada
-charset_normalizer==3.2.0+computecanada
-idna==3.4+computecanada
-requests==2.31.0+computecanada
-tqdm==4.66.5+computecanada
-urllib3==2.1.0+computecanada
