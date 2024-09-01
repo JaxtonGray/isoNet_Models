@@ -9,4 +9,4 @@ request = {
 }
 
 client = cdsapi.Client()
-client.retrieve(dataset, request, 'datasets/test.zip').download()
+client.retrieve(dataset, request, 'datasets/precip.zip').download()
