@@ -14,6 +14,6 @@ virtualenv --no-download $SLURM_TMPDIR/env
 source $SLURM_TMPDIR/env/bin/activate
 
 pip install --no-index --upgrade pip
-pip install --no-index -r req_clean.txt
+pip install --no-index -r requirements.txt
 
 python DataClean_Combine.py
