@@ -62,6 +62,7 @@ def dataSetup(modelData, modelName):
     # Create the sin transformation for the julian day
     features['JulianDay_Sin'] = np.sin(2 * np.pi * features['JulianDay'] / 365)
     features.drop(columns=['Date', 'JulianDay'], inplace=True)
+    trainingCols = features.columns
 
     # Create the Scaler object and fit the features
     scaler = MinMaxScaler()
@@ -75,7 +76,7 @@ def dataSetup(modelData, modelName):
     xVal, yVal = xTrain[:int(len(xTrain)*0.2)], yTrain[:int(len(yTrain)*0.2)]
     xTrain, yTrain = xTrain[int(len(xTrain)*0.2):], yTrain[int(len(yTrain)*0.2):]
 
-    return xTrain, xVal, xTest, yTrain, yVal, yTest, scaler
+    return xTrain, xVal, xTest, yTrain, yVal, yTest, scaler, trainingCols
 
 
 # %%
@@ -105,7 +106,7 @@ def trainAllModels(modelData):
     testData = {}
     for modelName in modelData.keys():
         # Setup the data for the model
-        xTrain, xVal, xTest, yTrain, yVal, yTest, scaler = dataSetup(modelData, modelName)
+        xTrain, xVal, xTest, yTrain, yVal, yTest, scaler, trainingCols = dataSetup(modelData, modelName)
         numFeatures = xTrain.shape[1]
 
         # Create the model
@@ -118,11 +119,11 @@ def trainAllModels(modelData):
         # Store the test data in the dictionary
         testData[modelName] = [xTest, yTest, scaler]
 
-    return models, testData
+    return models, testData, trainingCols
 
 # %%
 # This function will predict the values for the test data based on geography
-def predictValues(models, testData, cols):
+def predictValues(models, testData, trainingCols):
     # Create an empty dictionary to store the predictions
     predictions = {}
     for modelName in models.keys():
@@ -139,13 +140,18 @@ def predictValues(models, testData, cols):
         predictions[modelName] = [xTest, yPred, yTest]
     
     # Combine the predictions into a single dataframe
+    cols = trainingCols + ['O18A', 'H2A','O18P', 'H2P']
     predDF = pd.DataFrame(columns=cols)
     for modelName in predictions.keys():
         xTest, yPred, yTest = predictions[modelName]
-        tempDF = pd.DataFrame(xTest, columns=cols[:-2])
-        tempDF['O18'] = yPred[:,0]
-        tempDF['H2'] = yPred[:,1]
+        tempDF = pd.DataFrame(xTest, columns=trainingCols)
+        tempDF[cols[-4]] = yTest[:,0]
+        tempDF[cols[-3]] = yTest[:,1]
+        tempDF[cols[-2]] = yPred[:,0]
+        tempDF[cols[-1]] = yPred[:,1]
         predDF = pd.concat([predDF, tempDF], ignore_index=True)
+
+    return predDF
 
 # %%
 # Export all information to file
@@ -162,11 +168,6 @@ def exportData(models, predDF):
 def main():
     # Importing the data
     df, cols, modelData = importData()
-    models, testData = trainAllModels(modelData)
-    predictions = predictValues(models, testData, cols)
+    models, testData, trainingCols = trainAllModels(modelData)
+    predictions = predictValues(models, testData, trainingCols)
     exportData(models, predictions)
-
-# %%
-main()
-
-
