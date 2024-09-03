@@ -139,12 +139,23 @@ def predictValues(models, testData, cols):
         predictions[modelName] = [xTest, yPred, yTest]
     
     # Combine the predictions into a single dataframe
-    predDF = pd.DataFrame()
+    predDF = pd.DataFrame(columns=cols)
     for modelName in predictions.keys():
         xTest, yPred, yTest = predictions[modelName]
+        tempDF = pd.DataFrame(xTest, columns=cols[:-2])
+        tempDF['O18'] = yPred[:,0]
+        tempDF['H2'] = yPred[:,1]
+        predDF = pd.concat([predDF, tempDF], ignore_index=True)
 
-        # Create a dataframe for the predictions
-    return predictions
+# %%
+# Export all information to file
+def exportData(models, predDF):
+    # Export the models
+    for modelName in models.keys():
+        models[modelName].save(f'Trained_Models/{modelName}.keras')
+    
+    # Export the predictions
+    predDF.to_csv('Model_2_TestData.csv', index=False)
 
 # %%
 # Main function to call all the other functions
@@ -153,7 +164,7 @@ def main():
     df, cols, modelData = importData()
     models, testData = trainAllModels(modelData)
     predictions = predictValues(models, testData, cols)
-    return df
+    exportData(models, predictions)
 
 # %%
 main()
