@@ -94,7 +94,7 @@ def create_model(neurons, lr, numFeatures):
 # %%
 # This function will train a model
 def modelTrain(model, xTrain, yTrain, xVal, yVal, epochs):
-    earlyStop = EarlyStopping(monitor='val_loss', mode='min', patience=10, verbose=1)
+    earlyStop = EarlyStopping(monitor='val_loss', mode='min', patience=150, verbose=1)
     model.fit(xTrain, yTrain, epochs=epochs, validation_data=(xVal, yVal), callbacks=[earlyStop], verbose=0)
     return model
 
@@ -111,7 +111,7 @@ def trainAllModels(modelData):
 
         # Create the model
         model = create_model(64, 0.001, numFeatures)
-        model = modelTrain(model, xTrain, yTrain, xVal, yVal, 500)
+        model = modelTrain(model, xTrain, yTrain, xVal, yVal, 1000)
 
         # Store the model in the dictionary
         models[modelName] = model
@@ -119,7 +119,7 @@ def trainAllModels(modelData):
         # Store the test data in the dictionary
         testData[modelName] = [xTest, yTest, scaler]
 
-    return models, testData, trainingCols
+    return models, testData, list(trainingCols)
 
 # %%
 # This function will predict the values for the test data based on geography
@@ -171,3 +171,5 @@ def main():
     models, testData, trainingCols = trainAllModels(modelData)
     predictions = predictValues(models, testData, trainingCols)
     exportData(models, predictions)
+
+main()
