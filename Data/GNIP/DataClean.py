@@ -5,6 +5,7 @@
 import numpy as np
 import pandas as pd
 import xarray as xr
+from sklearn.model_selection import train_test_split
 import glob
 
 # Function to clean the GNIP data
@@ -106,11 +107,18 @@ def missingData(data, dictHydroGFD):
 
     return data
 
+# Split the data into training and testing sets (80% training, 20% testing) saved as GNIP_Train.csv and GNIP_Test.csv
+def splitData(data):
+    train, test = train_test_split(data, test_size=0.2)
+    train.to_csv('GNIP_Train.csv', index=False)
+    test.to_csv('GNIP_Test.csv', index=False)
+
+
 def main():
     df = cleanData()
     dictHydroGFD = loadHydroGFD()
     data = missingData(df, dictHydroGFD)
     data = data.to_csv('GNIP_CleanedTEST.csv', index=False)
-    return data
+    splitData(data)
 
 main()
