@@ -1,0 +1,13 @@
+certifi
+cftime
+h5netcdf
+h5py
+netCDF4
+numpy
+packaging
+pandas
+python_dateutil
+pytz
+six
+tzdata
+xarray

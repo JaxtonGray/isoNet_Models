@@ -85,7 +85,7 @@ def tempFinding(date, lat, lon, dictHydroGFD):
     # Find the HydroGFD file that contains the date
     for key in dictHydroGFD:
         if year >= key[0] and year <= key[1]:
-            file = dictHydroGFD[key][0]
+            file = dictHydroGFD[key][1]
             break
 
     # Load in the HydroGFD data
@@ -98,9 +98,12 @@ def tempFinding(date, lat, lon, dictHydroGFD):
 
 # Fill in the missing precipitation and temperature data in the GNIP data
 def missingData(data, dictHydroGFD):
-    # Find the missing precipitation and temperature data
-    data[data['Precip (mm)'].isnull()] = data.apply(lambda x: precipFinding(x['Date'], x['Lat'], x['Lon'], dictHydroGFD) if pd.isnull(x['Precip (mm)']) else x['Precip (mm)'], axis=1)
-    data[data['Temp (\u00B0C)'].isnull()] = data.apply(lambda x: tempFinding(x['Date'], x['Lat'], x['Lon'], dictHydroGFD) if pd.isnull(x['Temp (\u00B0C)']) else x['Temp (\u00B0C)'], axis=1)
+     # Fill in the missing precipitation data
+    data['Precip (mm)'] = data.apply(lambda x: precipFinding(x['Date'], x['Lat'], x['Lon'], dictHydroGFD) if pd.isnull(x['Precip (mm)']) else x['Precip (mm)'], axis=1)
+    
+    # Fill in the missing temperature data
+    data['Temp (\u00B0C)'] = data.apply(lambda x: tempFinding(x['Date'], x['Lat'], x['Lon'], dictHydroGFD) if pd.isnull(x['Temp (\u00B0C)']) else x['Temp (\u00B0C)'], axis=1)
+
 
     # Drop the rows with missing precipitation and temperature data
     data = data.dropna(subset=['Precip (mm)', 'Temp (\u00B0C)'])
@@ -118,7 +121,7 @@ def main():
     df = cleanData()
     dictHydroGFD = loadHydroGFD()
     data = missingData(df, dictHydroGFD)
-    data = data.to_csv('GNIP_CleanedTEST.csv', index=False)
+    data.to_csv('GNIP_Cleaned.csv', index=False)
     splitData(data)
 
 main()
