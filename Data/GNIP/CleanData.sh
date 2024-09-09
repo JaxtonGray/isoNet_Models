@@ -9,13 +9,11 @@
 #SBATCH --mail-type=BEGIN,END,FAIL
 
 # Setup the environment
-module load python/3.11 gcc/12.3  openmpi/4.1.5
+module load python/3.11
 virtualenv --no-download $SLURM_TMPDIR/env
 source $SLURM_TMPDIR/env/bin/activate
 
 pip install --no-index --upgrade pip
 pip install --no-index -r requirements.txt
-pip install --no-index numpy pandas netCDF4 xarray scikit-learn
 
-python DataClean.py
-
+python DataClean_Combine.py
