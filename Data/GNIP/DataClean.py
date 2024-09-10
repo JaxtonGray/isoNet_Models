@@ -93,6 +93,8 @@ def tempFinding(date, lat, lon, dictHydroGFD):
 
     # Find the temperature value
     tempValue = xrid['tasAdjust'].sel(lat=lat, lon=lon, time=date, method='nearest').item()
+    # Convert from K to C
+    tempValue -= 273.15
 
     return tempValue
 
