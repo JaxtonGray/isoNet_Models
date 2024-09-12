@@ -10,6 +10,7 @@
 
 # Setup the environment
 module load python/3.11 openmpi/4.1.5
+module load mpi4py/3.1.6
 virtualenv --no-download $SLURM_TMPDIR/env
 source $SLURM_TMPDIR/env/bin/activate
 
