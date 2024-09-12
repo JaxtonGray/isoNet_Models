@@ -56,7 +56,7 @@ def loadHydroGFD():
     return dictHydroGFD
 
 # This function will locate missing precipitation data using lat, lon, and date and return the precipitation value
-def precipFinding(date, lat, lon, dictHydroGFD):
+def precipFinding(date, lat, lon, dictHydroGFD, prAdjustIndex):
     # Find the year of the date
     year = date.year
     date = date.tz_localize(None)
@@ -64,7 +64,7 @@ def precipFinding(date, lat, lon, dictHydroGFD):
     # Find the HydroGFD file that contains the date
     for key in dictHydroGFD:
         if year >= key[0] and year <= key[1]:
-            file = dictHydroGFD[key][0]
+            file = dictHydroGFD[key][prAdjustIndex]
             break
 
     # Load in the HydroGFD data
@@ -77,7 +77,7 @@ def precipFinding(date, lat, lon, dictHydroGFD):
     return precipValue
 
 # This function will locate missing temperature data using lat, lon, and date and return the temperature value
-def tempFinding(date, lat, lon, dictHydroGFD):
+def tempFinding(date, lat, lon, dictHydroGFD, tasAdjustIndex):
     # Find the year of the date
     year = date.year
     date = date.tz_localize(None)
@@ -85,7 +85,7 @@ def tempFinding(date, lat, lon, dictHydroGFD):
     # Find the HydroGFD file that contains the date
     for key in dictHydroGFD:
         if year >= key[0] and year <= key[1]:
-            file = dictHydroGFD[key][1]
+            file = dictHydroGFD[key][tasAdjustIndex]
             break
 
     # Load in the HydroGFD data
@@ -100,11 +100,18 @@ def tempFinding(date, lat, lon, dictHydroGFD):
 
 # Fill in the missing precipitation and temperature data in the GNIP data
 def missingData(data, dictHydroGFD):
+    if 'prAdjust' in dictHydroGFD[list(dictHydroGFD.keys())[0]][0]:
+        prAdjustIndex = 0
+        tasAdjustIndex = 1
+    else:
+        prAdjustIndex = 1
+        tasAdjustIndex = 0
+
      # Fill in the missing precipitation data
-    data['Precip (mm)'] = data.apply(lambda x: precipFinding(x['Date'], x['Lat'], x['Lon'], dictHydroGFD) if pd.isnull(x['Precip (mm)']) else x['Precip (mm)'], axis=1)
+    data['Precip (mm)'] = data.apply(lambda x: precipFinding(x['Date'], x['Lat'], x['Lon'], dictHydroGFD, prAdjustIndex) if pd.isnull(x['Precip (mm)']) else x['Precip (mm)'], axis=1)
     
     # Fill in the missing temperature data
-    data['Temp (\u00B0C)'] = data.apply(lambda x: tempFinding(x['Date'], x['Lat'], x['Lon'], dictHydroGFD) if pd.isnull(x['Temp (\u00B0C)']) else x['Temp (\u00B0C)'], axis=1)
+    data['Temp (\u00B0C)'] = data.apply(lambda x: tempFinding(x['Date'], x['Lat'], x['Lon'], dictHydroGFD, tasAdjustIndex) if pd.isnull(x['Temp (\u00B0C)']) else x['Temp (\u00B0C)'], axis=1)
 
 
     # Drop the rows with missing precipitation and temperature data
