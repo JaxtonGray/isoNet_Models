@@ -19,6 +19,11 @@ import geopandas as gpd
 def rmse(observed, predicted):
     return np.sqrt(np.mean((observed - predicted) ** 2))
 
+# Calculate mean residuals for a predicted and observed dataset
+# Assume that the observed and predicted datasets are pandas dataframes with the same length
+def meanResidual(observed, predicted):
+    return np.mean(predicted) - np.mean(observed)
+
 # Calculate the KGE for a predicted and observed dataset
 # Assume that the observed and predicted datasets are pandas dataframes with the same length
 def kge(observed, predicted):
@@ -87,13 +92,15 @@ def summaryStats(modelData, modelArch_name):
             regionalData[region[key]] = modelData[modelData.within(region.geometry)]
         
         # Calculate the stats for each region and store in a dictionary
-        regionalStats = pd.DataFrame(columns=["Region", "O18 KGE", "O18 RMSE", "H2 KGE", "H2 RMSE"])
+        regionalStats = pd.DataFrame(columns=["Region", "O18 KGE", "O18 RMSE","O18 Mean Residual", "H2 KGE", "H2 RMSE", "H2 Mean Residual"])
         for region, data in regionalData.items():
             stats = {"Region": region,
                      "O18 KGE": kge(data['O18 A'], data['O18 P']),
                      "O18 RMSE": rmse(data['O18 A'], data['O18 P']),
+                     "O18 Mean Residual": meanResidual(data['O18 A'], data['O18 P']),
                      "H2 KGE": kge(data['H2 A'], data['H2 P']),
-                     "H2 RMSE": rmse(data['H2 A'], data['H2 P']),}
+                     "H2 RMSE": rmse(data['H2 A'], data['H2 P']),
+                     "H2 Mean Residual": meanResidual(data['H2 A'], data['H2 P'])}
             statsDF = pd.DataFrame([stats], index=[0])
             regionalStats = pd.concat([regionalStats, statsDF], ignore_index=True)
         
@@ -102,8 +109,10 @@ def summaryStats(modelData, modelArch_name):
         # Calculate the stats for the entire model
         stats = {"O18 KGE": kge(modelData['O18 A'], modelData['O18 P']),
                  "O18 RMSE": rmse(modelData['O18 A'], modelData['O18 P']),
+                 "O18 Mean Residual": meanResidual(modelData['O18 A'], modelData['O18 P']),
                  "H2 KGE": kge(modelData['H2 A'], modelData['H2 P']),
-                 "H2 RMSE": rmse(modelData['H2 A'], modelData['H2 P']),}
+                 "H2 RMSE": rmse(modelData['H2 A'], modelData['H2 P']),
+                 "H2 Mean Residual": meanResidual(modelData['H2 A'], modelData['H2 P'])}
         
         return pd.DataFrame([stats])
 
