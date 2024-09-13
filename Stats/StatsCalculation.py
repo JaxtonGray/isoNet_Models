@@ -1,4 +1,3 @@
-# %%
 ####################################################################################################
 #  This will read in a model number and output the stats for that specific model.
 # It will calculate the KGE (Kling-Gupta Efficiency), RMSE, and Residuals for the model.
@@ -14,13 +13,11 @@ import numpy as np
 import pandas as pd
 import geopandas as gpd
 
-# %%
 # Caclulate the RMSE for a predicted and observed dataset
 # Assume that the observed and predicted datasets are pandas dataframes with the same length
 def rmse(observed, predicted):
     return np.sqrt(np.mean((observed - predicted) ** 2))
 
-# %%
 # Calculate the KGE for a predicted and observed dataset
 # Assume that the observed and predicted datasets are pandas dataframes with the same length
 def kge(observed, predicted):
@@ -40,7 +37,6 @@ def kge(observed, predicted):
     # Calculate the Kling-Gupta Efficiency
     return 1 - np.sqrt((r - 1) ** 2 + (alpha - 1) ** 2 + (beta - 1) ** 2)
 
-# %%
 # Create a function that will load in the model data and return a geopandas dataframe with the data and
 # the model architecture
 def readModelData(modelNum):
@@ -65,7 +61,6 @@ def readModelData(modelNum):
 
     return modelData, list(oldHeaders)
 
-# %%
 def readModelArch(modelArch_Name):
     # Load in the model architecture which will only need to be done if not "Global"
     if modelArch_Name != "Global":
@@ -76,7 +71,6 @@ def readModelArch(modelArch_Name):
     
     return modelArch
 
-# %%
 # Calculate the summary statistics for the model and return a dataframe with the results for each region
 # and if there are no regions, return the stats for the entire model.
 def summaryStats(modelData, modelArch_name):
@@ -112,7 +106,6 @@ def summaryStats(modelData, modelArch_name):
         
         return pd.DataFrame([stats])
 
-# %%
 # This function will cylce through all model architectures and calculate the stats for each model and return
 # a dictionary with the results: {modelArch_Name: stats, modelArch_Name2: stats2, ...}
 def allArchStats(modelData, mainArch):
@@ -133,19 +126,16 @@ def allArchStats(modelData, mainArch):
 
     return allArchsStats
 
-# %%
 # Export the stats to an excel file where each sheet is a different model architecture
 def exportStats(allsStats, modelNum):
     with pd.ExcelWriter(f"SummaryStats//Model_{modelNum}_Stats.xlsx") as writer:
         for arch, stats in allsStats.items():
             stats.to_excel(writer, sheet_name=arch, index=False)
 
-# %%
 # Convert Julian Day Sin to Julian Day
 def undoJulianDaySin(values):
     return np.ceil((np.arcsin(values) / np.pi + 0.5) * 365).astype(int)
 
-# %%
 # Caclulate the residuals and export them to a csv file
 def calculateResiduals(modelData, modelNum, oldHeaders):
     # Calculate the residuals for the model
@@ -174,7 +164,6 @@ def calculateResiduals(modelData, modelNum, oldHeaders):
     # Export the residuals to a csv file
     modelData.to_csv(f"Residuals//Model_{modelNum}_Residuals.csv", index=False)
 
-# %%
 def main():
     # Load in the model directory
     with open(r'../Models/modelDirectory.json', 'r') as file:
@@ -194,7 +183,6 @@ def main():
         calculateResiduals(modelData, modelNum, oldHeaders)
 
 
-# %%
 main()
 
 
