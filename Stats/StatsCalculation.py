@@ -9,6 +9,7 @@
 import json
 from glob import glob
 import re
+import os
 import numpy as np
 import pandas as pd
 import geopandas as gpd
@@ -128,6 +129,8 @@ def allArchStats(modelData, mainArch):
 
 # Export the stats to an excel file where each sheet is a different model architecture
 def exportStats(allsStats, modelNum):
+    if not os.path.exists("SummaryStats"):
+        os.mkdir("SummaryStats")
     with pd.ExcelWriter(f"SummaryStats//Model_{modelNum}_Stats.xlsx") as writer:
         for arch, stats in allsStats.items():
             stats.to_excel(writer, sheet_name=arch, index=False)
@@ -162,6 +165,8 @@ def calculateResiduals(modelData, modelNum, oldHeaders):
     
 
     # Export the residuals to a csv file
+    if not os.path.exists("Residuals"):
+        os.mkdir("Residuals")
     modelData.to_csv(f"Residuals//Model_{modelNum}_Residuals.csv", index=False)
 
 def main():
