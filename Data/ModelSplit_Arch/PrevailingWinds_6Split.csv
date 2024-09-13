@@ -1,4 +1,4 @@
-Prevailing Wind,Geometry
+Prevailing Wind,geometry
 PolarWesterlies_NW,"POLYGON((-17 30, -17 90, -180 90, -180 30, -17 30))"
 Trade_W,"POLYGON((-17 -30, -17 30, -180 30, -180 -30, -17 -30))"
 PolarWesterlies_SW,"POLYGON((-17 -30,-17 -90, -180 -90, -180 -30, -17 -30))"
