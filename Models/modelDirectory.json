@@ -1,0 +1,10 @@
+{
+    "model_1": {
+        "num": 1,
+        "arch": "Global"
+    },
+    "model_2": {
+        "num": 2,
+        "arch": "PrevailingWinds_6Split"
+    }
+}

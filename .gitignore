@@ -4,3 +4,5 @@ slurm*
 **/bin/
 **/lib/
 *.zip
+Stats/SummaryStats/*.xlsx
+Stats/Residuals/*.csv
