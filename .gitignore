@@ -14,4 +14,4 @@ slurm*
 # Just rerun the scripts to generate them
 Stats/SummaryStats/*.xlsx
 Stats/Residuals/*.csv
-Stats/Mapping/*.geojson
+Stats/Mapping/*
