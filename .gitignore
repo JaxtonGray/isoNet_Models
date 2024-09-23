@@ -15,3 +15,8 @@ slurm*
 Stats/SummaryStats/*.xlsx
 Stats/Residuals/*.csv
 Stats/Mapping/*
+
+# Ignore most of the files within the KPN folder, all that include the .tif extension
+# and the legend.txt file
+Data/KPN/**/*.tif
+Data/KPN/legend.txt
