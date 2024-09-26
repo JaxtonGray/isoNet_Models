@@ -19,6 +19,6 @@ pip install --no-index -r requirements.txt
 pip install --no-index tensorflow
 
 # Run the training script
-python ensembleModelTraining.py
+python modelTraining.py
 
 

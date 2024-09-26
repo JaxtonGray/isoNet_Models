@@ -1,4 +1,3 @@
-# %%
 # Importing the common libraries
 import numpy as np
 import pandas as pd
@@ -16,43 +15,42 @@ from tensorflow.keras.metrics import RootMeanSquaredError, MeanAbsoluteError
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler
 
-# %%
 # Create a function that imports the data and returns 6 dataframes for each of the 6 models
-def importData():
+def importTrainData():
     # Importing the data and convert to a GeoDF
-    df = pd.read_csv(r'../../Data/GNIP/GNIP_Cleaned.csv')
-    df['Date'] = pd.to_datetime(df['Date'], utc=True)
-    df = gpd.GeoDataFrame(df, geometry=gpd.points_from_xy(df.Lon, df.Lat, df.Alt)).set_crs('EPSG:4326')
-    cols = df.columns
+    dfTrain = pd.read_csv(r'../../Data/DataTrain.csv')
+    dfTrain['Date'] = pd.to_datetime(dfTrain['Date'], utc=True)
+    dfTrain = gpd.GeoDataFrame(dfTrain, geometry=gpd.points_from_xy(dfTrain.Lon, dfTrain.Lat, dfTrain.Alt)).set_crs('EPSG:4326')
+    cols = dfTrain.columns
 
     # Remove units from columns for easier processing
     codeCols = list(map(lambda x: re.sub(r'\(([^()]*)\)', '', x).strip(), cols))
-    df.columns = codeCols
+    dfTrain.columns = codeCols
 
     # Load in the PrevailingWinds file for which the model will be split on
     modelLocations = pd.read_csv(r'../../Data/ModelSplit_Arch/PrevailingWinds_6Split.csv')
-    modelLocations = gpd.GeoDataFrame(modelLocations, geometry=gpd.GeoSeries.from_wkt(modelLocations['Geometry']), crs="EPSG:4326")
-    modelLocations.drop(columns="Geometry", inplace=True)
-    modelLocations.set_index('Prevailing Wind', inplace=True)
+    modelLocations = gpd.GeoDataFrame(modelLocations, geometry=gpd.GeoSeries.from_wkt(modelLocations['geometry']), crs="EPSG:4326")
+    modelLocations.drop(columns="geometry", inplace=True)
+    modelLocations.set_index('Region', inplace=True)
 
     # Create an empty dictionary that will contain each of the modelDatasets to train with
     modelData = {}
     for modelLoc in modelLocations.index:
         # Create a new dataframe for each of the model locations and store it in the dictionary
-        modelData[modelLoc] = df[df.within(modelLocations.loc[modelLoc].geometry)].copy()
+        modelData[modelLoc] = dfTrain[dfTrain.within(modelLocations.loc[modelLoc].geometry)].copy()
         modelData[modelLoc] = pd.DataFrame(modelData[modelLoc])
         # Drop the geometry column as it is not needed for the model
         modelData[modelLoc].drop(columns='geometry', inplace=True)
 
-    return df, cols, modelData
+    return dfTrain, cols, modelData
 
-# %%
 # Now we will have a function that will setup the data for the model
 def dataSetup(modelData, modelName):
     # Create the features and target variables
     dataset = modelData[modelName]
     targets = dataset[['O18', 'H2']]
-    features = dataset.drop(columns=['O18', 'H2'])
+    featureList = ['Lat', 'Lon', 'Alt', 'Precip', 'Temp']
+    features = dataset[featureList]
 
     # Extract the year and julian day from the date, convert to sin transformation for julian day
     features['Date'] = pd.to_datetime(features['Date'], utc=True)
@@ -69,17 +67,13 @@ def dataSetup(modelData, modelName):
     X = scaler.fit_transform(features.values)
     y = targets.values
 
-    # Split the data into training and testing
-    xTrain, xTest, yTrain, yTest = train_test_split(X, y, test_size=0.2, random_state=42)
-
     # Split the training data into training and validation
     xVal, yVal = xTrain[:int(len(xTrain)*0.2)], yTrain[:int(len(yTrain)*0.2)]
     xTrain, yTrain = xTrain[int(len(xTrain)*0.2):], yTrain[int(len(yTrain)*0.2):]
 
-    return xTrain, xVal, xTest, yTrain, yVal, yTest, scaler, trainingCols
+    return xTrain, xVal, yTrain, yVal, scaler, trainingCols
 
 
-# %%
 # Create a function that will create the model
 def create_model(neurons, lr, numFeatures):
     model = Sequential()
@@ -91,22 +85,19 @@ def create_model(neurons, lr, numFeatures):
     model.compile(optimizer=Adam(learning_rate=lr), loss='mse', metrics=[RootMeanSquaredError(), MeanAbsoluteError()])
     return model
 
-# %%
 # This function will train a model
 def modelTrain(model, xTrain, yTrain, xVal, yVal, epochs):
     earlyStop = EarlyStopping(monitor='val_loss', mode='min', patience=150, verbose=1)
     model.fit(xTrain, yTrain, epochs=epochs, validation_data=(xVal, yVal), callbacks=[earlyStop], verbose=0)
     return model
 
-# %%
 # This function will go through the process of training each of the models
 def trainAllModels(modelData):
     # Cycle through each of the models and create an empty dictionary to store the models
     models = {}
-    testData = {}
     for modelName in modelData.keys():
         # Setup the data for the model
-        xTrain, xVal, xTest, yTrain, yVal, yTest, scaler, trainingCols = dataSetup(modelData, modelName)
+        xTrain, xVal, yTrain, yVal, scaler, trainingCols = dataSetup(modelData, modelName)
         numFeatures = xTrain.shape[1]
 
         # Create the model
@@ -116,12 +107,38 @@ def trainAllModels(modelData):
         # Store the model in the dictionary
         models[modelName] = model
 
-        # Store the test data in the dictionary
-        testData[modelName] = [xTest, yTest, scaler]
+    return models, list(trainingCols), scaler
 
-    return models, testData, list(trainingCols)
+# This function will import the test data and setup the data for the model and scale it
+def importTestData(cols, scaler, modelData):
+    testData = pd.read_csv(r'../../Data/DataTest.csv')
+    testData['Date'] = pd.to_datetime(testData['Date'], utc=True)
+    testData = gpd.GeoDataFrame(testData, geometry=gpd.points_from_xy(testData.Lon, testData.Lat, testData.Alt)).set_crs('EPSG:4326')
+    testDict = {}
+    for modelName in modelData.keys():
+        dataset = modelData[modelName]
+        testDict[modelName] = testData[testData.within(dataset.total_bounds)].copy()
+        testDict[modelName] = pd.DataFrame(testDict[modelName])
+        testDict[modelName].drop(columns='geometry', inplace=True)
 
-# %%
+        # Extract the year and julian day from the date, convert to sin transformation for julian day
+        features = testDict[modelName][cols]
+        features['Date'] = pd.to_datetime(features['Date'], utc=True)
+        features['Year'] = features['Date'].dt.year
+        features['JulianDay'] = features['Date'].dt.dayofyear
+
+        # Create the sin transformation for the julian day
+        features['JulianDay_Sin'] = np.sin(2 * np.pi * features['JulianDay'] / 365)
+        features.drop(columns=['Date', 'JulianDay'], inplace=True)
+
+        # Scale the features
+        xTest = scaler.transform(features.values)
+        yTest = testDict[modelName][['O18', 'H2']].values
+
+        # Store the data in the dictionary
+        testDict[modelName] = [xTest, yTest, scaler]
+    return testDict
+
 # This function will predict the values for the test data based on geography
 def predictValues(models, testData, trainingCols):
     # Create an empty dictionary to store the predictions
@@ -153,7 +170,6 @@ def predictValues(models, testData, trainingCols):
 
     return predDF
 
-# %%
 # Export all information to file
 def exportData(models, predDF):
     # Export the models
@@ -163,11 +179,11 @@ def exportData(models, predDF):
     # Export the predictions
     predDF.to_csv('Model_2_TestData.csv', index=False)
 
-# %%
 # Main function to call all the other functions
 def main():
     # Importing the data
-    df, cols, modelData = importData()
+    dfTrain, cols, modelData = importTrainData()
+    testData = importTestData(cols, modelData)
     models, testData, trainingCols = trainAllModels(modelData)
     predictions = predictValues(models, testData, trainingCols)
     exportData(models, predictions)

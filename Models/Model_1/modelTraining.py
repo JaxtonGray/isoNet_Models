@@ -14,31 +14,30 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler
 
 # Importing the data
-dataset = pd.read_csv('../../Data/GNIP/GNIP_Cleaned.csv')
+dataTrain = pd.read_csv('../../Data/DataTrain.csv')
+dataTest = pd.read_csv('../../Data/DataTest.csv')
+featureList = ['Lat', 'Lon', 'Date', 'Alt', 'Precip (mm)', 'Temp (°C)']
 
 # Separate into targets and features
-targets = dataset[['O18 (‰)', 'H2 (‰)']]
-features = dataset.drop(['O18 (‰)', 'H2 (‰)'], axis=1)
+targetsTrain = dataTrain[['O18 (‰)', 'H2 (‰)']]
+featuresTrain = dataTrain[featureList]
 
 # Change the features date column to year and julian day (sine transformed)
-features['Date'] = pd.to_datetime(features['Date'], utc=True)
-features['Year'] = features['Date'].dt.year
-features['Julian'] = features['Date'].dt.dayofyear
+featuresTrain['Date'] = pd.to_datetime(featuresTrain['Date'], utc=True)
+featuresTrain['Year'] = featuresTrain['Date'].dt.year
+featuresTrain['Julian'] = featuresTrain['Date'].dt.dayofyear
 
 # Sine transformation of the Julian day to account for the cyclical nature of the year
-features['JulianDaySin'] = np.sin(2 * np.pi * features['Julian'] / 365)
-features = features.drop(['Date', 'Julian'], axis=1)
+featuresTrain['JulianDaySin'] = np.sin(2 * np.pi * featuresTrain['Julian'] / 365)
+featuresTrain = featuresTrain.drop(['Date', 'Julian'], axis=1)
 
 # Prep the min-max scaler
 scaler = MinMaxScaler()
 
 # Create arrays for the features and targets
-featureArray = features.values
-x = scaler.fit_transform(featureArray)
-y = targets.values
-
-# Split the data into training and testing
-xTrain, xTest, yTrain, yTest = train_test_split(x, y, test_size=0.2, random_state=42)
+featureArray = featuresTrain.values
+xTrain = scaler.fit_transform(featureArray)
+yTrain = targetsTrain.values
 
 # Split the training data into training and validation
 xVal, yVal = xTrain[:int(len(xTrain)*0.2)], yTrain[:int(len(yTrain)*0.2)]
@@ -62,12 +61,19 @@ model.fit(xTrain, yTrain, epochs=1000, batch_size=32, validation_data=(xVal, yVa
 
 
 # Export model testing data
-testData = pd.DataFrame(scaler.inverse_transform(xTest), columns=features.columns)
-testData['O18 (‰) Actual'] = yTest[:,0]
-testData['H2 (‰) Actual'] = yTest[:,1]
-testData['O18 (‰) Predicted'] = model.predict(xTest)[:,0]
-testData['H2 (‰) Predicted'] = model.predict(xTest)[:,1]
-testData.to_csv('Model_1_TestData.csv', index=False)
+xTest = dataTest[featureList]
+xTest['Date'] = pd.to_datetime(xTest['Date'], utc=True)
+xTest['Year'] = xTest['Date'].dt.year
+xTest['Julian'] = xTest['Date'].dt.dayofyear
+xTest['JulianDaySin'] = np.sin(2 * np.pi * xTest['Julian'] / 365)
+xTest = xTest.drop(['Date', 'Julian'], axis=1)
+xTest = scaler.transform(xTest)
+
+# Predict the test data
+yPred = model.predict(xTest)
+dataTest['O18 (‰) Predicted'] = yPred[:,0]
+dataTest['H2 (‰) Predicted'] = yPred[:,1]
+dataTest.to_csv('Model_1_TestData.csv', index=False)
 
 # Save the model
 model.save('model.keras')
