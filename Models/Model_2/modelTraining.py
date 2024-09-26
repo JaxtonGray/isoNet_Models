@@ -30,7 +30,6 @@ def importTrainData():
     # Load in the PrevailingWinds file for which the model will be split on
     modelLocations = pd.read_csv(r'../../Data/ModelSplit_Arch/PrevailingWinds_6Split.csv')
     modelLocations = gpd.GeoDataFrame(modelLocations, geometry=gpd.GeoSeries.from_wkt(modelLocations['geometry']), crs="EPSG:4326")
-    modelLocations.drop(columns="geometry", inplace=True)
     modelLocations.set_index('Region', inplace=True)
 
     # Create an empty dictionary that will contain each of the modelDatasets to train with
@@ -49,7 +48,7 @@ def dataSetup(modelData, modelName):
     # Create the features and target variables
     dataset = modelData[modelName]
     targets = dataset[['O18', 'H2']]
-    featureList = ['Lat', 'Lon', 'Alt', 'Precip', 'Temp']
+    featureList = ['Lat', 'Lon', 'Date', 'Alt', 'Precip', 'Temp']
     features = dataset[featureList]
 
     # Extract the year and julian day from the date, convert to sin transformation for julian day
@@ -64,8 +63,8 @@ def dataSetup(modelData, modelName):
 
     # Create the Scaler object and fit the features
     scaler = MinMaxScaler()
-    X = scaler.fit_transform(features.values)
-    y = targets.values
+    xTrain = scaler.fit_transform(features.values)
+    yTrain = targets.values
 
     # Split the training data into training and validation
     xVal, yVal = xTrain[:int(len(xTrain)*0.2)], yTrain[:int(len(yTrain)*0.2)]
@@ -77,7 +76,7 @@ def dataSetup(modelData, modelName):
 # Create a function that will create the model
 def create_model(neurons, lr, numFeatures):
     model = Sequential()
-    model.add(InputLayer(shape=(numFeatures,1)))
+    model.add(InputLayer(numFeatures,1))
     model.add(LSTM(neurons))
     model.add(Dense(neurons))
     model.add(Dense(neurons))
@@ -183,8 +182,8 @@ def exportData(models, predDF):
 def main():
     # Importing the data
     dfTrain, cols, modelData = importTrainData()
-    testData = importTestData(cols, modelData)
-    models, testData, trainingCols = trainAllModels(modelData)
+    models, trainingCols, scaler = trainAllModels(modelData)
+    testData = importTestData(cols, scaler, modelData)
     predictions = predictValues(models, testData, trainingCols)
     exportData(models, predictions)
 
