@@ -76,7 +76,7 @@ def dataSetup(modelData, modelName):
 # Create a function that will create the model
 def create_model(neurons, lr, numFeatures):
     model = Sequential()
-    model.add(InputLayer(numFeatures,1))
+    model.add(InputLayer(shape=(numFeatures,1)))
     model.add(LSTM(neurons))
     model.add(Dense(neurons))
     model.add(Dense(neurons))
