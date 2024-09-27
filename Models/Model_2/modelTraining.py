@@ -4,15 +4,14 @@ import pandas as pd
 import geopandas as gpd
 import re
 
-# TensorFlow and Scikit Learn libraries
+'''# TensorFlow and Scikit Learn libraries
 import tensorflow as tf
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, LSTM, InputLayer
 from tensorflow.keras.callbacks import EarlyStopping
 from tensorflow.keras.optimizers import Adam
-from tensorflow.keras.metrics import RootMeanSquaredError, MeanAbsoluteError
+from tensorflow.keras.metrics import RootMeanSquaredError, MeanAbsoluteError'''
 
-from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler
 
 # Create a function that imports the data and returns 6 dataframes for each of the 6 models
@@ -41,7 +40,7 @@ def importTrainData():
         # Drop the geometry column as it is not needed for the model
         modelData[modelLoc].drop(columns='geometry', inplace=True)
 
-    return dfTrain, cols, modelData
+    return dfTrain, codeCols, cols, modelData
 
 # Now we will have a function that will setup the data for the model
 def dataSetup(modelData, modelName):
@@ -109,33 +108,40 @@ def trainAllModels(modelData):
     return models, list(trainingCols), scaler
 
 # This function will import the test data and setup the data for the model and scale it
-def importTestData(cols, scaler, modelData):
+def importTestData(cols, codeCols, scaler, modelData):
     testData = pd.read_csv(r'../../Data/DataTest.csv')
     testData['Date'] = pd.to_datetime(testData['Date'], utc=True)
     testData = gpd.GeoDataFrame(testData, geometry=gpd.points_from_xy(testData.Lon, testData.Lat, testData.Alt)).set_crs('EPSG:4326')
+    testData.columns = codeCols
+    testData = testData[['Lat', 'Lon', 'Date', 'Alt', 'Precip', 'Temp', 'geometry', 'O18', 'H2']] # Reorder the columns
+
+    # Convert the Date column to year and julian day sin transformation
+    testData['Year'] = testData['Date'].dt.year
+    testData['JulianDay'] = testData['Date'].dt.dayofyear
+    testData['JulianDay_Sin'] = np.sin(2 * np.pi * testData['JulianDay'] / 365)
+    testData.drop(columns=['Date', 'JulianDay'], inplace=True)
+
+    # Load in the PrevailingWinds file for which the model will be split on
+    modelLocations = pd.read_csv(r'../../Data/ModelSplit_Arch/PrevailingWinds_6Split.csv')
+    modelLocations = gpd.GeoDataFrame(modelLocations, geometry=gpd.GeoSeries.from_wkt(modelLocations['geometry']), crs="EPSG:4326")
+    modelLocations.set_index('Region', inplace=True)
+
+    # Create an empty dictionary to store the test data for each of the models regions
     testDict = {}
-    for modelName in modelData.keys():
-        dataset = modelData[modelName]
-        testDict[modelName] = testData[testData.within(dataset.total_bounds)].copy()
-        testDict[modelName] = pd.DataFrame(testDict[modelName])
-        testDict[modelName].drop(columns='geometry', inplace=True)
+    for region in modelLocations.index:
+        # Extract the test data for the region
+        testRegion = testData[testData.within(modelLocations.loc[region].geometry)].copy()
+        testRegion.drop(columns='geometry', inplace=True)
 
-        # Extract the year and julian day from the date, convert to sin transformation for julian day
-        features = testDict[modelName][cols]
-        features['Date'] = pd.to_datetime(features['Date'], utc=True)
-        features['Year'] = features['Date'].dt.year
-        features['JulianDay'] = features['Date'].dt.dayofyear
+        # Scale the test data
+        yTest = testRegion[['O18', 'H2']].values
+        xTest = testRegion.drop(columns=['O18', 'H2']).values
+        xTest = scaler.transform(xTest)
 
-        # Create the sin transformation for the julian day
-        features['JulianDay_Sin'] = np.sin(2 * np.pi * features['JulianDay'] / 365)
-        features.drop(columns=['Date', 'JulianDay'], inplace=True)
+        # Store the test data in the dictionary
+        testDict[region] = [xTest, yTest, scaler]
 
-        # Scale the features
-        xTest = scaler.transform(features.values)
-        yTest = testDict[modelName][['O18', 'H2']].values
-
-        # Store the data in the dictionary
-        testDict[modelName] = [xTest, yTest, scaler]
+    
     return testDict
 
 # This function will predict the values for the test data based on geography
@@ -181,9 +187,9 @@ def exportData(models, predDF):
 # Main function to call all the other functions
 def main():
     # Importing the data
-    dfTrain, cols, modelData = importTrainData()
+    dfTrain, codeCols, cols, modelData = importTrainData()
     models, trainingCols, scaler = trainAllModels(modelData)
-    testData = importTestData(cols, scaler, modelData)
+    testData = importTestData(cols, codeCols, scaler, modelData)
     predictions = predictValues(models, testData, trainingCols)
     exportData(models, predictions)
 
