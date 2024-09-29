@@ -11,17 +11,20 @@
 
 # !/bin/bash
 # This section will grab the model name to run
-modelName = $(sed -n ${SLURM_ARRAY_TASK_ID}p modelList.txt)
+modelName=$(sed -n ${SLURM_ARRAY_TASK_ID}p modelList.txt)
+echo $modelName
 
-# Setup the environment
+cd Models/$modelName
+
+# Set up the environment
 module load python/3.11.5
 module load proj
 
 virtualenv --no-download $SLURM_TMPDIR/env
 source $SLURM_TMPDIR/env/bin/activate
 pip install --no-index --upgrade pip
-pip install --no-index -r Models/$modelName/requirements.txt
+pip install --no-index -r requirements.txt
 pip install --no-index tensorflow
 
 # Run the training script
-python Models/$modelName/modelTraining.py
+python modelTraining.py
