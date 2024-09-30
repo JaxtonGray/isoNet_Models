@@ -72,11 +72,12 @@ def trainModel(model, xTrain, yTrain, xVal, yVal):
 def predictTestData(model, dataTest, featureList, scaler, cols):
     xTest = transformDate(dataTest)
     xTest = dataTest[featureList]
-    xTest = scaler.transform(xTest)
-    yPred = model.predict(xTest)
-    dataTest['O18 (‰)'] = yPred[:,0]
-    dataTest['H2 (‰)'] = yPred[:,1]
-    dataTest.to_csv('Model_1_Test.csv', index=False)
+    xArr = scaler.transform(xTest.values)
+    yPred = model.predict(xArr)
+    testData = xTest.copy()
+    testData['O18 (‰)'] = yPred[:,0]
+    testData['H2 (‰)'] = yPred[:,1]
+    testData.to_csv('Model_1_TestData.csv', index=False)
 
 # Save the model
 def saveModel(model):
