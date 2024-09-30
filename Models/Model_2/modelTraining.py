@@ -162,7 +162,7 @@ def predictValues(models, testData, trainingCols):
         predictions[modelName] = [xTest, yPred, yTest]
     
     # Combine the predictions into a single dataframe
-    cols = trainingCols + ['O18A', 'H2A','O18P', 'H2P']
+    cols = trainingCols + ['O18 A', 'H2 A','O18 P', 'H2 P']
     predDF = pd.DataFrame(columns=cols)
     for modelName in predictions.keys():
         xTest, yPred, yTest = predictions[modelName]
