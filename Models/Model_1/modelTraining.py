@@ -1,6 +1,7 @@
 # Importing the correct libraries
 import numpy as np
 import pandas as pd
+import re
 
 # TensorFlow and Scikit Learn libraries
 import tensorflow as tf
@@ -16,10 +17,15 @@ from sklearn.preprocessing import MinMaxScaler
 # Importing the data
 def importData():
     dataTrain = pd.read_csv('../../Data/DataTrain.csv')
+    cols = dataTrain.columns
+    # Remove units from columns for easier processing
+    codeCols = list(map(lambda x: re.sub(r'\(([^()]*)\)', '', x).strip(), cols))
+    dataTrain.columns = codeCols
     dataTrain['Date'] = pd.to_datetime(dataTrain['Date'], utc=True)
     dataTest = pd.read_csv('../../Data/DataTest.csv')
+    dataTest.columns = codeCols
     dataTest['Date'] = pd.to_datetime(dataTest['Date'], utc=True)
-    return dataTrain, dataTest
+    return dataTrain, dataTest, codeCols, cols
 
 def transformDate(data):
     data['Year'] = data['Date'].dt.year
@@ -31,7 +37,7 @@ def transformDate(data):
 
 # Separate into targets and features
 def separateTrainData(dataTrain, featureList):
-    targetsTrain = dataTrain[['O18 (‰)', 'H2 (‰)']]
+    targetsTrain = dataTrain[['O18', 'H2']]
     featuresTrain = dataTrain[featureList]
     return targetsTrain, featuresTrain
     
@@ -48,7 +54,7 @@ def createArrays(features, targets):
 # Define the model
 def create_model(neurons, lr, featureLength):
     model = Sequential()
-    model.add(InputLayer(input_shape=(featureLength,1)))
+    model.add(InputLayer(shape=(featureLength,1)))
     model.add(LSTM(neurons))
     model.add(Dense(neurons))
     model.add(Dense(neurons))
@@ -59,16 +65,16 @@ def create_model(neurons, lr, featureLength):
 # Create and train the model
 def trainModel(model, xTrain, yTrain, xVal, yVal):
     es = EarlyStopping(monitor='val_loss', mode='min', verbose=1, patience=100, restore_best_weights=True) # Early stopping callback
-    model.fit(xTrain, yTrain, epochs=1000, batch_size=32, validation_data=(xVal, yVal), callbacks=[es], verbose=0)
+    model.fit(xTrain, yTrain, epochs=1000, batch_size=32, validation_data=(xVal, yVal), callbacks=[es], verbose=1)
     return model
 
 # Predict the test data and export it
-def predictTestData(model, dataTest, featureList, scaler):
+def predictTestData(model, dataTest, featureList, scaler, cols):
     xTest = dataTest[featureList]
     xTest = transformDate(xTest)
     xTest = scaler.transform(xTest)
     yPred = model.predict(xTest)
-
+    dataTest.columns = cols
     dataTest['O18 (‰)'] = yPred[:,0]
     dataTest['H2 (‰)'] = yPred[:,1]
     dataTest.to_csv('Model_1_Test.csv', index=False)
@@ -79,14 +85,14 @@ def saveModel(model):
 
 # Main function
 def main():
-    dataTrain, dataTest = importData()
+    dataTrain, dataTest, codeCols, cols = importData()
     featureList = ['Lat', 'Lon', 'Alt', 'Temp', 'Precip', 'Year', 'JulianDay_Sin']
     dataTrain = transformDate(dataTrain)
     targetsTrain, featuresTrain = separateTrainData(dataTrain, featureList)
     xTrain, yTrain, xVal, yVal, scaler = createArrays(featuresTrain, targetsTrain)
     model = create_model(64, 0.001, len(featureList))
     model = trainModel(model, xTrain, yTrain, xVal, yVal)
-    predictTestData(model, dataTest, featureList, scaler)
+    predictTestData(model, dataTest, featureList, scaler, cols)
     saveModel(model)
 
 main()
