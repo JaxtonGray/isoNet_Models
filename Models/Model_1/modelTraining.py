@@ -74,7 +74,6 @@ def predictTestData(model, dataTest, featureList, scaler, cols):
     xTest = dataTest[featureList]
     xTest = scaler.transform(xTest)
     yPred = model.predict(xTest)
-    dataTest.columns = cols
     dataTest['O18 (‰)'] = yPred[:,0]
     dataTest['H2 (‰)'] = yPred[:,1]
     dataTest.to_csv('Model_1_Test.csv', index=False)
