@@ -44,7 +44,7 @@ def kge(observed, predicted):
     return 1 - np.sqrt((r - 1) ** 2 + (alpha - 1) ** 2 + (beta - 1) ** 2)
 
 # Create a function that will load in the model data and return a geopandas dataframe with the data and
-# the model architecture
+# the model schemeitecture
 def readModelData(modelNum):
     # Load in the model data
     modelData = pd.read_csv(f"../Models/Model_{modelNum}/Model_{modelNum}_TestData.csv")
@@ -67,28 +67,28 @@ def readModelData(modelNum):
 
     return modelData, list(oldHeaders)
 
-def readModelArch(modelArch_Name):
-    # Load in the model architecture which will only need to be done if not "Global"
-    if modelArch_Name != "Global":
-        modelArch = pd.read_csv(f"../Data/ModelSplit_Arch/{modelArch_Name}.csv")
-        modelArch = gpd.GeoDataFrame(modelArch, geometry=gpd.GeoSeries.from_wkt(modelArch.geometry), crs="EPSG:4326")
+def readModelScheme(modelScheme_Name):
+    # Load in the model schemeitecture which will only need to be done if not "Global"
+    if modelScheme_Name != "Global":
+        modelScheme = pd.read_csv(f"../Data/ModelSplit_Scheme/{modelScheme_Name}.csv")
+        modelScheme = gpd.GeoDataFrame(modelScheme, geometry=gpd.GeoSeries.from_wkt(modelScheme.geometry), crs="EPSG:4326")
     else:
-        modelArch = None
+        modelScheme = None
     
-    return modelArch
+    return modelScheme
 
 # Calculate the summary statistics for the model and return a dataframe with the results for each region
 # and if there are no regions, return the stats for the entire model.
-def summaryStats(modelData, modelArch_name):
+def summaryStats(modelData, modelScheme_name):
     # First check if the model has regional models
-    if modelArch_name != "Global":
-        # Load in the model architecture
-        modelArch = readModelArch(modelArch_name)
+    if modelScheme_name != "Global":
+        # Load in the model schemeitecture
+        modelScheme = readModelScheme(modelScheme_name)
 
         # Cycle through the regions and assign the data from each to dictionary
         regionalData = {}
-        key = modelArch.columns[0]
-        for null, region in modelArch.iterrows():
+        key = modelScheme.columns[0]
+        for null, region in modelScheme.iterrows():
             regionalData[region[key]] = modelData[modelData.within(region.geometry)]
         
         # Calculate the stats for each region and store in a dictionary
@@ -116,33 +116,33 @@ def summaryStats(modelData, modelArch_name):
         
         return pd.DataFrame([stats])
 
-# This function will cylce through all model architectures and calculate the stats for each model and return
-# a dictionary with the results: {modelArch_Name: stats, modelArch_Name2: stats2, ...}
-def allArchStats(modelData, mainArch):
-    # Use glob to get all the model architecture names
-    allArchs = glob("../Data/ModelSplit_Arch/*.csv")
-    allArchs = [arch.split("/")[-1].split(".")[0] for arch in allArchs]
-    allArchs = [re.split(r"\\|//", arch)[1] for arch in allArchs]
-    allArchs.append("Global")
-    # Create a dictionary to store the stats for each model architecture
-    allArchsStats = {}
+# This function will cylce through all model schemeitectures and calculate the stats for each model and return
+# a dictionary with the results: {modelScheme_Name: stats, modelScheme_Name2: stats2, ...}
+def allSchemeStats(modelData, mainScheme):
+    # Use glob to get all the model schemeitecture names
+    allSchemes = glob("../Data/ModelSplit_Scheme/*.csv")
+    allSchemes = [scheme.split("/")[-1].split(".")[0] for scheme in allSchemes]
+    allSchemes = [re.split(r"\\|//", scheme)[1] for scheme in allSchemes]
+    allSchemes.append("Global")
+    # Create a dictionary to store the stats for each model schemeitecture
+    allSchemesStats = {}
 
-    # Cycle through each model architecture and calculate the stats for each model
-    for arch in allArchs:
-        if arch == mainArch:
-            allArchsStats[f"{arch} (main)"] = summaryStats(modelData, arch)
+    # Cycle through each model schemeitecture and calculate the stats for each model
+    for scheme in allSchemes:
+        if scheme == mainScheme:
+            allSchemesStats[f"{scheme} (main)"] = summaryStats(modelData, scheme)
         else:
-            allArchsStats[arch] = summaryStats(modelData, arch)
+            allSchemesStats[scheme] = summaryStats(modelData, scheme)
 
-    return allArchsStats
+    return allSchemesStats
 
-# Export the stats to an excel file where each sheet is a different model architecture
+# Export the stats to an excel file where each sheet is a different model schemeitecture
 def exportStats(allsStats, modelNum):
     if not os.path.exists("SummaryStats"):
         os.mkdir("SummaryStats")
     with pd.ExcelWriter(f"SummaryStats//Model_{modelNum}_Stats.xlsx") as writer:
-        for arch, stats in allsStats.items():
-            stats.to_excel(writer, sheet_name=arch, index=False)
+        for scheme, stats in allsStats.items():
+            stats.to_excel(writer, sheet_name=scheme, index=False)
 
 # Convert Julian Day Sin to Julian Day
 def undoJulianDaySin(values):
@@ -186,13 +186,13 @@ def main():
     # Cycle through the models and calculate the stats for each model
     for modelValues in data.values():
         modelNum = modelValues['num']
-        mainArch = modelValues['arch']
+        mainScheme = modelValues['scheme']
 
         # Load in the model data
         modelData, oldHeaders = readModelData(modelNum)
 
         # Calculate the stats for the model and export to an excel file
-        statsAll = allArchStats(modelData, mainArch)
+        statsAll = allSchemeStats(modelData, mainScheme)
         exportStats(statsAll, modelNum)
         calculateResiduals(modelData, modelNum, oldHeaders)
 
