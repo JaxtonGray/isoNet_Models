@@ -75,8 +75,10 @@ def predictTestData(model, dataTest, featureList, scaler, cols):
     xArr = scaler.transform(xTest.values)
     yPred = model.predict(xArr)
     testData = xTest.copy()
-    testData['O18 (‰)'] = yPred[:,0]
-    testData['H2 (‰)'] = yPred[:,1]
+    testData['O18 A'] = dataTest['O18']
+    testData['H2 A'] = dataTest['H2']
+    testData['O18 P'] = yPred[:,0]
+    testData['H2 P'] = yPred[:,1]
     testData.to_csv('Model_1_TestData.csv', index=False)
 
 # Save the model
