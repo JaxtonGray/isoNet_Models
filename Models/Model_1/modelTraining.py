@@ -70,8 +70,8 @@ def trainModel(model, xTrain, yTrain, xVal, yVal):
 
 # Predict the test data and export it
 def predictTestData(model, dataTest, featureList, scaler, cols):
-    xTest = dataTest[featureList]
     xTest = transformDate(xTest)
+    xTest = dataTest[featureList]
     xTest = scaler.transform(xTest)
     yPred = model.predict(xTest)
     dataTest.columns = cols
