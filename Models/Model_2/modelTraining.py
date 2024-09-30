@@ -57,7 +57,7 @@ def dataSetup(modelData, modelName, featureList):
     # Create the sin transformation for the julian day
     features['JulianDay_Sin'] = np.sin(2 * np.pi * features['JulianDay'] / 365)
     features.drop(columns=['Date', 'JulianDay'], inplace=True)
-    features = dataset[featureList]
+    features = features[featureList]
     trainingCols = features.columns
 
     # Create the Scaler object and fit the features
@@ -86,7 +86,7 @@ def create_model(neurons, lr, numFeatures):
 # This function will train a model
 def modelTrain(model, xTrain, yTrain, xVal, yVal, epochs):
     earlyStop = EarlyStopping(monitor='val_loss', mode='min', patience=150, verbose=1)
-    model.fit(xTrain, yTrain, epochs=epochs, validation_data=(xVal, yVal), callbacks=[earlyStop], verbose=0)
+    model.fit(xTrain, yTrain, epochs=epochs, validation_data=(xVal, yVal), callbacks=[earlyStop], verbose=1)
     return model
 
 # This function will go through the process of training each of the models
