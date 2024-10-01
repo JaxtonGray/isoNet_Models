@@ -108,12 +108,11 @@ def trainAllModels(modelData, featureList):
     return models, list(trainingCols), scaler
 
 # This function will import the test data and setup the data for the model and scale it
-def importTestData(cols, codeCols, scaler, modelData, scheme):
+def importTestData(cols, codeCols, scaler, modelData, scheme, featureList):
     testData = pd.read_csv(r'../../Data/DataTest.csv')
     testData['Date'] = pd.to_datetime(testData['Date'], utc=True)
     testData = gpd.GeoDataFrame(testData, geometry=gpd.points_from_xy(testData.Lon, testData.Lat, testData.Alt)).set_crs('EPSG:4326')
     testData.columns = codeCols
-    testData = testData[['Lat', 'Lon', 'Date', 'Alt', 'Precip', 'Temp', 'geometry', 'O18', 'H2']] # Reorder the columns
 
     # Convert the Date column to year and julian day sin transformation
     testData['Year'] = testData['Date'].dt.year
@@ -135,7 +134,7 @@ def importTestData(cols, codeCols, scaler, modelData, scheme):
 
         # Scale the test data
         yTest = testRegion[['O18', 'H2']].values
-        xTest = testRegion.drop(columns=['O18', 'H2']).values
+        xTest = testRegion[featureList].values
         xTest = scaler.transform(xTest)
 
         # Store the test data in the dictionary
@@ -192,7 +191,7 @@ def main():
                    'Year', 'JulianDay_Sin']
     dfTrain, codeCols, cols, modelData = importTrainData(scheme)
     models, trainingCols, scaler = trainAllModels(modelData, featureList)
-    testData = importTestData(cols, codeCols, scaler, modelData, scheme)
+    testData = importTestData(cols, codeCols, scaler, modelData, scheme, featureList)
     predictions = predictValues(models, testData, trainingCols)
     exportData(models, predictions)
 
