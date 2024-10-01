@@ -72,12 +72,14 @@ def trainModel(model, xTrain, yTrain, xVal, yVal):
 def predictTestData(model, dataTest, featureList, scaler, cols):
     xTest = transformDate(dataTest)
     xTest = dataTest[featureList]
-    xTest = scaler.transform(xTest)
-    yPred = model.predict(xTest)
-    dataTest.columns = cols
-    dataTest['O18 (‰)'] = yPred[:,0]
-    dataTest['H2 (‰)'] = yPred[:,1]
-    dataTest.to_csv('Model_1_Test.csv', index=False)
+    xArr = scaler.transform(xTest.values)
+    yPred = model.predict(xArr)
+    testData = xTest.copy()
+    testData['O18 A'] = dataTest['O18']
+    testData['H2 A'] = dataTest['H2']
+    testData['O18 P'] = yPred[:,0]
+    testData['H2 P'] = yPred[:,1]
+    testData.to_csv('Model_1_TestData.csv', index=False)
 
 # Save the model
 def saveModel(model):
@@ -86,10 +88,9 @@ def saveModel(model):
 # Main function
 def main():
     dataTrain, dataTest, codeCols, cols = importData()
-    featureList = [
-        'Lat', 'Lon', 'Alt', 'Temp', 'Precip',
-        'KPN_A', 'KPN_B', 'KPN_C', 'KPN_D', 'KPN_E', 
-        'Year', 'JulianDay_Sin']
+    featureList = ['Lat', 'Lon', 'Alt', 'Temp', 'Precip', 
+                   'KPN_A', 'KPN_B', 'KPN_C', 'KPN_D', 'KPN_E',
+                   'Year', 'JulianDay_Sin']
     dataTrain = transformDate(dataTrain)
     targetsTrain, featuresTrain = separateTrainData(dataTrain, featureList)
     xTrain, yTrain, xVal, yVal, scaler = createArrays(featuresTrain, targetsTrain)

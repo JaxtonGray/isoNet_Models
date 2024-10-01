@@ -15,7 +15,7 @@ from tensorflow.keras.metrics import RootMeanSquaredError, MeanAbsoluteError
 from sklearn.preprocessing import MinMaxScaler
 
 # Create a function that imports the data and returns 6 dataframes for each of the 6 models
-def importTrainData():
+def importTrainData(scheme):
     # Importing the data and convert to a GeoDF
     dfTrain = pd.read_csv(r'../../Data/DataTrain.csv')
     dfTrain['Date'] = pd.to_datetime(dfTrain['Date'], utc=True)
@@ -27,7 +27,7 @@ def importTrainData():
     dfTrain.columns = codeCols
 
     # Load in the PrevailingWinds file for which the model will be split on
-    modelLocations = pd.read_csv(r'../../Data/ModelSplit_Arch/PrevailingWinds_6Split.csv')
+    modelLocations = pd.read_csv(f'../../Data/ModelSplit_Schemes/{scheme}.csv')
     modelLocations = gpd.GeoDataFrame(modelLocations, geometry=gpd.GeoSeries.from_wkt(modelLocations['geometry']), crs="EPSG:4326")
     modelLocations.set_index('Region', inplace=True)
 
@@ -43,12 +43,11 @@ def importTrainData():
     return dfTrain, codeCols, cols, modelData
 
 # Now we will have a function that will setup the data for the model
-def dataSetup(modelData, modelName):
+def dataSetup(modelData, modelName, featureList):
     # Create the features and target variables
     dataset = modelData[modelName]
     targets = dataset[['O18', 'H2']]
-    featureList = ['Lat', 'Lon', 'Date', 'Alt', 'Precip', 'Temp']
-    features = dataset[featureList]
+    features = dataset.drop(columns=['O18', 'H2'])
 
     # Extract the year and julian day from the date, convert to sin transformation for julian day
     features['Date'] = pd.to_datetime(features['Date'], utc=True)
@@ -58,6 +57,7 @@ def dataSetup(modelData, modelName):
     # Create the sin transformation for the julian day
     features['JulianDay_Sin'] = np.sin(2 * np.pi * features['JulianDay'] / 365)
     features.drop(columns=['Date', 'JulianDay'], inplace=True)
+    features = features[featureList]
     trainingCols = features.columns
 
     # Create the Scaler object and fit the features
@@ -86,16 +86,16 @@ def create_model(neurons, lr, numFeatures):
 # This function will train a model
 def modelTrain(model, xTrain, yTrain, xVal, yVal, epochs):
     earlyStop = EarlyStopping(monitor='val_loss', mode='min', patience=150, verbose=1)
-    model.fit(xTrain, yTrain, epochs=epochs, validation_data=(xVal, yVal), callbacks=[earlyStop], verbose=0)
+    model.fit(xTrain, yTrain, epochs=epochs, validation_data=(xVal, yVal), callbacks=[earlyStop], verbose=1)
     return model
 
 # This function will go through the process of training each of the models
-def trainAllModels(modelData):
+def trainAllModels(modelData, featureList):
     # Cycle through each of the models and create an empty dictionary to store the models
     models = {}
     for modelName in modelData.keys():
         # Setup the data for the model
-        xTrain, xVal, yTrain, yVal, scaler, trainingCols = dataSetup(modelData, modelName)
+        xTrain, xVal, yTrain, yVal, scaler, trainingCols = dataSetup(modelData, modelName, featureList)
         numFeatures = xTrain.shape[1]
 
         # Create the model
@@ -108,7 +108,7 @@ def trainAllModels(modelData):
     return models, list(trainingCols), scaler
 
 # This function will import the test data and setup the data for the model and scale it
-def importTestData(cols, codeCols, scaler, modelData):
+def importTestData(cols, codeCols, scaler, modelData, scheme):
     testData = pd.read_csv(r'../../Data/DataTest.csv')
     testData['Date'] = pd.to_datetime(testData['Date'], utc=True)
     testData = gpd.GeoDataFrame(testData, geometry=gpd.points_from_xy(testData.Lon, testData.Lat, testData.Alt)).set_crs('EPSG:4326')
@@ -122,7 +122,7 @@ def importTestData(cols, codeCols, scaler, modelData):
     testData.drop(columns=['Date', 'JulianDay'], inplace=True)
 
     # Load in the PrevailingWinds file for which the model will be split on
-    modelLocations = pd.read_csv(r'../../Data/ModelSplit_Arch/PrevailingWinds_6Split.csv')
+    modelLocations = pd.read_csv(f'../../Data/ModelSplit_Schemes/{scheme}.csv')
     modelLocations = gpd.GeoDataFrame(modelLocations, geometry=gpd.GeoSeries.from_wkt(modelLocations['geometry']), crs="EPSG:4326")
     modelLocations.set_index('Region', inplace=True)
 
@@ -162,7 +162,7 @@ def predictValues(models, testData, trainingCols):
         predictions[modelName] = [xTest, yPred, yTest]
     
     # Combine the predictions into a single dataframe
-    cols = trainingCols + ['O18A', 'H2A','O18P', 'H2P']
+    cols = trainingCols + ['O18 A', 'H2 A','O18 P', 'H2 P']
     predDF = pd.DataFrame(columns=cols)
     for modelName in predictions.keys():
         xTest, yPred, yTest = predictions[modelName]
@@ -186,10 +186,11 @@ def exportData(models, predDF):
 
 # Main function to call all the other functions
 def main():
-    # Importing the data
-    dfTrain, codeCols, cols, modelData = importTrainData()
-    models, trainingCols, scaler = trainAllModels(modelData)
-    testData = importTestData(cols, codeCols, scaler, modelData)
+    scheme = 'PrevailingWinds_6Split'
+    featureList = ['Lat', 'Lon', 'Alt', 'Precip', 'Temp', 'Year', 'JulianDay_Sin']
+    dfTrain, codeCols, cols, modelData = importTrainData(scheme)
+    models, trainingCols, scaler = trainAllModels(modelData, featureList)
+    testData = importTestData(cols, codeCols, scaler, modelData, scheme)
     predictions = predictValues(models, testData, trainingCols)
     exportData(models, predictions)
 

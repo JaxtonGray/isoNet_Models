@@ -70,7 +70,7 @@ def readModelData(modelNum):
 def readModelScheme(modelScheme_Name):
     # Load in the model schemeitecture which will only need to be done if not "Global"
     if modelScheme_Name != "Global":
-        modelScheme = pd.read_csv(f"../Data/ModelSplit_Scheme/{modelScheme_Name}.csv")
+        modelScheme = pd.read_csv(f"../Data/ModelSplit_Schemes/{modelScheme_Name}.csv")
         modelScheme = gpd.GeoDataFrame(modelScheme, geometry=gpd.GeoSeries.from_wkt(modelScheme.geometry), crs="EPSG:4326")
     else:
         modelScheme = None
@@ -120,7 +120,7 @@ def summaryStats(modelData, modelScheme_name):
 # a dictionary with the results: {modelScheme_Name: stats, modelScheme_Name2: stats2, ...}
 def allSchemeStats(modelData, mainScheme):
     # Use glob to get all the model schemeitecture names
-    allSchemes = glob("../Data/ModelSplit_Scheme/*.csv")
+    allSchemes = glob("../Data/ModelSplit_Schemes/*.csv")
     allSchemes = [scheme.split("/")[-1].split(".")[0] for scheme in allSchemes]
     allSchemes = [re.split(r"\\|//", scheme)[1] for scheme in allSchemes]
     allSchemes.append("Global")
@@ -160,12 +160,12 @@ def calculateResiduals(modelData, modelNum, oldHeaders):
     modelData.drop(columns=['geometry'], inplace=True)
 
     # Convert the Julian Day sine transform back to the original Julian Date
-    modelData['JulianDay'] = undoJulianDaySin(modelData['JulianDaySin'])
+    modelData['JulianDay'] = undoJulianDaySin(modelData['JulianDay_Sin'])
 
     # Combine the Year and Julian Day columns to create a date column
     modelData['Date'] = modelData['Year'].astype(int).astype(str) + "-" + modelData['JulianDay'].astype(str)
     modelData['Date'] = pd.to_datetime(modelData['Date'], format="%Y-%j")
-    modelData.drop(columns=['Year', 'JulianDay', 'JulianDaySin'], inplace=True)
+    modelData.drop(columns=['Year', 'JulianDay', 'JulianDay_Sin'], inplace=True)
 
     # Move the Date column to the front of the dataframe
     cols = modelData.columns.tolist()

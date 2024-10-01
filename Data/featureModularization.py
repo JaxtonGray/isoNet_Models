@@ -38,7 +38,7 @@ def loadDataset(path):
 # 2. The first and only band of the raster as a numpy array
 def readRasters():
     # Create a dictionary to hold the rasters
-    files = glob('KPN\*') # Get all the files in the current directory
+    files = glob(r'KPN\*') # Get all the files in the current directory
     files.remove(r'KPN\2041_2070') # Remove the directories that are future projections
     files.remove(r'KPN\2071_2099') # Remove the directories that are future projections
     rasters = {}
@@ -105,7 +105,7 @@ def convertKPN(df, legend):
 # One-hot encode the KPN
 def oneHotEncodeKPN(df):
     df = df.copy()
-    df = pd.concat([df, pd.get_dummies(df['KPN'], prefix='KPN')], axis=1)
+    df = pd.concat([df, pd.get_dummies(df['KPN'], prefix='KPN', dtype=int)], axis=1)
     df.drop(columns=['KPN'], inplace=True)
     
     return df
