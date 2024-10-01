@@ -6,5 +6,13 @@
     "model_2": {
         "num": 2,
         "scheme": "PrevailingWinds_6Split"
+    },
+    "model_3": {
+        "num": 3,
+        "scheme": "Global"
+    },
+    "model_4": {
+        "num": 4,
+        "scheme": "PrevailingWinds_6Split"
     }
 }   
