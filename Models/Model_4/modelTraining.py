@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 import geopandas as gpd
 import re
+import os
 
 # TensorFlow and Scikit Learn libraries
 import tensorflow as tf
@@ -176,12 +177,15 @@ def predictValues(models, testData, trainingCols):
 
 # Export all information to file
 def exportData(models, predDF):
+    # Create the directory if it does not exist
+    if not os.path.exists('Trained_Models'):
+        os.makedirs('Trained_Models')
     # Export the models
     for modelName in models.keys():
         models[modelName].save(f'Trained_Models/{modelName}.keras')
     
     # Export the predictions
-    predDF.to_csv('Model_2_TestData.csv', index=False)
+    predDF.to_csv('Model_4_TestData.csv', index=False)
 
 # Main function to call all the other functions
 def main():

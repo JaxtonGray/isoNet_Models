@@ -79,7 +79,7 @@ def predictTestData(model, dataTest, featureList, scaler, cols):
     testData['H2 A'] = dataTest['H2']
     testData['O18 P'] = yPred[:,0]
     testData['H2 P'] = yPred[:,1]
-    testData.to_csv('Model_1_TestData.csv', index=False)
+    testData.to_csv('Model_3_TestData.csv', index=False)
 
 # Save the model
 def saveModel(model):
