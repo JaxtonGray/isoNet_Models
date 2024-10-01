@@ -65,7 +65,7 @@ def create_model(neurons, lr, featureLength):
 # Create and train the model
 def trainModel(model, xTrain, yTrain, xVal, yVal):
     es = EarlyStopping(monitor='val_loss', mode='min', verbose=1, patience=100, restore_best_weights=True) # Early stopping callback
-    model.fit(xTrain, yTrain, epochs=1000, batch_size=32, validation_data=(xVal, yVal), callbacks=[es], verbose=1)
+    model.fit(xTrain, yTrain, epochs=1000, batch_size=32, validation_data=(xVal, yVal), callbacks=[es], verbose=0)
     return model
 
 # Predict the test data and export it

@@ -86,7 +86,7 @@ def create_model(neurons, lr, numFeatures):
 # This function will train a model
 def modelTrain(model, xTrain, yTrain, xVal, yVal, epochs):
     earlyStop = EarlyStopping(monitor='val_loss', mode='min', patience=150, verbose=1)
-    model.fit(xTrain, yTrain, epochs=epochs, validation_data=(xVal, yVal), callbacks=[earlyStop], verbose=1)
+    model.fit(xTrain, yTrain, epochs=epochs, validation_data=(xVal, yVal), callbacks=[earlyStop], verbose=0)
     return model
 
 # This function will go through the process of training each of the models
