@@ -13,64 +13,64 @@ from glob import glob
 import pandas as pd
 import geopandas as gpd
 
-# This function will load in a specified summary stat file (.xlsx), it will do this by loading in each model architecture
+# This function will load in a specified summary stat file (.xlsx), it will do this by loading in each model schemeitecture
 # and using that as its basis for the sheet names to load in the data.
-# returns a dictionary with the keys being the model architecture and the values being the dataframes
+# returns a dictionary with the keys being the model schemeitecture and the values being the dataframes
 
 def loadStats(modelNum):
-    # Read in the names of the types of Model Architectures
-    archs = glob('..//Data//ModelSplit_Arch//*')
-    archs = [re.split(r'\\|//', x)[-1] for x in archs]
-    archs = [x.split('.')[0] for x in archs]
-    # Since Global is not a model architecture file we will add it to the list
-    archs.append('Global')
+    # Read in the names of the types of Model Schemeitectures
+    schemes = glob('..//Data//ModelSplit_Schemes//*')
+    schemes = [re.split(r'\\|//', x)[-1] for x in schemes]
+    schemes = [x.split('.')[0] for x in schemes]
+    # Since Global is not a model schemeitecture file we will add it to the list
+    schemes.append('Global')
 
     # Load in the modelDirectory which will be used to load information
     # about the model
     with open('..//Models//modelDirectory.json', 'r') as file:
         modelDirectory = json.load(file)
-        mainArch = modelDirectory[f'model_{modelNum}']['arch']
+        mainScheme = modelDirectory[f'model_{modelNum}']['scheme']
 
     # Load in the data
     stats = {}
-    for arch in archs:
-        # To load in the data I will need to check if the arch is the main one
+    for scheme in schemes:
+        # To load in the data I will need to check if the scheme is the main one
         # If it is I will need to attach (main) to the end of the sheet name
-        if arch == mainArch:
-            stats[arch] = pd.read_excel(f'..//Stats//SummaryStats//Model_{modelNum}_Stats.xlsx', sheet_name=f'{arch} (main)')
+        if scheme == mainScheme:
+            stats[scheme] = pd.read_excel(f'..//Stats//SummaryStats//Model_{modelNum}_Stats.xlsx', sheet_name=f'{scheme} (main)')
             
         else:
-            stats[arch] = pd.read_excel(f'..//Stats//SummaryStats//Model_{modelNum}_Stats.xlsx', sheet_name=arch)
+            stats[scheme] = pd.read_excel(f'..//Stats//SummaryStats//Model_{modelNum}_Stats.xlsx', sheet_name=scheme)
 
     return stats
 
-# This function will load a model architecture and return the data in a geodataframe
-def loadArch(archName):
-    # Check to make sure the archName is not Global
-    if archName == 'Global':
+# This function will load a model schemeitecture and return the data in a geodataframe
+def loadScheme(schemeName):
+    # Check to make sure the schemeName is not Global
+    if schemeName == 'Global':
         return None
 
     # Load the data
-    arch = pd.read_csv(f'..//Data//ModelSplit_Arch//{archName}.csv')
+    scheme = pd.read_csv(f'..//Data//ModelSplit_Schemes//{schemeName}.csv')
     # Convert the data to a geodataframe
-    arch = gpd.GeoDataFrame(arch, geometry=gpd.GeoSeries.from_wkt(arch['geometry']))
+    scheme = gpd.GeoDataFrame(scheme, geometry=gpd.GeoSeries.from_wkt(scheme['geometry']))
 
-    return arch
+    return scheme
 
 loadStats(1)['PrevailingWinds_6Split']
 
-# This function will take a stat dataframe and a model architecture dataframe and join them
+# This function will take a stat dataframe and a model schemeitecture dataframe and join them
 # together, it will then return the data as a geodataframe
-def joinStats(statData, arch):
-    # Check to make sure the arch is not None
-    if arch is None:
+def joinStats(statData, scheme):
+    # Check to make sure the scheme is not None
+    if scheme is None:
         # Merge the data with a bounding box enclosing the entire world
         statData['Region'] = 'Global'
         statData['geometry'] = 'POLYGON ((-180 -90, 180 -90, 180 90, -180 90, -180 -90))'
         data = gpd.GeoDataFrame(statData, geometry=gpd.GeoSeries.from_wkt(statData['geometry']), crs='EPSG:4326')
     else:
         # Merge the data on the Region column
-        data = pd.merge(arch, statData, on='Region', how='left')
+        data = pd.merge(scheme, statData, on='Region', how='left')
         data = gpd.GeoDataFrame(data, geometry='geometry', crs='EPSG:4326')
 
     return data
@@ -92,17 +92,17 @@ def main():
         # Load in the stats
         stats = loadStats(model['num'])
         
-        # Cycle through each model architecture and export the data
-        for archName in stats.keys():
-            # Load in the model architecture
-            arch = loadArch(archName)
+        # Cycle through each model schemeitecture and export the data
+        for schemeName in stats.keys():
+            # Load in the model schemeitecture
+            scheme = loadScheme(schemeName)
             # Join the data
-            data = joinStats(stats[archName], arch)
+            data = joinStats(stats[schemeName], scheme)
             # Export the data
             if os.path.exists('Mapping') == False:
                 os.mkdir('Mapping')
             
-            data.to_file(f'Mapping//Model_{model["num"]}_{archName}.geojson', driver='GeoJSON')
+            data.to_file(f'Mapping//Model_{model["num"]}_{schemeName}.geojson', driver='GeoJSON')
 
 
 main()
