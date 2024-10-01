@@ -3,7 +3,6 @@
 #SBATCH --job-name=model_training
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=16
-#SBATCH --gres=gpu:v100:1
 #SBATCH --mem=64000MB
 #SBATCH --time=1:30:00
 #SBATCH --mail-user=jaxton.gray@ucalgary.ca
