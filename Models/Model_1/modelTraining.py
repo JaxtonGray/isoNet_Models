@@ -30,7 +30,8 @@ def importData():
 def transformDate(data):
     data['Year'] = data['Date'].dt.year
     data['Julian'] = data['Date'].dt.dayofyear
-### Sine transformation of the Julian day to account for the cyclical nature of the year
+    
+    # Sine transformation of the Julian day to account for the cyclical nature of the year
     data['JulianDay_Sin'] = np.sin(2 * np.pi * data['Julian'] / 365)
     data = data.drop(['Date', 'Julian'], axis=1)
     return data
