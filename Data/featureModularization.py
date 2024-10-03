@@ -129,15 +129,15 @@ def addKPN(df):
 
 # Main function that will be called by the script determining which features to add
 def addFeatures(df):
-    features = sys.argv[1:]
+    features = ['KPN']
 
     for feat in features:
-        if feat == '1':
+        if feat == 'KPN':
             df = addKPN(df)
         else:
             continue
     
-    return df
+    return df.drop(columns=['geometry', 'index'])
 
 def main():
     # Load training and test datasets
