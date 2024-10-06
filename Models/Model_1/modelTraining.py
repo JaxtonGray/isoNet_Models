@@ -110,13 +110,13 @@ def hyperParameterTuning(xTrain, yTrain):
     tuner = kt.Hyperband(modelBuilder, 
                         objective='val_loss', 
                         max_epochs=100, factor=3, 
-                        directory='Hyperparameter Trials', project_name='G1')
+                        directory='Hyperparameter_Tuner', project_name='G1')
 
     # Create a callback to stop training early
     stop_early = EarlyStopping(monitor='val_loss', patience=5)
 
     # Perform the search
-    tuner.search(xTrain, yTrain, epochs=50, validation_split=0.2, callbacks=[stop_early], verbose=0)
+    tuner.search(xTrain, yTrain, epochs=50, validation_split=0.2, callbacks=[stop_early])
 
     # Get the best model hyperparameters
     best_hps = tuner.get_best_hyperparameters(num_trials=1)[0]
@@ -139,7 +139,7 @@ def trainModel(xTrain, yTrain, best_hps):
     stop_early = EarlyStopping(monitor='val_loss', patience = 100)
 
     # Train the model
-    model.fit(xTrain, yTrain, epochs=1000, validation_split=0.2, callbacks=[stop_early], verbose=2)
+    model.fit(xTrain, yTrain, epochs=1000, validation_split=0.2, callbacks=[stop_early], verbose=1)
 
     print('Finished Training')
     
