@@ -109,7 +109,7 @@ def hyperParameterTuning(xTrain, yTrain):
     # Create the Hyperband Tuner
     tuner = kt.Hyperband(modelBuilder, 
                         objective='val_loss', 
-                        max_epochs=100, factor=3, 
+                        max_epochs=10, factor=3, 
                         directory='Hyperparameter_Tuner', project_name='G1')
 
     # Create a callback to stop training early
