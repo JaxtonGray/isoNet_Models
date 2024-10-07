@@ -136,7 +136,7 @@ def trainModel(xTrain, yTrain, best_hps):
     model = modelBuilder(best_hps)
 
     # Early Stopping
-    stop_early = EarlyStopping(monitor='val_loss', patience = 100)
+    stop_early = EarlyStopping(monitor='val_loss', patience = 100, restore_best_weights=True)
 
     # Train the model
     model.fit(xTrain, yTrain, epochs=1000, validation_split=0.2, callbacks=[stop_early], verbose=0)
