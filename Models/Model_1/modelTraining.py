@@ -116,7 +116,7 @@ def hyperParameterTuning(xTrain, yTrain):
     stop_early = EarlyStopping(monitor='val_loss', patience=5)
 
     # Perform the search
-    tuner.search(xTrain, yTrain, epochs=50, validation_split=0.2, callbacks=[stop_early])
+    tuner.search(xTrain, yTrain, epochs=50, validation_split=0.2, callbacks=[stop_early], verbose=1)
 
     # Get the best model hyperparameters
     best_hps = tuner.get_best_hyperparameters(num_trials=1)[0]
