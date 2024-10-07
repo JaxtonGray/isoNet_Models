@@ -184,7 +184,7 @@ def main():
     testData, _ = importData('DataTest')
 
     # Predict the test data using the trained model
-    predictTestData(testData, testData[['O18', 'H2']], model, scaler, oldCols)
+    predictTestData(testData[FEATURES], testData[['O18', 'H2']], model, scaler, oldCols)
 
     # Save the model
     model.save('Model_1.keras')
