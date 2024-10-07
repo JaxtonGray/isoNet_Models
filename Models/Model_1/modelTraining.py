@@ -159,7 +159,7 @@ def predictTestData(xTest, yTest, model, scaler, oldCols):
     yPreds = model.predict(x)
 
     # Combine the test data and the predictions with original headers
-    testResults = pd.DataFrame(np.concatenate((xTest, yTest, yPreds), axis=1), columns=oldCols + ['O18 P (‰)', 'H2 P (‰)'])
+    testResults = pd.DataFrame(np.concatenate((xTest, yTest, yPreds), axis=1), columns=FEATURES + ['O18 A', 'H2 A', 'O18 P', 'H2 P'])
 
     # Save the results to a CSV
     testResults.to_csv(f'Model_1_TestData.csv', index=False)
