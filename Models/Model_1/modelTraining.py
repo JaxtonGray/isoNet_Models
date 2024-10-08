@@ -106,6 +106,7 @@ def modelBuilder(hp):
 # 4. Get the best model hyperparameters
 # 5. Return the best hyperparameters
 def hyperParameterTuning(xTrain, yTrain):
+    print('Start Tuning')
     # Create the Hyperband Tuner
     tuner = kt.Hyperband(modelBuilder, 
                         objective='val_loss', 
@@ -132,6 +133,7 @@ def hyperParameterTuning(xTrain, yTrain):
 # 3. Train the model
 # 4. Return the trained model
 def trainModel(xTrain, yTrain, best_hps):
+    print('Start Training')
     # Using the best hyperparameters, build the model
     model = modelBuilder(best_hps)
 
