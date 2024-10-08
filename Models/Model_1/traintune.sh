@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --account=def-stadnykt-ab
-#SBATCH --job-name=model_training
+#SBATCH --job-name=model_tuning_training
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=16
 #SBATCH --mem=64000MB
