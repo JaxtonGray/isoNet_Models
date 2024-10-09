@@ -1,6 +1,6 @@
 ### Model 1 ####
 SCHEME = 'Global'
-FEATURES = ['Lat', 'Lon', 'Alt', 'Temp', 'Precip', 'Year', 'JulianDay_Sin']
+FEATURES = ['Lat', 'Lon', 'Alt', 'Temp', 'Precip', 'KPN_A', 'KPN_B', 'KPN_C', 'KPN_D', 'KPN_E', 'Year', 'JulianDay_Sin']
 
 ### Import Libraries
 # Base Libraries
