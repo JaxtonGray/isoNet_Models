@@ -7,6 +7,7 @@ FEATURES = ['Lat', 'Lon', 'Alt', 'Temp', 'Precip', 'Year', 'JulianDay_Sin']
 import numpy as np
 import pandas as pd
 import re
+import json
 # Tensorflow, scikit, kerasTuner
 import tensorflow as tf
 from tensorflow.keras.models import Sequential
@@ -73,28 +74,39 @@ def scaleSplitData(dataset):
 # 6. Add a Dense Output Layer
 # 7. Compile the Model with Hyperparameters
 # 8. Return the Model
-def modelBuilder(hp):
+def modelBuilder(numNeurons1, numNeurons2, numNeurons3, lr):
     # Create a Sequential Model
     model = Sequential()
     # Add an Input Layer
     model.add(InputLayer(shape=(len(FEATURES), 1)))
 
+    # Add the hidden layers with Hyperparameters
+    model.add(LSTM(numNeurons1))
+    model.add(Dense(numNeurons2, activation='relu'))
+    model.add(Dense(numNeurons3, activation='relu'))
+
+    # Add the Output Layer
+    model.add(Dense(2))
+
+    # Compile the Model with Hyperparameters
+    model.compile(optimizer=Adam(learning_rate=lr), loss='mse', metrics=[RootMeanSquaredError(), MeanAbsoluteError()])
+
+    return model
+
+# Hyperparameter Search Space
+# Pseudocode:
+# 1. Define the search space for the hyperparameters
+# 2. Create a Hyperband Tuner Model from the search space
+# 3. Create a callback to stop training early
+# 4. Return the model
+def hyperParameterSearchSpace(hp):
     # Prep the Search Space for Hyperparameter Tuning
     hp_numNeurons1 = hp.Int('numNeurons_LSTM', min_value=8, max_value=512, step=8)
     hp_numNeurons2 = hp.Int('numNeurons_Dense1', min_value=8, max_value=512, step=8)
     hp_numNeurons3 = hp.Int('numNeurons_Dense2', min_value=8, max_value=512, step=8)
     hp_lr = hp.Choice('learning_rate', values=[1e-2, 1e-3, 1e-4])
 
-    # Add the hidden layers with Hyperparameters
-    model.add(LSTM(units=hp_numNeurons1))
-    model.add(Dense(units=hp_numNeurons2, activation='relu'))
-    model.add(Dense(units=hp_numNeurons3, activation='relu'))
-
-    # Add the Output Layer
-    model.add(Dense(2))
-
-    # Compile the Model with Hyperparameters
-    model.compile(optimizer=Adam(learning_rate=hp_lr), loss='mse', metrics=[RootMeanSquaredError(), MeanAbsoluteError()])
+    model = modelBuilder(hp_numNeurons1, hp_numNeurons2, hp_numNeurons3, hp_lr)
 
     return model
 
@@ -108,10 +120,9 @@ def modelBuilder(hp):
 def hyperParameterTuning(xTrain, yTrain):
     print('Start Tuning')
     # Create the Hyperband Tuner
-    tuner = kt.Hyperband(modelBuilder, 
+    tuner = kt.Hyperband(hyperParameterSearchSpace, 
                         objective='val_loss', 
-                        max_epochs=10, factor=3, 
-                        directory='Hyperparameter_Tuner', project_name='G1')
+                        max_epochs=10, factor=3)
 
     # Create a callback to stop training early
     stop_early = EarlyStopping(monitor='val_loss', patience=5)
@@ -122,20 +133,29 @@ def hyperParameterTuning(xTrain, yTrain):
     # Get the best model hyperparameters
     best_hps = tuner.get_best_hyperparameters(num_trials=1)[0]
 
+    # Save the best hyperparameters to a JSON file
+    with open('Best_Hyperparameters.json', 'w') as f:
+        f.write(json.dumps(best_hps.values))
+
     print('Finsihed Tuning')
 
     return best_hps
 
 # Training Process
 # Pseudocode:
-# 1. Using the best hyperparameters, build the model
-# 2. Early Stopping
-# 3. Train the model
-# 4. Return the trained model
+# 1. Load the best hyperparameters
+# 2. Using the best hyperparameters, build the model
+# 3. Early Stopping
+# 4. Train the model
+# 5. Return the trained model
 def trainModel(xTrain, yTrain, best_hps):
     print('Start Training')
+    # Load the best hyperparameters
+    with open('Best_Hyperparameters.json', 'r') as f:
+        hyperparams = json.load(f)
+
     # Using the best hyperparameters, build the model
-    model = modelBuilder(best_hps)
+    model = modelBuilder(hyperparams['numNeurons1'], hyperparams['numNeurons2'], hyperparams['numNeurons3'], hyperparams['lr'])
 
     # Early Stopping
     stop_early = EarlyStopping(monitor='val_loss', patience = 100, restore_best_weights=True)
