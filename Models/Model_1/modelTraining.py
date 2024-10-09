@@ -8,6 +8,7 @@ import numpy as np
 import pandas as pd
 import re
 import json
+import sys
 # Tensorflow, scikit, kerasTuner
 import tensorflow as tf
 from tensorflow.keras.models import Sequential
@@ -139,8 +140,6 @@ def hyperParameterTuning(xTrain, yTrain):
 
     print('Finsihed Tuning')
 
-    return best_hps
-
 # Training Process
 # Pseudocode:
 # 1. Load the best hyperparameters
@@ -148,8 +147,9 @@ def hyperParameterTuning(xTrain, yTrain):
 # 3. Early Stopping
 # 4. Train the model
 # 5. Return the trained model
-def trainModel(xTrain, yTrain, best_hps):
+def trainModel(xTrain, yTrain):
     print('Start Training')
+
     # Load the best hyperparameters
     with open('Best_Hyperparameters.json', 'r') as f:
         hyperparams = json.load(f)
@@ -190,17 +190,21 @@ def predictTestData(xTest, yTest, model, scaler, oldCols):
 
 # Main Function
 def main():
+    # Based on what script was run (train or train & tune), the script will decide if it needs to retune the model
+    shouldTune = bool(sys.argv[1])
+
     # Import train data and original headers
     trainData, oldCols = importData('DataTrain')
 
     # Scale and Split the train data
     xTrain, yTrain, scaler = scaleSplitData(trainData)
 
-    # Hyperparameter Tuning
-    best_hps = hyperParameterTuning(xTrain, yTrain)
+    if shouldTune:
+        # Hyperparameter Tuning
+        hyperParameterTuning(xTrain, yTrain)
 
     # Train the Model
-    model = trainModel(xTrain, yTrain, best_hps)
+    model = trainModel(xTrain, yTrain)
 
     # Import test data and original headers
     testData, _ = importData('DataTest')
