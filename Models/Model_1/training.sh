@@ -13,4 +13,6 @@ virtualenv --no-download $SLURM_TMPDIR/env
 source $SLURM_TMPDIR/env/bin/activate
 pip install --no-index --upgrade pip
 pip install --no-index -r requirements.txt
+
+# Run the training script with the argument of False to indicate we have hyperparameters
 python modelTraining.py False
