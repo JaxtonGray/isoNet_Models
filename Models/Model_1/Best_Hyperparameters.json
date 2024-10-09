@@ -1,1 +1,1 @@
-{"numNeurons_LSTM": 72, "numNeurons_Dense1": 80, "numNeurons_Dense2": 16, "learning_rate": 0.01, "tuner/epochs": 10, "tuner/initial_epoch": 0, "tuner/bracket": 0, "tuner/round": 0}
+{"numNeurons_LSTM": 32, "numNeurons_Dense1": 512, "numNeurons_Dense2": 1024, "learning_rate": 0.01, "tuner/epochs": 10, "tuner/initial_epoch": 4, "tuner/bracket": 2, "tuner/round": 2, "tuner/trial_id": "0013"}

@@ -104,7 +104,7 @@ def hyperParameterSearchSpace(hp):
     # Prep the Search Space for Hyperparameter Tuning
     hp_numNeurons1 = hp.Choice('numNeurons_LSTM', values=[2**3, 2**4, 2**5, 2**6, 2**7, 2**8, 2**9, 2**10])
     hp_numNeurons2 = hp.Choice('numNeurons_Dense1', values=[2**3, 2**4, 2**5, 2**6, 2**7, 2**8, 2**9, 2**10])
-    hp_numNeurons3 = hp.Int('numNeurons_Dense2', values=[2**3, 2**4, 2**5, 2**6, 2**7, 2**8, 2**9, 2**10])
+    hp_numNeurons3 = hp.Choice('numNeurons_Dense2', values=[2**3, 2**4, 2**5, 2**6, 2**7, 2**8, 2**9, 2**10])
     hp_lr = hp.Choice('learning_rate', values=[1e-2, 1e-3, 1e-4])
 
     model = modelBuilder(hp_numNeurons1, hp_numNeurons2, hp_numNeurons3, hp_lr)
