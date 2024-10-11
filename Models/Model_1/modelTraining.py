@@ -1,4 +1,5 @@
-### Model 1 ####
+### Model ####
+MODELNUM = 1
 SCHEME = 'Global'
 FEATURES = ['Lat', 'Lon', 'Alt', 'Temp', 'Precip', 'Year', 'JulianDay_Sin']
 
@@ -186,7 +187,7 @@ def predictTestData(xTest, yTest, model, scaler, oldCols):
     testResults = pd.DataFrame(np.concatenate((xTest, yTest, yPreds), axis=1), columns=FEATURES + ['O18 A', 'H2 A', 'O18 P', 'H2 P'])
 
     # Save the results to a CSV
-    testResults.to_csv(f'Model_1_TestData.csv', index=False)
+    testResults.to_csv(f'Model_{MODELNUM}_TestData.csv', index=False)
 
 
 
