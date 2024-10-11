@@ -9,7 +9,6 @@ import numpy as np
 import pandas as pd
 import re
 import json
-import sys
 # Tensorflow, scikit, kerasTuner
 import tensorflow as tf
 from tensorflow.keras.models import Sequential
@@ -193,18 +192,14 @@ def predictTestData(xTest, yTest, model, scaler, oldCols):
 
 # Main Function
 def main():
-    # Based on what script was run (train or train & tune), the script will decide if it needs to retune the model
-    shouldTune = bool(sys.argv[1])
-
     # Import train data and original headers
     trainData, oldCols = importData('DataTrain')
 
     # Scale and Split the train data
     xTrain, yTrain, scaler = scaleSplitData(trainData)
 
-    if shouldTune:
-        # Hyperparameter Tuning
-        hyperParameterTuning(xTrain, yTrain)
+    # Hyperparameter Tuning
+    hyperParameterTuning(xTrain, yTrain)
 
     # Train the Model
     model = trainModel(xTrain, yTrain)
@@ -216,6 +211,6 @@ def main():
     predictTestData(testData[FEATURES], testData[['O18', 'H2']], model, scaler, oldCols)
 
     # Save the model
-    model.save('Model_1.keras')
+    model.save(f'Model_{MODELNUM}.keras')
 
 main()
