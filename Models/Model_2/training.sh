@@ -2,9 +2,10 @@
 #SBATCH --account=def-stadnykt-ab
 #SBATCH --job-name=model_training
 #SBATCH --nodes=1
+#SBATCH --gpus-per-node=1
 #SBATCH --cpus-per-task=16
 #SBATCH --mem=64000MB
-#SBATCH --time=2:00:00
+#SBATCH --time=2:30:00
 #SBATCH --mail-user=jaxton.gray@ucalgary.ca
 #SBATCH --mail-type=BEGIN,END,FAIL
 
