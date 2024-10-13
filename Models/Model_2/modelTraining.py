@@ -292,7 +292,7 @@ def predictAllTestData(testData, regionalModels, regionalData):
         yTest = testData[['O18', 'H2']].values
 
         # Predict the test data using the trained model for each region
-        yPreds = model.predict(xTest)
+        yPreds = model.predict(xTest, verbose=0)
 
         # Combine the test data and the predictions with original headers for each region
         testResults = pd.DataFrame(np.concatenate((xTest, yTest, yPreds), axis=1), 
