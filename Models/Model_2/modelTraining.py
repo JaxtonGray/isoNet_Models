@@ -272,7 +272,7 @@ def predictTestData(xTest, yTest, model, scaler):
 # 6. Save the results to a CSV for each region
 def predictAllTestData(regionalModels, regionalData):
     print("Predicting for all test data")
-    testData = pd.read_csv('../../Data/TestData.csv')[0]
+    testData = pd.read_csv('../../Data/DataTest.csv')[0]
     # Convert testData into geoDataFrame
     gdf = gpd.GeoDataFrame(testData, geometry=gpd.points_from_xy(testData.Lon, testData.Lat))
 
