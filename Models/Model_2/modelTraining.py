@@ -270,9 +270,8 @@ def predictTestData(xTest, yTest, model, scaler):
 # 4. Predict the test data using the trained model for each region
 # 5. Combine the test data and the predictions with original headers for each region
 # 6. Save the results to a CSV for each region
-def predictAllTestData(regionalModels, regionalData):
+def predictAllTestData(testData, regionalModels, regionalData):
     print("Predicting for all test data")
-    testData = pd.read_csv('../../Data/DataTest.csv')
     # Convert testData into geoDataFrame
     gdf = gpd.GeoDataFrame(testData, geometry=gpd.points_from_xy(testData.Lon, testData.Lat))
 
@@ -358,7 +357,9 @@ def main():
         regionalModels = traintuneAllModels(splitData)
 
         # Predict all test data for all regional models for non-global schemes
-        predictAllTestData(regionalModels, splitData)
+        testData = importData('DataTest')[0]
+        print("Test Data Imported")
+        predictAllTestData(testData, regionalModels, splitData)
 
 main()
 
