@@ -1,6 +1,6 @@
 ### Model ####
-MODELNUM = 3
-SCHEME = 'Global'
+MODELNUM = 4
+SCHEME = 'PrevailingWinds_6Split'
 FEATURES = ['Lat', 'Lon', 'Alt', 'Precip', 'Temp',
             'KPN_A', 'KPN_B', 'KPN_C', 'KPN_D', 'KPN_E',
             'Year', 'JulianDay_Sin']

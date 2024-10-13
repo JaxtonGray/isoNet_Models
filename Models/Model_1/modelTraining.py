@@ -7,6 +7,8 @@ FEATURES = ['Lat', 'Lon', 'Alt', 'Temp', 'Precip', 'Year', 'JulianDay_Sin']
 # Base Libraries
 import numpy as np
 import pandas as pd
+import geopandas as gpd
+import os
 import re
 import json
 # Tensorflow, scikit, kerasTuner
@@ -53,17 +55,52 @@ def importData(fileName):
 # 1. Separate dataset into Features and Target
 # 2. Scale the Features array using MinMaxScaler
 # 3. Return the scaled X, Y, and the scaler used
-def scaleSplitData(dataset):
+def scaleData(dataset, regionalScaler = None):
     # Separate Features and Target
     features = dataset[FEATURES]
     target = dataset[['O18', 'H2']]
 
-    # Scale the Features
-    scaler = MinMaxScaler()
-    X = scaler.fit_transform(features.values)
-    Y = target.values
+    # Scale the data if no regionalScaler is provided
+    if regionalScaler is None:
+        # Scale the Features
+        scaler = MinMaxScaler()
+        X = scaler.fit_transform(features.values)
+        Y = target.values
+        return X, Y, scaler
+    
+    else:
+        # Scale the Features using the regionalScaler provided
+        X = regionalScaler.transform(features.values)
+        Y = target.values
+        scaler = regionalScaler
+        return X, Y
 
-    return X, Y, scaler
+
+# Split data based on spatial scheme
+# Pseudocode:
+# 1. Load in the schematic file
+# 2. Convert the schematic file into a geodataframe
+# 3. Convert the dataset into a geodataframe
+# 4. Split data based on the spatial scheme region and add to a dictionary
+# 5. Return the dictionary of dataframes
+def schemeSplit(df):
+    # Load in the schematic file
+    scheme = pd.read_csv(f'../../Data/ModelSplit_Schemes/{SCHEME}.csv')
+    # Convert the schematic file into a geodataframe
+    scheme = gpd.GeoDataFrame(scheme, geometry=gpd.GeoSeries.from_wkt(scheme['geometry']))
+
+    # Convert the dataset into a geodataframe
+    gdf = gpd.GeoDataFrame(df, geometry=gpd.points_from_xy(df.Lon, df.Lat))
+
+    # Split data based on the spatial scheme region and add to a dictionary
+    splitData = {}
+
+    for region in scheme.iterrows():
+        regionData = gdf[gdf.within(region[1]['geometry'])].reset_index()
+        regionData_X, regionData_Y, regionData_scaler = scaleData(regionData)
+        splitData[region[1]['Region']] = (regionData_X, regionData_Y, regionData_scaler)
+
+    return splitData
 
 # Model Builder Function 
 # Pseudocode:
@@ -136,11 +173,10 @@ def hyperParameterTuning(xTrain, yTrain):
     # Get the best model hyperparameters
     best_hps = tuner.get_best_hyperparameters(num_trials=1)[0]
 
-    # Save the best hyperparameters to a JSON file
-    with open('Best_Hyperparameters.json', 'w') as f:
-        f.write(json.dumps(best_hps.values))
-
     print('Finsihed Tuning')
+    # Return the best hyperparameters
+    return best_hps.values
+    
 
 # Training Process
 # Pseudocode:
@@ -149,12 +185,8 @@ def hyperParameterTuning(xTrain, yTrain):
 # 3. Early Stopping
 # 4. Train the model
 # 5. Return the trained model
-def trainModel(xTrain, yTrain):
+def trainModel(xTrain, yTrain, hyperparams):
     print('Start Training')
-
-    # Load the best hyperparameters
-    with open('Best_Hyperparameters.json', 'r') as f:
-        hyperparams = json.load(f)
 
     # Using the best hyperparameters, build the model
     model = modelBuilder(hyperparams['numNeurons_LSTM'], hyperparams['numNeurons_Dense1'], hyperparams['numNeurons_Dense2'], hyperparams['learning_rate'])
@@ -169,13 +201,44 @@ def trainModel(xTrain, yTrain):
     
     return model
 
+# Train and tune all models for non-global schemes
+# Pseudocode:
+# 1. Cycle through all the regional datasets
+# 2. Tune the model for each region
+# 3. Save the best hyperparameters to a new region dictionary
+# 4. Train the model for each region and save the trained model to the regional model dictionary
+# 5. Return the regional model dictionary
+def traintuneAllModels(regionalData):
+    print("Start tuning and training all models") 
+    # Cycle through all the regional datasets
+    regionalModels = {}
+    regionalHyperparams = {}
+
+    for region in regionalData.keys():
+        print(f'-----> Region: {region}')
+        # Tune the model for each region
+        bestHyperparams = hyperParameterTuning(regionalData[region][0], regionalData[region][1])
+        regionalHyperparams[region] = bestHyperparams
+
+        # Train the model for each region
+        model = trainModel(regionalData[region][0], regionalData[region][1], bestHyperparams)
+        regionalModels[region] = model
+
+    # Save the best hyperparameters to a file
+    if not os.path.exists(f'Trained_Models'):
+        os.makedirs(f'Trained_Models')
+    with open(f'Trained_Models/Model_{MODELNUM}_Hyperparameters.json', 'w') as f:
+        json.dump(regionalHyperparams, f)
+
+    return regionalModels
+
 # Test data prediction using the test data and the trained model
 # Pseudocode:
 # 1. Scale the test data using the scaler
 # 2. Predict the test data using the trained model
 # 3. Combine the test data and the predictions with original headers
 # 4. Save the results to a CSV
-def predictTestData(xTest, yTest, model, scaler, oldCols):
+def predictTestData(xTest, yTest, model, scaler):
     # Scale the test data using the scaler
     x = scaler.transform(xTest.values)
     
@@ -188,29 +251,104 @@ def predictTestData(xTest, yTest, model, scaler, oldCols):
     # Save the results to a CSV
     testResults.to_csv(f'Model_{MODELNUM}_TestData.csv', index=False)
 
+# Predict all test data for all regional models for non-global schemes
+# Pseudocode:
+# 1. Load in test data and scheme
+# 2. Cycle through all the regions
+# 3. Scale the test data using the scaler for each region
+# 4. Predict the test data using the trained model for each region
+# 5. Combine the test data and the predictions with original headers for each region
+# 6. Save the results to a CSV for each region
+def predictAllTestData(testData, regionalModels, regionalData):
+    print("Predicting for all test data")
+    # Convert testData into geoDataFrame
+    gdf = gpd.GeoDataFrame(testData, geometry=gpd.points_from_xy(testData.Lon, testData.Lat))
 
+    # Load in the schematic file
+    scheme = pd.read_csv(f'../../Data/ModelSplit_Schemes/{SCHEME}.csv')
+    # Convert the schematic file into a geodataframe
+    scheme = gpd.GeoDataFrame(scheme, geometry=gpd.GeoSeries.from_wkt(scheme['geometry']))
+
+    regionalPredictions = pd.DataFrame(columns=FEATURES + ['O18 A', 'H2 A', 'O18 P', 'H2 P'])
+    for region in scheme.iterrows():
+        # Grab the regional model and the scaler for the region
+        model = regionalModels[region[1]['Region']]
+        scaler = regionalData[region[1]['Region']][2]
+        testData = gdf[gdf.within(region[1]['geometry'])].reset_index()
+
+        # Scale the test data using the scaler for each region
+        xTest = scaler.transform(testData[FEATURES].values)
+        yTest = testData[['O18', 'H2']].values
+
+        # Predict the test data using the trained model for each region
+        yPreds = model.predict(xTest, verbose=0)
+
+        # Combine the test data and the predictions with original headers for each region
+        testResults = pd.DataFrame(np.concatenate((xTest, yTest, yPreds), axis=1), 
+                                   columns=FEATURES + ['O18 A', 'H2 A', 'O18 P', 'H2 P'])
+        
+        regionalPredictions = pd.concat([regionalPredictions, testResults], axis=0)
+
+        if not os.path.exists(f'Trained_Models'):
+            os.makedirs(f'Trained_Models')
+            # Save the model to a file
+            model.save(f'Trained_Models/{region[1]["Region"]}.keras')
+        else:
+            # Save the model to a file
+            model.save(f'Trained_Models/{region[1]["Region"]}.keras')
+
+        
+
+    # Save all the results to a CSV
+    regionalPredictions.to_csv(f'Model_{MODELNUM}_TestData.csv', index=False)
+
+
+    print("Finished predicting all test data")
 
 # Main Function
 def main():
+    print(f"Model {MODELNUM} - {SCHEME}")
+    print("---------------------------------")
+
     # Import train data and original headers
     trainData, oldCols = importData('DataTrain')
+    print("Training Data Imported")
 
-    # Scale and Split the train data
-    xTrain, yTrain, scaler = scaleSplitData(trainData)
+    # If a global spatial scheme is used do not split the data
+    if SCHEME == "Global":
+        # Scale and Split the train data
+        xTrain, yTrain, scaler = scaleData(trainData)
+        print("Training Data Scaled")
 
-    # Hyperparameter Tuning
-    hyperParameterTuning(xTrain, yTrain)
+        # Hyperparameter Tuning
+        best_hps = hyperParameterTuning(xTrain, yTrain)
 
-    # Train the Model
-    model = trainModel(xTrain, yTrain)
+        # Train the Model
+        model = trainModel(xTrain, yTrain, best_hps)
 
-    # Import test data and original headers
-    testData, _ = importData('DataTest')
+        # Import test data and original headers
+        testData = importData('DataTest')[0]
+        print("Test Data Imported")
 
-    # Predict the test data using the trained model
-    predictTestData(testData[FEATURES], testData[['O18', 'H2']], model, scaler, oldCols)
+        # Predict the test data using the trained model
+        predictTestData(testData[FEATURES], testData[['O18', 'H2']], model, scaler)
+        print("Test Data Predicted")
 
-    # Save the model
-    model.save(f'Model_{MODELNUM}.keras')
+        # Save the model
+        model.save(f'Model_{MODELNUM}.keras')
+    else:
+        # Split the data based on the spatial scheme
+        print(f"\nSplitting training data based on Scheme: {SCHEME}")
+        splitData = schemeSplit(trainData)
+        
+        # Train and tune all models for non-global schemes
+        regionalModels = traintuneAllModels(splitData)
+
+        # Predict all test data for all regional models for non-global schemes
+        testData = importData('DataTest')[0]
+        print("Test Data Imported")
+        predictAllTestData(testData, regionalModels, splitData)
 
 main()
+
+
