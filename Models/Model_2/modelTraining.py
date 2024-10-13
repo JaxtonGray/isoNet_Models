@@ -1,4 +1,3 @@
-# %%
 ### Model ####
 MODELNUM = 2
 SCHEME = 'PrevailingWinds_6Split'
@@ -22,7 +21,6 @@ from tensorflow.keras.metrics import RootMeanSquaredError, MeanAbsoluteError
 from sklearn.preprocessing import MinMaxScaler
 import keras_tuner as kt
 
-# %%
 # Function to import a dataset and transform headers for easier coding and convert Date column
 # Pseudocode:
 # 1. Import Dataset Save old Headers for later
@@ -52,7 +50,6 @@ def importData(fileName):
     
     return dataset, oldCols
 
-# %%
 # Function that will sort dataset into scaled X and Y
 # Pseudocode:
 # 1. Separate dataset into Features and Target
@@ -79,7 +76,6 @@ def scaleData(dataset, regionalScaler = None):
         return X, Y
 
 
-# %%
 # Split data based on spatial scheme
 # Pseudocode:
 # 1. Load in the schematic file
@@ -106,7 +102,6 @@ def schemeSplit(df):
 
     return splitData
 
-# %%
 # Model Builder Function 
 # Pseudocode:
 # 1. Create a Sequential Model
@@ -136,7 +131,6 @@ def modelBuilder(numNeurons1, numNeurons2, numNeurons3, lr):
 
     return model
 
-# %%
 # Hyperparameter Search Space
 # Pseudocode:
 # 1. Define the search space for the hyperparameters
@@ -154,7 +148,6 @@ def hyperParameterSearchSpace(hp):
 
     return model
 
-# %%
 # Hyperparameter tuning process
 # Pseudocode:
 # 1. Create the Hyperband Tuner
@@ -185,7 +178,6 @@ def hyperParameterTuning(xTrain, yTrain):
     return best_hps.values
     
 
-# %%
 # Training Process
 # Pseudocode:
 # 1. Load the best hyperparameters
@@ -209,7 +201,6 @@ def trainModel(xTrain, yTrain, hyperparams):
     
     return model
 
-# %%
 # Train and tune all models for non-global schemes
 # Pseudocode:
 # 1. Cycle through all the regional datasets
@@ -241,7 +232,6 @@ def traintuneAllModels(regionalData):
 
     return regionalModels
 
-# %%
 # Test data prediction using the test data and the trained model
 # Pseudocode:
 # 1. Scale the test data using the scaler
@@ -261,7 +251,6 @@ def predictTestData(xTest, yTest, model, scaler):
     # Save the results to a CSV
     testResults.to_csv(f'Model_{MODELNUM}_TestData.csv', index=False)
 
-# %%
 # Predict all test data for all regional models for non-global schemes
 # Pseudocode:
 # 1. Load in test data and scheme
@@ -316,7 +305,6 @@ def predictAllTestData(testData, regionalModels, regionalData):
 
     print("Finished predicting all test data")
 
-# %%
 # Main Function
 def main():
     print(f"Model {MODELNUM} - {SCHEME}")
