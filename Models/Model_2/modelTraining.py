@@ -233,9 +233,11 @@ def traintuneAllModels(regionalData):
         model = trainModel(regionalData[region][0], regionalData[region][1], bestHyperparams)
         regionalModels[region] = model
 
-    # Save the regional model dictionary to a file
-    with open(f'../../Models/Model_{MODELNUM}_{SCHEME}_Models.json', 'w') as f:
-        json.dump(regionalModels, f)
+    # Save the best hyperparameters to a file
+    if not os.path.exists(f'Trained_Models'):
+        os.makedirs(f'Trained_Models')
+    with open(f'Trained_Models/Model_{MODELNUM}_Hyperparameters.json', 'w') as f:
+        json.dump(regionalHyperparams, f)
 
     return regionalModels
 
