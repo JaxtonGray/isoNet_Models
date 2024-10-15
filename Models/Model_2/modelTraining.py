@@ -277,11 +277,12 @@ def predictAllTestData(testData, regionalModels, regionalData):
         testData = gdf[gdf.within(region[1]['geometry'])].reset_index()
 
         # Scale the test data using the scaler for each region
-        xTest = scaler.transform(testData[FEATURES].values)
+        xTest = testData[FEATURES]
+        x = scaler.transform(xTest.values)
         yTest = testData[['O18', 'H2']].values
 
         # Predict the test data using the trained model for each region
-        yPreds = model.predict(xTest, verbose=0)
+        yPreds = model.predict(x, verbose=0)
 
         # Combine the test data and the predictions with original headers for each region
         testResults = pd.DataFrame(np.concatenate((xTest, yTest, yPreds), axis=1), 
@@ -350,5 +351,3 @@ def main():
         predictAllTestData(testData, regionalModels, splitData)
 
 main()
-
-
