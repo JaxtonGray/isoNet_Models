@@ -243,7 +243,7 @@ def predictTestData(xTest, yTest, model, scaler):
     x = scaler.transform(xTest.values)
     
     # Predict the test data using the trained model
-    yPreds = model.predict(x)
+    yPreds = model.predict(x, verbose=0)
 
     # Combine the test data and the predictions with original headers
     testResults = pd.DataFrame(np.concatenate((xTest, yTest, yPreds), axis=1), columns=FEATURES + ['O18 A', 'H2 A', 'O18 P', 'H2 P'])
