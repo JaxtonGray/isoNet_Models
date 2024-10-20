@@ -1,10 +1,3 @@
-### Model ####
-MODELNUM = 3
-SCHEME = 'Global'
-FEATURES = ['Lat', 'Lon', 'Alt', 'Precip', 'Temp',
-            'KPN_A', 'KPN_B', 'KPN_C', 'KPN_D', 'KPN_E',
-            'Year', 'JulianDay_Sin']
-
 ### Import Libraries
 # Base Libraries
 import numpy as np
@@ -13,6 +6,7 @@ import geopandas as gpd
 import os
 import re
 import json
+import sys
 # Tensorflow, scikit, kerasTuner
 import tensorflow as tf
 from tensorflow.keras.models import Sequential
@@ -22,6 +16,11 @@ from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.metrics import RootMeanSquaredError, MeanAbsoluteError
 from sklearn.preprocessing import MinMaxScaler
 import keras_tuner as kt
+
+### Model Global Variables####
+MODELNUM = sys.argv[1]
+SCHEME = sys.argv[2]
+FEATURES = sys.argv[3].split(',')
 
 # Function to import a dataset and transform headers for easier coding and convert Date column
 # Pseudocode:
