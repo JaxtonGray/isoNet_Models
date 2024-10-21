@@ -8,11 +8,10 @@
 #SBATCH --time=2:30:00
 #SBATCH --mail-user=jaxton.gray@ucalgary.ca
 #SBATCH --mail-type=BEGIN,END,FAIL
-#SBATCH --array=1-4
 
 # !/bin/bash
 # This section will grab the model name to run
-modelName=$(sed -n ${SLURM_ARRAY_TASK_ID}p modelList.txt)
+modelName=$(sed -n 1p modelList.txt)
 echo $modelName
 
 cd Models/$modelName

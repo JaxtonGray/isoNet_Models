@@ -6,7 +6,7 @@ flatbuffers==24.3.25+computecanada
 gast==0.6.0+computecanada
 geopandas==1.0.1+computecanada
 google-pasta==0.2.0+computecanada
-grpcio==1.62.1+computecanada
+grpcio==1.67.0+computecanada
 h5py==3.12.0+computecanada
 idna==3.10+computecanada
 joblib==1.4.2+computecanada
@@ -32,7 +32,7 @@ pyproj==3.6.1+computecanada
 python_dateutil==2.9.0.post0+computecanada
 pytz==2024.2+computecanada
 requests==2.32.3+computecanada
-rich==13.9.0+computecanada
+rich==13.9.2+computecanada
 scikit_learn==1.5.0+computecanada
 scipy==1.14.1+computecanada
 shapely==2.0.4+computecanada
