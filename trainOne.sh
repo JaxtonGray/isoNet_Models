@@ -24,8 +24,6 @@ pip install --no-index --upgrade pip
 pip install --no-index -r requirements.txt
 pip install --no-index tensorflow
 
-# Switch to the model directory
-cd Models/$modelName
 
 # Extract the information from Model_Info.txt
 modelNum=$(sed -n 1p Model_Info.txt)
@@ -33,4 +31,4 @@ modelScheme=$(sed -n 2p Model_Info.txt)
 modelFeatures=$(sed -n 3p Model_Info.txt)
 
 # Run the training script
-python ../modelTraining.py "$modelNum" "$modelScheme" "$modelFeatures"
+python Models/modelTraining.py "$modelNum" "$modelScheme" "$modelFeatures"
