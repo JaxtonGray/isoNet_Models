@@ -19,12 +19,13 @@ import keras_tuner as kt
 
 # Function to load in the important parts of the model rather than have a bunch of global variables
 def modelInfo(modelName):
-    with open("../modelDirectory.json", 'r') as file:
-        modelDir = json.loads(file)
+    with open(r"modelDirectory.json", 'r') as file:
+        modelInfo = file.read()
+        modelDir = json.loads(modelInfo)
 
-    modelNum = modelDir["num"]
-    modelScheme = modelDir["scheme"]
-    modelFeatures = modelDir["features"]
+    modelNum = int(modelDir[modelName]["num"])
+    modelScheme = modelDir[modelName]["scheme"]
+    modelFeatures = list(map(lambda x: x.strip(), modelDir[modelName]["features"].split(",")))
 
     return modelNum, modelScheme, modelFeatures
 
@@ -37,7 +38,7 @@ def modelInfo(modelName):
 # 5. Return the dataset, and old headers
 def importData(fileName):
     # Read in the correct file
-    dataset = pd.read_csv(f'../../Data/{fileName}.csv')
+    dataset = pd.read_csv(f'../Data/{fileName}.csv')
     oldCols = list(dataset.columns)
 
     # Remove any units (anything in parentheses)
@@ -144,14 +145,14 @@ def modelBuilder(modelFeatures, numNeurons1, numNeurons2, numNeurons3, lr):
 # 2. Create a Hyperband Tuner Model from the search space
 # 3. Create a callback to stop training early
 # 4. Return the model
-def hyperParameterSearchSpace(modelFeatures, hp):
+def hyperParameterSearchSpace(hp):
     # Prep the Search Space for Hyperparameter Tuning
     hp_numNeurons1 = hp.Choice('numNeurons_LSTM', values=[2**3, 2**4, 2**5, 2**6, 2**7, 2**8, 2**9, 2**10])
     hp_numNeurons2 = hp.Choice('numNeurons_Dense1', values=[2**3, 2**4, 2**5, 2**6, 2**7, 2**8, 2**9, 2**10])
     hp_numNeurons3 = hp.Choice('numNeurons_Dense2', values=[2**3, 2**4, 2**5, 2**6, 2**7, 2**8, 2**9, 2**10])
     hp_lr = hp.Choice('learning_rate', values=[1e-2, 1e-3, 1e-4])
 
-    model = modelBuilder(modelFeatures, hp_numNeurons1, hp_numNeurons2, hp_numNeurons3, hp_lr)
+    model = modelBuilder(modelInfo(sys.argv[1])[2], hp_numNeurons1, hp_numNeurons2, hp_numNeurons3, hp_lr)
 
     return model
 
@@ -336,7 +337,7 @@ def main():
         print("Training Data Scaled")
 
         # Hyperparameter Tuning
-        best_hps = hyperParameterTuning(modelFeatures, xTrain, yTrain)
+        best_hps = hyperParameterTuning(xTrain, yTrain)
 
         # Train the Model
         model = trainModel(modelFeatures, xTrain, yTrain, best_hps)
