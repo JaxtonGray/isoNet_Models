@@ -23,5 +23,7 @@ source $SLURM_TMPDIR/env/bin/activate
 pip install --no-index --upgrade pip
 pip install --no-index tensorflow pandas geopandas numpy scikit-learn keras-tuner
 
+cd Models/$modelName
+
 # Run the training script
-python modelTraining.py "$modelName"
+python ../modelTraining.py "$modelName"
