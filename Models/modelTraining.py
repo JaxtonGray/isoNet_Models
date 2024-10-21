@@ -38,7 +38,7 @@ def modelInfo(modelName):
 # 5. Return the dataset, and old headers
 def importData(fileName):
     # Read in the correct file
-    dataset = pd.read_csv(f'../Data/{fileName}.csv')
+    dataset = pd.read_csv(f'../../Data/{fileName}.csv')
     oldCols = list(dataset.columns)
 
     # Remove any units (anything in parentheses)
