@@ -250,6 +250,8 @@ def predictTestData(xTest, yTest, model, scaler):
     testResults = pd.DataFrame(np.concatenate((xTest, yTest, yPreds), axis=1), columns=FEATURES + ['O18 A', 'H2 A', 'O18 P', 'H2 P'])
 
     # Save the results to a CSV
+    if not os.path.exists('TestResults'):
+        os.makedirs('TestResults')
     testResults.to_csv(f'Model_{MODELNUM}_TestData.csv', index=False)
 
 # Predict all test data for all regional models for non-global schemes
@@ -302,8 +304,9 @@ def predictAllTestData(testData, regionalModels, regionalData):
         
 
     # Save all the results to a CSV
-    regionalPredictions.to_csv(f'Model_{MODELNUM}_TestData.csv', index=False)
-
+    if not os.path.exists('TestResults'):
+        os.makedirs('TestResults')
+    regionalPredictions.to_csv(f'TestResults/Model_{MODELNUM}_TestData.csv', index=False)
 
     print("Finished predicting all test data")
 
