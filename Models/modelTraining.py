@@ -19,7 +19,7 @@ import keras_tuner as kt
 
 # Function to load in the important parts of the model rather than have a bunch of global variables
 def modelInfo(modelName):
-    with open(r"modelDirectory.json", 'r') as file:
+    with open(r"../modelDirectory.json", 'r') as file:
         modelInfo = file.read()
         modelDir = json.loads(modelInfo)
 
