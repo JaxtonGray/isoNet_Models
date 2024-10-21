@@ -1,3 +1,0 @@
-1
-Global
-Lat, Lon, Alt, Temp, Precip, Year, JulianDay_Sin

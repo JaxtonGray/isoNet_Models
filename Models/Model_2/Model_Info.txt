@@ -1,3 +1,0 @@
-2
-PrevailingWinds_6Split
-Lat, Lon, Alt, Temp, Precip, Year, JulianDay_Sin

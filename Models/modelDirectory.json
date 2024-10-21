@@ -1,18 +1,22 @@
 {
-    "model_1": {
+    "Model_1": {
         "num": 1,
-        "scheme": "Global"
+        "scheme": "Global",
+        "features": "Lat, Lon, Alt, Temp, Precip, Year, JulianDay_Sin"
     },
-    "model_2": {
+    "Model_2": {
         "num": 2,
-        "scheme": "PrevailingWinds_6Split"
+        "scheme": "PrevailingWinds_6Split",
+        "features": "Lat, Lon, Alt, Temp, Precip, Year, JulianDay_Sin"
     },
-    "model_3": {
+    "Model_3": {
         "num": 3,
-        "scheme": "Global"
+        "scheme": "Global",
+        "features": "Lat, Lon, Alt, Precip, Temp, KPN_A, KPN_B, KPN_C, KPN_D, KPN_E, Year, JulianDay_Sin"
     },
-    "model_4": {
+    "Model_4": {
         "num": 4,
-        "scheme": "PrevailingWinds_6Split"
+        "scheme": "PrevailingWinds_6Split",
+        "features": "Lat, Lon, Alt, Precip, Temp, KPN_A, KPN_B, KPN_C, KPN_D, KPN_E, Year, JulianDay_Sin"
     }
 }   
