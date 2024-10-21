@@ -21,8 +21,7 @@ module load proj
 virtualenv --no-download $SLURM_TMPDIR/env
 source $SLURM_TMPDIR/env/bin/activate
 pip install --no-index --upgrade pip
-pip install --no-index -r requirements.txt
-pip install --no-index tensorflow
+pip install --no-index tensorflow pandas numpy scikit-learn keras-tuner
 
 
 # Extract the information from Model_Info.txt
