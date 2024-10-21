@@ -18,9 +18,9 @@ from sklearn.preprocessing import MinMaxScaler
 import keras_tuner as kt
 
 ### Model Global Variables####
-MODELNUM = sys.argv[1]
+MODELNUM = int(sys.argv[1])
 SCHEME = sys.argv[2]
-FEATURES = sys.argv[3].split(',')
+FEATURES = list(map(lambda x: x.strip(), sys.argv[3].split(',')))
 
 # Function to import a dataset and transform headers for easier coding and convert Date column
 # Pseudocode:
