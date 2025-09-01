@@ -2,9 +2,12 @@
 Global,Global,FALSE,TRUE
 Preliminary Winds,PreWinds,FALSE,TRUE
 High Low Latitude,HighLowLat,FALSE,TRUE
+Desert Bands,Desert,FALSE,TRUE
 "Base Set (Coods, Date)",B,TRUE,FALSE
 Temperature,T,TRUE,FALSE
 Precipitation,P,TRUE,FALSE
 Wind,W,TRUE,FALSE
 KPN,K,TRUE,FALSE
-Teleconnections,I,TRUE,FALSE
+El Nino Southern Oscillation,I(E),TRUE,FALSE
+North Atlantic Oscillation,I(N),TRUE,FALSE
+Antarctic Oscillation,I(A),TRUE,FALSE

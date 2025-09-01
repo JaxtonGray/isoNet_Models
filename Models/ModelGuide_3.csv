@@ -7,4 +7,6 @@ Temperature,T,TRUE,FALSE
 Precipitation,P,TRUE,FALSE
 Wind,W,TRUE,FALSE
 KPN,K,TRUE,FALSE
-Teleconnections,I,TRUE,FALSE
+El Nino Southern Oscillation,I(E),TRUE,FALSE
+North Atlantic Oscillation,I(N),TRUE,FALSE
+Antarctic Oscillation,I(A),TRUE,FALSE
