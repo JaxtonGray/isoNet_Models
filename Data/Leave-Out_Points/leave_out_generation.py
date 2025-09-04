@@ -2,11 +2,23 @@
 # This will contain points specifically pulled from the GNIP data as well as the 
 # excess data shared by Trish's colleagues
 #%%
+from ctypes.wintypes import POINT
 import json
 import pandas as pd
 import geopandas as gpd
 from shapely.geometry import Point
 
+# Set Global variable defining the points that are being left out
+LEAVE_OUT_POINTS = {
+    "LowData" : {"coords" : Point(104.283, 52.3), "type": "Low density of observations", "source": "GNIP"},
+    "HighData" : {"coords" : Point(7.584, 47.543), "type": "High density of observations", "source": "GNIP"},
+    "DesertData" : {"coords" : Point(-2.17, 30.13), "type": "Arid region that is sparsely populated, testing for how model performs", "source": "GNIP"},
+    "NorthernData" : {"coords" : Point(-105.117, 69.1), "type": "Northern region with unique climatic conditions and typically sparesly populated", "source": "GNIP"},
+    "SouthernData" : {"coords" : Point(-105.117, -19.65), "type": "Southern region with distinct climatic conditions and diverse ecosystems", "source": "GNIP"},
+    "lakeWoods" : {"coords" : Point(-93.72, 49.67), "type": "Experimental Lakes Area or Lake of the Woods, Insititue of Sustainable Development", "source": "GNIP"},
+    "tibetPlat" : {"coords" : Point(91.133, 29.7), "type": "Tibetan Plateau, or as close as I could get it for this", "source": "GNIP"},
+
+}
 #%%
 # Function to read in the GNIP data and convert it to a GeoDataFrame
 def read_gnip_data(file_path):
@@ -55,17 +67,6 @@ def read_gnip_data(file_path):
     gdf = gpd.GeoDataFrame(df, geometry=gpd.points_from_xy(df.Lon, df.Lat))
     return gdf
 # %%
-# Function to be used for reading in the excess data
+# Function to be used for reading in the Non-Gnip Data Sources
 # NOT AVAILABLE YET
 #%%
-# Function to set the rough coordinates for the leave out points
-def set_leave_out_points():
-    # Define the rough coordinates for the leave out points
-    leave_out_coords = {
-        "Point_1": {"Lat": 34.0522, "Lon": -118.2437},  # Los Angeles, CA
-        "Point_2": {"Lat": 40.7128, "Lon": -74.0060},   # New York, NY
-        "Point_3": {"Lat": 41.8781, "Lon": -87.6298},   # Chicago, IL
-        "Point_4": {"Lat": 29.7604, "Lon": -95.3698},   # Houston, TX
-        "Point_5": {"Lat": 33.4484, "Lon": -112.0740}   # Phoenix, AZ
-    }
-    return leave_out_coords
