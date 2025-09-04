@@ -2,7 +2,6 @@
 # This will contain points specifically pulled from the GNIP data as well as the 
 # excess data shared by Trish's colleagues
 #%%
-from ctypes.wintypes import POINT
 import json
 import pandas as pd
 import geopandas as gpd
@@ -17,6 +16,7 @@ LEAVE_OUT_POINTS = {
     "SouthernData" : {"coords" : Point(-105.117, -19.65), "type": "Southern region with distinct climatic conditions and diverse ecosystems", "source": "GNIP"},
     "lakeWoods" : {"coords" : Point(-93.72, 49.67), "type": "Experimental Lakes Area or Lake of the Woods, Insititue of Sustainable Development", "source": "GNIP"},
     "tibetPlat" : {"coords" : Point(91.133, 29.7), "type": "Tibetan Plateau, or as close as I could get it for this", "source": "GNIP"},
+    "ethiopiaHigh" : {"coords" : Point(39.77, 12.542), "type": "Ethiopian Highlands", "source": "GNIP"}
 
 }
 #%%
