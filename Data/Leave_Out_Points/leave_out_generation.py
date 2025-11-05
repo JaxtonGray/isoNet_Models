@@ -9,15 +9,17 @@ from shapely.geometry import Point
 
 # Set Global variable defining the points that are being left out
 LEAVE_OUT_POINTS = {
-    "LowData" : {"coords" : Point(104.283, 52.3), "type": "Low density of observations", "source": "GNIP"},
-    "HighData" : {"coords" : Point(7.584, 47.543), "type": "High density of observations", "source": "GNIP"},
-    "DesertData" : {"coords" : Point(-2.17, 30.13), "type": "Arid region that is sparsely populated, testing for how model performs", "source": "GNIP"},
-    "NorthernData" : {"coords" : Point(-105.117, 69.1), "type": "Northern region with unique climatic conditions and typically sparesly populated", "source": "GNIP"},
-    "SouthernData" : {"coords" : Point(-105.117, -19.65), "type": "Southern region with distinct climatic conditions and diverse ecosystems", "source": "GNIP"},
-    "lakeWoods" : {"coords" : Point(-93.72, 49.67), "type": "Experimental Lakes Area or Lake of the Woods, Insititue of Sustainable Development", "source": "GNIP"},
-    "tibetPlat" : {"coords" : Point(91.133, 29.7), "type": "Tibetan Plateau, or as close as I could get it for this", "source": "GNIP"},
-    "ethiopiaHigh" : {"coords" : Point(39.77, 12.542), "type": "Ethiopian Highlands", "source": "GNIP"}
-
+    "lowData" : Point(104.283, 52.3),
+    "highData" : Point(7.584, 47.543),
+    "aridData" : Point(-2.17, 30.13),
+    "northData" : Point(-105.117, 69.1),
+    "equitData" : Point(6.72, 0.38),
+    "southernData" : Point(-48.06, -22.66),
+    "antData" : Point(-68.13, -67.57),
+    "lakeWoods" : Point(-93.72, 49.67),
+    "tibetPlat" : Point(91.133, 29.7),
+    "ethiopiaHigh" : Point(39.77, 12.542),
+    "hotWet" : Point(72.82, 18.96)
 }
 #%%
 # Function to read in the GNIP data and convert it to a GeoDataFrame
