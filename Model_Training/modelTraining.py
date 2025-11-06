@@ -7,7 +7,7 @@
 import numpy as np
 import pandas as pd
 import geopandas as gpd
-import os, re, json, sys, logging
+import os, glob, re, json, sys, logging
 
 # Tensorflow, scikit, kerasTuner
 import tensorflow as tf
@@ -26,25 +26,39 @@ logNums = max([int(f[-5]) for f in os.listdir('Logs/')]) if os.listdir('Logs/') 
 
 # Configure the logger
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.CRITICAL)
 fh = logging.FileHandler(f'Logs/ModelTraining_Log_{logNums + 1}.log')
 formatter = logging.Formatter('%(asctime)s - %(module)s - %(levelname)s - %(message)s')
 fh.setFormatter(formatter)
 logger.addHandler(fh)
 
 # Function to load in the important parts of the model rather than have a bunch of global variables
+#%%
 def modelInfo(modelName):
-    logger.info(f"Loading model information for: {modelName}")
-    with open(r"Model_Training/model_directory.json", 'r') as file:
-        modelInfo = file.read()
-        modelDir = json.loads(modelInfo)
+    #logger.info(f"Loading model information for: {modelName}")
+    
+    # New model name contains model scheme and features so below is deprecated
+    #with open(r"Model_Training/model_directory.json", 'r') as file:
+    #    modelInfo = file.read()
+    #    modelDir = json.loads(modelInfo)
 
-    modelNum = int(modelDir[modelName]["num"])
-    modelScheme = modelDir[modelName]["scheme"]
-    modelFeatures = list(map(lambda x: x.strip(), modelDir[modelName]["features"].split(",")))
+    # Determine the number of times the model has been trained
+    modelDir = f'Models/{modelName}'
+    modelRuns = glob.glob(f'{modelDir}/Model_{modelName}_Run*.keras')
+    modelNum = int(len(modelRuns)) + 1
 
-    return modelNum, modelScheme, modelFeatures
+    # create test file to see where model is being saved
+    with open(f'{modelDir}/Model_{modelName}_Run{modelNum}.keras', 'w') as f:
+        f.write('Test File - Remove after training')
 
+    # Extract scheme from model name
+    modelScheme = modelName.split("_")[0]
+
+    # Extract features from model name
+    modelFeatures = re.findall(r'.', modelName.split("_")[1])
+
+    return modelScheme, modelFeatures, modelNum
+#%%
 # Function to import a dataset and transform headers for easier coding and convert Date column
 # Pseudocode:
 # 1. Import Dataset Save old Headers for later
@@ -74,7 +88,7 @@ def importData(fileName):
     oldCols += ['Year', 'JulianDay_Sin']
     
     return dataset, oldCols
-
+#%%
 # Function that will sort dataset into scaled X and Y
 # Pseudocode:
 # 1. Separate dataset into Features and Target
@@ -242,7 +256,7 @@ def trainModel(modelFeatures, xTrain, yTrain, hyperparams):
 # 3. Save the best hyperparameters to a new region dictionary
 # 4. Train the model for each region and save the trained model to the regional model dictionary
 # 5. Return the regional model dictionary
-def traintuneAllModels(modelNum, modelFeatures, regionalData):
+def traintuneAllModels(modelName, modelFeatures, regionalData):
     logging.info("Starting tuning and training for all models")
     # Cycle through all the regional datasets
     regionalModels = {}
@@ -261,7 +275,7 @@ def traintuneAllModels(modelNum, modelFeatures, regionalData):
     # Save the best hyperparameters to a file
     if not os.path.exists(f'Trained_Models'):
         os.makedirs(f'Trained_Models')
-    with open(f'Trained_Models/Model_{modelNum}_Hyperparameters.json', 'w') as f:
+    with open(f'Trained_Models/Model_{modelName}_Hyperparameters.json', 'w') as f:
         json.dump(regionalHyperparams, f)
 
     return regionalModels
@@ -272,7 +286,7 @@ def traintuneAllModels(modelNum, modelFeatures, regionalData):
 # 2. Predict the test data using the trained model
 # 3. Combine the test data and the predictions with original headers
 # 4. Save the results to a CSV
-def predictTestData(modelFeatures, modelNum, xTest, yTest, model, scaler):
+def predictTestData(modelFeatures, modelName, xTest, yTest, model, scaler):
     # Scale the test data using the scaler
     x = scaler.transform(xTest.values)
     
@@ -285,7 +299,7 @@ def predictTestData(modelFeatures, modelNum, xTest, yTest, model, scaler):
     # Save the results to a CSV
     if not os.path.exists('TestResults'):
         os.makedirs('TestResults')
-    testResults.to_csv(f'Model_{modelNum}_TestData.csv', index=False)
+    testResults.to_csv(f'Model_{modelName}_TestData.csv', index=False)
 
 # Predict all test data for all regional models for non-global schemes
 # Pseudocode:
@@ -295,7 +309,7 @@ def predictTestData(modelFeatures, modelNum, xTest, yTest, model, scaler):
 # 4. Predict the test data using the trained model for each region
 # 5. Combine the test data and the predictions with original headers for each region
 # 6. Save the results to a CSV for each region
-def predictAllTestData(modelScheme, modelFeatures, modelNum, testData, regionalModels, regionalData):
+def predictAllTestData(modelScheme, modelFeatures, modelName, testData, regionalModels, regionalData):
     logging.info("Predicting for all test data")
     # Convert testData into geoDataFrame
     gdf = gpd.GeoDataFrame(testData, geometry=gpd.points_from_xy(testData.Lon, testData.Lat))
@@ -339,16 +353,18 @@ def predictAllTestData(modelScheme, modelFeatures, modelNum, testData, regionalM
     # Save all the results to a CSV
     if not os.path.exists('TestResults'):
         os.makedirs('TestResults')
-    regionalPredictions.to_csv(f'TestResults/Model_{modelNum}_TestData.csv', index=False)
+    regionalPredictions.to_csv(f'TestResults/Model_{modelName}_TestData.csv', index=False)
 
     print("Finished predicting all test data")
 
+#%%
 # Main Function
 if __name__ == "__main__":
     # Load model Info
-    modelNum, modelScheme, modelFeatures = modelInfo(sys.argv[1])
+    modelName = sys.argv[1]
+    modelScheme, modelFeatures = modelInfo(modelName)
 
-    logging.info(f"Model {modelNum} - {modelScheme}")
+    logging.info(f"Model {modelName} - {modelScheme}")
     logging.info("---------------------------------")
 
     # Import train data and original headers
@@ -372,21 +388,21 @@ if __name__ == "__main__":
         logging.info("Test Data Imported")
 
         # Predict the test data using the trained model
-        predictTestData(modelFeatures, modelNum, testData[modelFeatures], testData[['O18', 'H2']], model, scaler)
+        predictTestData(modelFeatures, modelName, testData[modelFeatures], testData[['O18', 'H2']], model, scaler)
         logging.info("Test Data Predicted")
 
         # Save the model
-        model.save(f'Model_{modelNum}.keras')
+        model.save(f'Models/{modelName}/Model_{modelName}.keras')
     else:
         # Split the data based on the spatial scheme
         logging.info(f"Splitting training data based on Scheme: {modelScheme}")
         splitData = schemeSplit(trainData)
         
         # Train and tune all models for non-global schemes
-        regionalModels = traintuneAllModels(modelNum, modelFeatures, splitData)
+        regionalModels = traintuneAllModels(modelName, modelFeatures, splitData)
 
         # Predict all test data for all regional models for non-global schemes
         testData = importData('DataTest')[0]
         logging.info("Test Data Imported")
-        predictAllTestData(modelScheme, modelFeatures, modelNum, testData, regionalModels, splitData)
+        predictAllTestData(modelScheme, modelFeatures, modelName, testData, regionalModels, splitData)
         logging.info("Test Data Predicted")
