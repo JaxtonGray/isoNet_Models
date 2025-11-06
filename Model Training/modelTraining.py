@@ -15,9 +15,6 @@ from tensorflow.keras.metrics import RootMeanSquaredError, MeanAbsoluteError
 from sklearn.preprocessing import MinMaxScaler
 import keras_tuner as kt
 
-# Setup logging
-
-
 # Function to load in the important parts of the model rather than have a bunch of global variables
 def modelInfo(modelName):
     with open(r"../modelDirectory.json", 'r') as file:
