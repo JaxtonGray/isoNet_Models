@@ -65,7 +65,7 @@ def create_model_dir(allModels):
 
     return model_dir
 
-#%%
+
 def save_model_dir(model_dir):
     # Save the model directory DataFrame to a json file which will be structured in the following manner
     # { 'model_name': {
@@ -84,7 +84,16 @@ def save_model_dir(model_dir):
     with open('model_directory.json', 'w') as json_file:
         json.dump(model_dict, json_file, indent=4)
 
+# Create a model directory for all model combinations inside the models directory
+def create_models_directory(model_dir):
+    # Set the base path for models
+    base_path = r'../Models'
 
+    # Cycle through each model and create a directory with the model name
+    for index, row in model_dir.iterrows():
+        model_path = os.path.join(base_path, row['Model Name'])
+        os.makedirs(model_path, exist_ok=True)
+    
 #%%
 if __name__ == "__main__":
     # Generate all model combinations
@@ -92,6 +101,9 @@ if __name__ == "__main__":
 
     # Create the model directory DataFrame
     model_directory = create_model_dir(allModels)
+
+    # Create the models directory structure
+    create_models_directory(model_directory)
 
     # Save the model directory to a JSON file
     save_model_dir(model_directory)

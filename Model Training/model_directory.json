@@ -11,10 +11,6 @@
         "Spatial Scheme": "HighLowLat",
         "Features": "Base Set (Coods, Date)"
     },
-    "Desert_B": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date)"
-    },
     "Global_BT": {
         "Spatial Scheme": "Global",
         "Features": "Base Set (Coods, Date), Temperature"
@@ -25,10 +21,6 @@
     },
     "HighLowLat_BT": {
         "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature"
-    },
-    "Desert_BT": {
-        "Spatial Scheme": "Desert",
         "Features": "Base Set (Coods, Date), Temperature"
     },
     "Global_BP": {
@@ -43,10 +35,6 @@
         "Spatial Scheme": "HighLowLat",
         "Features": "Base Set (Coods, Date), Precipitation"
     },
-    "Desert_BP": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Precipitation"
-    },
     "Global_BW": {
         "Spatial Scheme": "Global",
         "Features": "Base Set (Coods, Date), Wind"
@@ -57,10 +45,6 @@
     },
     "HighLowLat_BW": {
         "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Wind"
-    },
-    "Desert_BW": {
-        "Spatial Scheme": "Desert",
         "Features": "Base Set (Coods, Date), Wind"
     },
     "Global_BK": {
@@ -75,57 +59,17 @@
         "Spatial Scheme": "HighLowLat",
         "Features": "Base Set (Coods, Date), KPN"
     },
-    "Desert_BK": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), KPN"
-    },
-    "Global_BI(E)": {
+    "Global_BI": {
         "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), El Nino Southern Oscillation"
+        "Features": "Base Set (Coods, Date), Teleconnections"
     },
-    "PreWinds_BI(E)": {
+    "PreWinds_BI": {
         "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), El Nino Southern Oscillation"
+        "Features": "Base Set (Coods, Date), Teleconnections"
     },
-    "HighLowLat_BI(E)": {
+    "HighLowLat_BI": {
         "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), El Nino Southern Oscillation"
-    },
-    "Desert_BI(E)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), El Nino Southern Oscillation"
-    },
-    "Global_BI(N)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), North Atlantic Oscillation"
-    },
-    "PreWinds_BI(N)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), North Atlantic Oscillation"
-    },
-    "HighLowLat_BI(N)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), North Atlantic Oscillation"
-    },
-    "Desert_BI(N)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), North Atlantic Oscillation"
-    },
-    "Global_BI(A)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Antarctic Oscillation"
-    },
-    "PreWinds_BI(A)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Antarctic Oscillation"
-    },
-    "HighLowLat_BI(A)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Antarctic Oscillation"
-    },
-    "Desert_BI(A)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Antarctic Oscillation"
+        "Features": "Base Set (Coods, Date), Teleconnections"
     },
     "Global_BTP": {
         "Spatial Scheme": "Global",
@@ -137,10 +81,6 @@
     },
     "HighLowLat_BTP": {
         "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation"
-    },
-    "Desert_BTP": {
-        "Spatial Scheme": "Desert",
         "Features": "Base Set (Coods, Date), Temperature, Precipitation"
     },
     "Global_BTW": {
@@ -155,10 +95,6 @@
         "Spatial Scheme": "HighLowLat",
         "Features": "Base Set (Coods, Date), Temperature, Wind"
     },
-    "Desert_BTW": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Temperature, Wind"
-    },
     "Global_BTK": {
         "Spatial Scheme": "Global",
         "Features": "Base Set (Coods, Date), Temperature, KPN"
@@ -171,57 +107,17 @@
         "Spatial Scheme": "HighLowLat",
         "Features": "Base Set (Coods, Date), Temperature, KPN"
     },
-    "Desert_BTK": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Temperature, KPN"
-    },
-    "Global_BTI(E)": {
+    "Global_BTI": {
         "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, El Nino Southern Oscillation"
+        "Features": "Base Set (Coods, Date), Temperature, Teleconnections"
     },
-    "PreWinds_BTI(E)": {
+    "PreWinds_BTI": {
         "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, El Nino Southern Oscillation"
+        "Features": "Base Set (Coods, Date), Temperature, Teleconnections"
     },
-    "HighLowLat_BTI(E)": {
+    "HighLowLat_BTI": {
         "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, El Nino Southern Oscillation"
-    },
-    "Desert_BTI(E)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Temperature, El Nino Southern Oscillation"
-    },
-    "Global_BTI(N)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, North Atlantic Oscillation"
-    },
-    "PreWinds_BTI(N)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, North Atlantic Oscillation"
-    },
-    "HighLowLat_BTI(N)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, North Atlantic Oscillation"
-    },
-    "Desert_BTI(N)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Temperature, North Atlantic Oscillation"
-    },
-    "Global_BTI(A)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, Antarctic Oscillation"
-    },
-    "PreWinds_BTI(A)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, Antarctic Oscillation"
-    },
-    "HighLowLat_BTI(A)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, Antarctic Oscillation"
-    },
-    "Desert_BTI(A)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Temperature, Antarctic Oscillation"
+        "Features": "Base Set (Coods, Date), Temperature, Teleconnections"
     },
     "Global_BPW": {
         "Spatial Scheme": "Global",
@@ -233,10 +129,6 @@
     },
     "HighLowLat_BPW": {
         "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind"
-    },
-    "Desert_BPW": {
-        "Spatial Scheme": "Desert",
         "Features": "Base Set (Coods, Date), Precipitation, Wind"
     },
     "Global_BPK": {
@@ -251,57 +143,17 @@
         "Spatial Scheme": "HighLowLat",
         "Features": "Base Set (Coods, Date), Precipitation, KPN"
     },
-    "Desert_BPK": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Precipitation, KPN"
-    },
-    "Global_BPI(E)": {
+    "Global_BPI": {
         "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Precipitation, El Nino Southern Oscillation"
+        "Features": "Base Set (Coods, Date), Precipitation, Teleconnections"
     },
-    "PreWinds_BPI(E)": {
+    "PreWinds_BPI": {
         "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Precipitation, El Nino Southern Oscillation"
+        "Features": "Base Set (Coods, Date), Precipitation, Teleconnections"
     },
-    "HighLowLat_BPI(E)": {
+    "HighLowLat_BPI": {
         "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Precipitation, El Nino Southern Oscillation"
-    },
-    "Desert_BPI(E)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Precipitation, El Nino Southern Oscillation"
-    },
-    "Global_BPI(N)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Precipitation, North Atlantic Oscillation"
-    },
-    "PreWinds_BPI(N)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Precipitation, North Atlantic Oscillation"
-    },
-    "HighLowLat_BPI(N)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Precipitation, North Atlantic Oscillation"
-    },
-    "Desert_BPI(N)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Precipitation, North Atlantic Oscillation"
-    },
-    "Global_BPI(A)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Precipitation, Antarctic Oscillation"
-    },
-    "PreWinds_BPI(A)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Precipitation, Antarctic Oscillation"
-    },
-    "HighLowLat_BPI(A)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Precipitation, Antarctic Oscillation"
-    },
-    "Desert_BPI(A)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Precipitation, Antarctic Oscillation"
+        "Features": "Base Set (Coods, Date), Precipitation, Teleconnections"
     },
     "Global_BWK": {
         "Spatial Scheme": "Global",
@@ -315,153 +167,29 @@
         "Spatial Scheme": "HighLowLat",
         "Features": "Base Set (Coods, Date), Wind, KPN"
     },
-    "Desert_BWK": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Wind, KPN"
-    },
-    "Global_BWI(E)": {
+    "Global_BWI": {
         "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Wind, El Nino Southern Oscillation"
+        "Features": "Base Set (Coods, Date), Wind, Teleconnections"
     },
-    "PreWinds_BWI(E)": {
+    "PreWinds_BWI": {
         "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Wind, El Nino Southern Oscillation"
+        "Features": "Base Set (Coods, Date), Wind, Teleconnections"
     },
-    "HighLowLat_BWI(E)": {
+    "HighLowLat_BWI": {
         "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Wind, El Nino Southern Oscillation"
+        "Features": "Base Set (Coods, Date), Wind, Teleconnections"
     },
-    "Desert_BWI(E)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Wind, El Nino Southern Oscillation"
-    },
-    "Global_BWI(N)": {
+    "Global_BKI": {
         "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Wind, North Atlantic Oscillation"
+        "Features": "Base Set (Coods, Date), KPN, Teleconnections"
     },
-    "PreWinds_BWI(N)": {
+    "PreWinds_BKI": {
         "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Wind, North Atlantic Oscillation"
+        "Features": "Base Set (Coods, Date), KPN, Teleconnections"
     },
-    "HighLowLat_BWI(N)": {
+    "HighLowLat_BKI": {
         "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Wind, North Atlantic Oscillation"
-    },
-    "Desert_BWI(N)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Wind, North Atlantic Oscillation"
-    },
-    "Global_BWI(A)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Wind, Antarctic Oscillation"
-    },
-    "PreWinds_BWI(A)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Wind, Antarctic Oscillation"
-    },
-    "HighLowLat_BWI(A)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Wind, Antarctic Oscillation"
-    },
-    "Desert_BWI(A)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Wind, Antarctic Oscillation"
-    },
-    "Global_BKI(E)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), KPN, El Nino Southern Oscillation"
-    },
-    "PreWinds_BKI(E)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), KPN, El Nino Southern Oscillation"
-    },
-    "HighLowLat_BKI(E)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), KPN, El Nino Southern Oscillation"
-    },
-    "Desert_BKI(E)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), KPN, El Nino Southern Oscillation"
-    },
-    "Global_BKI(N)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), KPN, North Atlantic Oscillation"
-    },
-    "PreWinds_BKI(N)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), KPN, North Atlantic Oscillation"
-    },
-    "HighLowLat_BKI(N)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), KPN, North Atlantic Oscillation"
-    },
-    "Desert_BKI(N)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), KPN, North Atlantic Oscillation"
-    },
-    "Global_BKI(A)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), KPN, Antarctic Oscillation"
-    },
-    "PreWinds_BKI(A)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), KPN, Antarctic Oscillation"
-    },
-    "HighLowLat_BKI(A)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), KPN, Antarctic Oscillation"
-    },
-    "Desert_BKI(A)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), KPN, Antarctic Oscillation"
-    },
-    "Global_BI(EN)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "PreWinds_BI(EN)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "HighLowLat_BI(EN)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "Desert_BI(EN)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "Global_BI(EA)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "PreWinds_BI(EA)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "HighLowLat_BI(EA)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "Desert_BI(EA)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "Global_BI(NA)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "PreWinds_BI(NA)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "HighLowLat_BI(NA)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "Desert_BI(NA)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), North Atlantic Oscillation, Antarctic Oscillation"
+        "Features": "Base Set (Coods, Date), KPN, Teleconnections"
     },
     "Global_BTPW": {
         "Spatial Scheme": "Global",
@@ -473,10 +201,6 @@
     },
     "HighLowLat_BTPW": {
         "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind"
-    },
-    "Desert_BTPW": {
-        "Spatial Scheme": "Desert",
         "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind"
     },
     "Global_BTPK": {
@@ -491,57 +215,17 @@
         "Spatial Scheme": "HighLowLat",
         "Features": "Base Set (Coods, Date), Temperature, Precipitation, KPN"
     },
-    "Desert_BTPK": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, KPN"
-    },
-    "Global_BTPI(E)": {
+    "Global_BTPI": {
         "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, El Nino Southern Oscillation"
+        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Teleconnections"
     },
-    "PreWinds_BTPI(E)": {
+    "PreWinds_BTPI": {
         "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, El Nino Southern Oscillation"
+        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Teleconnections"
     },
-    "HighLowLat_BTPI(E)": {
+    "HighLowLat_BTPI": {
         "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, El Nino Southern Oscillation"
-    },
-    "Desert_BTPI(E)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, El Nino Southern Oscillation"
-    },
-    "Global_BTPI(N)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, North Atlantic Oscillation"
-    },
-    "PreWinds_BTPI(N)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, North Atlantic Oscillation"
-    },
-    "HighLowLat_BTPI(N)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, North Atlantic Oscillation"
-    },
-    "Desert_BTPI(N)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, North Atlantic Oscillation"
-    },
-    "Global_BTPI(A)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Antarctic Oscillation"
-    },
-    "PreWinds_BTPI(A)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Antarctic Oscillation"
-    },
-    "HighLowLat_BTPI(A)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Antarctic Oscillation"
-    },
-    "Desert_BTPI(A)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Antarctic Oscillation"
+        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Teleconnections"
     },
     "Global_BTWK": {
         "Spatial Scheme": "Global",
@@ -555,153 +239,29 @@
         "Spatial Scheme": "HighLowLat",
         "Features": "Base Set (Coods, Date), Temperature, Wind, KPN"
     },
-    "Desert_BTWK": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, KPN"
-    },
-    "Global_BTWI(E)": {
+    "Global_BTWI": {
         "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, El Nino Southern Oscillation"
+        "Features": "Base Set (Coods, Date), Temperature, Wind, Teleconnections"
     },
-    "PreWinds_BTWI(E)": {
+    "PreWinds_BTWI": {
         "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, El Nino Southern Oscillation"
+        "Features": "Base Set (Coods, Date), Temperature, Wind, Teleconnections"
     },
-    "HighLowLat_BTWI(E)": {
+    "HighLowLat_BTWI": {
         "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, El Nino Southern Oscillation"
+        "Features": "Base Set (Coods, Date), Temperature, Wind, Teleconnections"
     },
-    "Desert_BTWI(E)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, El Nino Southern Oscillation"
-    },
-    "Global_BTWI(N)": {
+    "Global_BTKI": {
         "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, North Atlantic Oscillation"
+        "Features": "Base Set (Coods, Date), Temperature, KPN, Teleconnections"
     },
-    "PreWinds_BTWI(N)": {
+    "PreWinds_BTKI": {
         "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, North Atlantic Oscillation"
+        "Features": "Base Set (Coods, Date), Temperature, KPN, Teleconnections"
     },
-    "HighLowLat_BTWI(N)": {
+    "HighLowLat_BTKI": {
         "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, North Atlantic Oscillation"
-    },
-    "Desert_BTWI(N)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, North Atlantic Oscillation"
-    },
-    "Global_BTWI(A)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, Antarctic Oscillation"
-    },
-    "PreWinds_BTWI(A)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, Antarctic Oscillation"
-    },
-    "HighLowLat_BTWI(A)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, Antarctic Oscillation"
-    },
-    "Desert_BTWI(A)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, Antarctic Oscillation"
-    },
-    "Global_BTKI(E)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, KPN, El Nino Southern Oscillation"
-    },
-    "PreWinds_BTKI(E)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, KPN, El Nino Southern Oscillation"
-    },
-    "HighLowLat_BTKI(E)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, KPN, El Nino Southern Oscillation"
-    },
-    "Desert_BTKI(E)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Temperature, KPN, El Nino Southern Oscillation"
-    },
-    "Global_BTKI(N)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, KPN, North Atlantic Oscillation"
-    },
-    "PreWinds_BTKI(N)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, KPN, North Atlantic Oscillation"
-    },
-    "HighLowLat_BTKI(N)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, KPN, North Atlantic Oscillation"
-    },
-    "Desert_BTKI(N)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Temperature, KPN, North Atlantic Oscillation"
-    },
-    "Global_BTKI(A)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, KPN, Antarctic Oscillation"
-    },
-    "PreWinds_BTKI(A)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, KPN, Antarctic Oscillation"
-    },
-    "HighLowLat_BTKI(A)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, KPN, Antarctic Oscillation"
-    },
-    "Desert_BTKI(A)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Temperature, KPN, Antarctic Oscillation"
-    },
-    "Global_BTI(EN)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "PreWinds_BTI(EN)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "HighLowLat_BTI(EN)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "Desert_BTI(EN)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Temperature, El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "Global_BTI(EA)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "PreWinds_BTI(EA)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "HighLowLat_BTI(EA)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "Desert_BTI(EA)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Temperature, El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "Global_BTI(NA)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "PreWinds_BTI(NA)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "HighLowLat_BTI(NA)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "Desert_BTI(NA)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Temperature, North Atlantic Oscillation, Antarctic Oscillation"
+        "Features": "Base Set (Coods, Date), Temperature, KPN, Teleconnections"
     },
     "Global_BPWK": {
         "Spatial Scheme": "Global",
@@ -715,313 +275,41 @@
         "Spatial Scheme": "HighLowLat",
         "Features": "Base Set (Coods, Date), Precipitation, Wind, KPN"
     },
-    "Desert_BPWK": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, KPN"
-    },
-    "Global_BPWI(E)": {
+    "Global_BPWI": {
         "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, El Nino Southern Oscillation"
+        "Features": "Base Set (Coods, Date), Precipitation, Wind, Teleconnections"
     },
-    "PreWinds_BPWI(E)": {
+    "PreWinds_BPWI": {
         "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, El Nino Southern Oscillation"
+        "Features": "Base Set (Coods, Date), Precipitation, Wind, Teleconnections"
     },
-    "HighLowLat_BPWI(E)": {
+    "HighLowLat_BPWI": {
         "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, El Nino Southern Oscillation"
+        "Features": "Base Set (Coods, Date), Precipitation, Wind, Teleconnections"
     },
-    "Desert_BPWI(E)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, El Nino Southern Oscillation"
-    },
-    "Global_BPWI(N)": {
+    "Global_BPKI": {
         "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, North Atlantic Oscillation"
+        "Features": "Base Set (Coods, Date), Precipitation, KPN, Teleconnections"
     },
-    "PreWinds_BPWI(N)": {
+    "PreWinds_BPKI": {
         "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, North Atlantic Oscillation"
+        "Features": "Base Set (Coods, Date), Precipitation, KPN, Teleconnections"
     },
-    "HighLowLat_BPWI(N)": {
+    "HighLowLat_BPKI": {
         "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, North Atlantic Oscillation"
+        "Features": "Base Set (Coods, Date), Precipitation, KPN, Teleconnections"
     },
-    "Desert_BPWI(N)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, North Atlantic Oscillation"
-    },
-    "Global_BPWI(A)": {
+    "Global_BWKI": {
         "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, Antarctic Oscillation"
+        "Features": "Base Set (Coods, Date), Wind, KPN, Teleconnections"
     },
-    "PreWinds_BPWI(A)": {
+    "PreWinds_BWKI": {
         "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, Antarctic Oscillation"
+        "Features": "Base Set (Coods, Date), Wind, KPN, Teleconnections"
     },
-    "HighLowLat_BPWI(A)": {
+    "HighLowLat_BWKI": {
         "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, Antarctic Oscillation"
-    },
-    "Desert_BPWI(A)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, Antarctic Oscillation"
-    },
-    "Global_BPKI(E)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Precipitation, KPN, El Nino Southern Oscillation"
-    },
-    "PreWinds_BPKI(E)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Precipitation, KPN, El Nino Southern Oscillation"
-    },
-    "HighLowLat_BPKI(E)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Precipitation, KPN, El Nino Southern Oscillation"
-    },
-    "Desert_BPKI(E)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Precipitation, KPN, El Nino Southern Oscillation"
-    },
-    "Global_BPKI(N)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Precipitation, KPN, North Atlantic Oscillation"
-    },
-    "PreWinds_BPKI(N)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Precipitation, KPN, North Atlantic Oscillation"
-    },
-    "HighLowLat_BPKI(N)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Precipitation, KPN, North Atlantic Oscillation"
-    },
-    "Desert_BPKI(N)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Precipitation, KPN, North Atlantic Oscillation"
-    },
-    "Global_BPKI(A)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Precipitation, KPN, Antarctic Oscillation"
-    },
-    "PreWinds_BPKI(A)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Precipitation, KPN, Antarctic Oscillation"
-    },
-    "HighLowLat_BPKI(A)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Precipitation, KPN, Antarctic Oscillation"
-    },
-    "Desert_BPKI(A)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Precipitation, KPN, Antarctic Oscillation"
-    },
-    "Global_BPI(EN)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Precipitation, El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "PreWinds_BPI(EN)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Precipitation, El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "HighLowLat_BPI(EN)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Precipitation, El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "Desert_BPI(EN)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Precipitation, El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "Global_BPI(EA)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Precipitation, El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "PreWinds_BPI(EA)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Precipitation, El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "HighLowLat_BPI(EA)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Precipitation, El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "Desert_BPI(EA)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Precipitation, El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "Global_BPI(NA)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Precipitation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "PreWinds_BPI(NA)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Precipitation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "HighLowLat_BPI(NA)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Precipitation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "Desert_BPI(NA)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Precipitation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "Global_BWKI(E)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Wind, KPN, El Nino Southern Oscillation"
-    },
-    "PreWinds_BWKI(E)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Wind, KPN, El Nino Southern Oscillation"
-    },
-    "HighLowLat_BWKI(E)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Wind, KPN, El Nino Southern Oscillation"
-    },
-    "Desert_BWKI(E)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Wind, KPN, El Nino Southern Oscillation"
-    },
-    "Global_BWKI(N)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Wind, KPN, North Atlantic Oscillation"
-    },
-    "PreWinds_BWKI(N)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Wind, KPN, North Atlantic Oscillation"
-    },
-    "HighLowLat_BWKI(N)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Wind, KPN, North Atlantic Oscillation"
-    },
-    "Desert_BWKI(N)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Wind, KPN, North Atlantic Oscillation"
-    },
-    "Global_BWKI(A)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Wind, KPN, Antarctic Oscillation"
-    },
-    "PreWinds_BWKI(A)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Wind, KPN, Antarctic Oscillation"
-    },
-    "HighLowLat_BWKI(A)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Wind, KPN, Antarctic Oscillation"
-    },
-    "Desert_BWKI(A)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Wind, KPN, Antarctic Oscillation"
-    },
-    "Global_BWI(EN)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Wind, El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "PreWinds_BWI(EN)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Wind, El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "HighLowLat_BWI(EN)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Wind, El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "Desert_BWI(EN)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Wind, El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "Global_BWI(EA)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Wind, El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "PreWinds_BWI(EA)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Wind, El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "HighLowLat_BWI(EA)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Wind, El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "Desert_BWI(EA)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Wind, El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "Global_BWI(NA)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Wind, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "PreWinds_BWI(NA)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Wind, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "HighLowLat_BWI(NA)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Wind, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "Desert_BWI(NA)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Wind, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "Global_BKI(EN)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), KPN, El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "PreWinds_BKI(EN)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), KPN, El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "HighLowLat_BKI(EN)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), KPN, El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "Desert_BKI(EN)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), KPN, El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "Global_BKI(EA)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), KPN, El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "PreWinds_BKI(EA)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), KPN, El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "HighLowLat_BKI(EA)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), KPN, El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "Desert_BKI(EA)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), KPN, El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "Global_BKI(NA)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), KPN, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "PreWinds_BKI(NA)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), KPN, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "HighLowLat_BKI(NA)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), KPN, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "Desert_BKI(NA)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), KPN, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "Global_BI(ENA)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "PreWinds_BI(ENA)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "HighLowLat_BI(ENA)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "Desert_BI(ENA)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
+        "Features": "Base Set (Coods, Date), Wind, KPN, Teleconnections"
     },
     "Global_BTPWK": {
         "Spatial Scheme": "Global",
@@ -1035,1016 +323,64 @@
         "Spatial Scheme": "HighLowLat",
         "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, KPN"
     },
-    "Desert_BTPWK": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, KPN"
-    },
-    "Global_BTPWI(E)": {
+    "Global_BTPWI": {
         "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, El Nino Southern Oscillation"
+        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, Teleconnections"
     },
-    "PreWinds_BTPWI(E)": {
+    "PreWinds_BTPWI": {
         "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, El Nino Southern Oscillation"
+        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, Teleconnections"
     },
-    "HighLowLat_BTPWI(E)": {
+    "HighLowLat_BTPWI": {
         "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, El Nino Southern Oscillation"
+        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, Teleconnections"
     },
-    "Desert_BTPWI(E)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, El Nino Southern Oscillation"
-    },
-    "Global_BTPWI(N)": {
+    "Global_BTPKI": {
         "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, North Atlantic Oscillation"
+        "Features": "Base Set (Coods, Date), Temperature, Precipitation, KPN, Teleconnections"
     },
-    "PreWinds_BTPWI(N)": {
+    "PreWinds_BTPKI": {
         "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, North Atlantic Oscillation"
+        "Features": "Base Set (Coods, Date), Temperature, Precipitation, KPN, Teleconnections"
     },
-    "HighLowLat_BTPWI(N)": {
+    "HighLowLat_BTPKI": {
         "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, North Atlantic Oscillation"
+        "Features": "Base Set (Coods, Date), Temperature, Precipitation, KPN, Teleconnections"
     },
-    "Desert_BTPWI(N)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, North Atlantic Oscillation"
-    },
-    "Global_BTPWI(A)": {
+    "Global_BTWKI": {
         "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, Antarctic Oscillation"
+        "Features": "Base Set (Coods, Date), Temperature, Wind, KPN, Teleconnections"
     },
-    "PreWinds_BTPWI(A)": {
+    "PreWinds_BTWKI": {
         "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, Antarctic Oscillation"
+        "Features": "Base Set (Coods, Date), Temperature, Wind, KPN, Teleconnections"
     },
-    "HighLowLat_BTPWI(A)": {
+    "HighLowLat_BTWKI": {
         "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, Antarctic Oscillation"
+        "Features": "Base Set (Coods, Date), Temperature, Wind, KPN, Teleconnections"
     },
-    "Desert_BTPWI(A)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, Antarctic Oscillation"
-    },
-    "Global_BTPKI(E)": {
+    "Global_BPWKI": {
         "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, KPN, El Nino Southern Oscillation"
+        "Features": "Base Set (Coods, Date), Precipitation, Wind, KPN, Teleconnections"
     },
-    "PreWinds_BTPKI(E)": {
+    "PreWinds_BPWKI": {
         "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, KPN, El Nino Southern Oscillation"
+        "Features": "Base Set (Coods, Date), Precipitation, Wind, KPN, Teleconnections"
     },
-    "HighLowLat_BTPKI(E)": {
+    "HighLowLat_BPWKI": {
         "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, KPN, El Nino Southern Oscillation"
+        "Features": "Base Set (Coods, Date), Precipitation, Wind, KPN, Teleconnections"
     },
-    "Desert_BTPKI(E)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, KPN, El Nino Southern Oscillation"
-    },
-    "Global_BTPKI(N)": {
+    "Global_BTPWKI": {
         "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, KPN, North Atlantic Oscillation"
+        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, KPN, Teleconnections"
     },
-    "PreWinds_BTPKI(N)": {
+    "PreWinds_BTPWKI": {
         "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, KPN, North Atlantic Oscillation"
+        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, KPN, Teleconnections"
     },
-    "HighLowLat_BTPKI(N)": {
+    "HighLowLat_BTPWKI": {
         "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, KPN, North Atlantic Oscillation"
-    },
-    "Desert_BTPKI(N)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, KPN, North Atlantic Oscillation"
-    },
-    "Global_BTPKI(A)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, KPN, Antarctic Oscillation"
-    },
-    "PreWinds_BTPKI(A)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, KPN, Antarctic Oscillation"
-    },
-    "HighLowLat_BTPKI(A)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, KPN, Antarctic Oscillation"
-    },
-    "Desert_BTPKI(A)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, KPN, Antarctic Oscillation"
-    },
-    "Global_BTPI(EN)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "PreWinds_BTPI(EN)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "HighLowLat_BTPI(EN)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "Desert_BTPI(EN)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "Global_BTPI(EA)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "PreWinds_BTPI(EA)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "HighLowLat_BTPI(EA)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "Desert_BTPI(EA)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "Global_BTPI(NA)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "PreWinds_BTPI(NA)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "HighLowLat_BTPI(NA)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "Desert_BTPI(NA)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "Global_BTWKI(E)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, KPN, El Nino Southern Oscillation"
-    },
-    "PreWinds_BTWKI(E)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, KPN, El Nino Southern Oscillation"
-    },
-    "HighLowLat_BTWKI(E)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, KPN, El Nino Southern Oscillation"
-    },
-    "Desert_BTWKI(E)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, KPN, El Nino Southern Oscillation"
-    },
-    "Global_BTWKI(N)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, KPN, North Atlantic Oscillation"
-    },
-    "PreWinds_BTWKI(N)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, KPN, North Atlantic Oscillation"
-    },
-    "HighLowLat_BTWKI(N)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, KPN, North Atlantic Oscillation"
-    },
-    "Desert_BTWKI(N)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, KPN, North Atlantic Oscillation"
-    },
-    "Global_BTWKI(A)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, KPN, Antarctic Oscillation"
-    },
-    "PreWinds_BTWKI(A)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, KPN, Antarctic Oscillation"
-    },
-    "HighLowLat_BTWKI(A)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, KPN, Antarctic Oscillation"
-    },
-    "Desert_BTWKI(A)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, KPN, Antarctic Oscillation"
-    },
-    "Global_BTWI(EN)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "PreWinds_BTWI(EN)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "HighLowLat_BTWI(EN)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "Desert_BTWI(EN)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "Global_BTWI(EA)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "PreWinds_BTWI(EA)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "HighLowLat_BTWI(EA)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "Desert_BTWI(EA)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "Global_BTWI(NA)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "PreWinds_BTWI(NA)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "HighLowLat_BTWI(NA)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "Desert_BTWI(NA)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "Global_BTKI(EN)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, KPN, El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "PreWinds_BTKI(EN)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, KPN, El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "HighLowLat_BTKI(EN)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, KPN, El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "Desert_BTKI(EN)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Temperature, KPN, El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "Global_BTKI(EA)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, KPN, El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "PreWinds_BTKI(EA)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, KPN, El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "HighLowLat_BTKI(EA)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, KPN, El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "Desert_BTKI(EA)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Temperature, KPN, El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "Global_BTKI(NA)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, KPN, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "PreWinds_BTKI(NA)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, KPN, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "HighLowLat_BTKI(NA)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, KPN, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "Desert_BTKI(NA)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Temperature, KPN, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "Global_BTI(ENA)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "PreWinds_BTI(ENA)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "HighLowLat_BTI(ENA)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "Desert_BTI(ENA)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Temperature, El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "Global_BPWKI(E)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, KPN, El Nino Southern Oscillation"
-    },
-    "PreWinds_BPWKI(E)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, KPN, El Nino Southern Oscillation"
-    },
-    "HighLowLat_BPWKI(E)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, KPN, El Nino Southern Oscillation"
-    },
-    "Desert_BPWKI(E)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, KPN, El Nino Southern Oscillation"
-    },
-    "Global_BPWKI(N)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, KPN, North Atlantic Oscillation"
-    },
-    "PreWinds_BPWKI(N)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, KPN, North Atlantic Oscillation"
-    },
-    "HighLowLat_BPWKI(N)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, KPN, North Atlantic Oscillation"
-    },
-    "Desert_BPWKI(N)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, KPN, North Atlantic Oscillation"
-    },
-    "Global_BPWKI(A)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, KPN, Antarctic Oscillation"
-    },
-    "PreWinds_BPWKI(A)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, KPN, Antarctic Oscillation"
-    },
-    "HighLowLat_BPWKI(A)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, KPN, Antarctic Oscillation"
-    },
-    "Desert_BPWKI(A)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, KPN, Antarctic Oscillation"
-    },
-    "Global_BPWI(EN)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "PreWinds_BPWI(EN)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "HighLowLat_BPWI(EN)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "Desert_BPWI(EN)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "Global_BPWI(EA)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "PreWinds_BPWI(EA)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "HighLowLat_BPWI(EA)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "Desert_BPWI(EA)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "Global_BPWI(NA)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "PreWinds_BPWI(NA)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "HighLowLat_BPWI(NA)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "Desert_BPWI(NA)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "Global_BPKI(EN)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Precipitation, KPN, El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "PreWinds_BPKI(EN)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Precipitation, KPN, El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "HighLowLat_BPKI(EN)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Precipitation, KPN, El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "Desert_BPKI(EN)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Precipitation, KPN, El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "Global_BPKI(EA)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Precipitation, KPN, El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "PreWinds_BPKI(EA)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Precipitation, KPN, El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "HighLowLat_BPKI(EA)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Precipitation, KPN, El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "Desert_BPKI(EA)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Precipitation, KPN, El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "Global_BPKI(NA)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Precipitation, KPN, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "PreWinds_BPKI(NA)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Precipitation, KPN, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "HighLowLat_BPKI(NA)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Precipitation, KPN, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "Desert_BPKI(NA)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Precipitation, KPN, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "Global_BPI(ENA)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Precipitation, El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "PreWinds_BPI(ENA)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Precipitation, El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "HighLowLat_BPI(ENA)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Precipitation, El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "Desert_BPI(ENA)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Precipitation, El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "Global_BWKI(EN)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Wind, KPN, El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "PreWinds_BWKI(EN)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Wind, KPN, El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "HighLowLat_BWKI(EN)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Wind, KPN, El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "Desert_BWKI(EN)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Wind, KPN, El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "Global_BWKI(EA)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Wind, KPN, El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "PreWinds_BWKI(EA)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Wind, KPN, El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "HighLowLat_BWKI(EA)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Wind, KPN, El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "Desert_BWKI(EA)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Wind, KPN, El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "Global_BWKI(NA)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Wind, KPN, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "PreWinds_BWKI(NA)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Wind, KPN, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "HighLowLat_BWKI(NA)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Wind, KPN, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "Desert_BWKI(NA)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Wind, KPN, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "Global_BWI(ENA)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Wind, El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "PreWinds_BWI(ENA)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Wind, El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "HighLowLat_BWI(ENA)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Wind, El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "Desert_BWI(ENA)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Wind, El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "Global_BKI(ENA)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), KPN, El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "PreWinds_BKI(ENA)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), KPN, El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "HighLowLat_BKI(ENA)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), KPN, El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "Desert_BKI(ENA)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), KPN, El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "Global_BTPWKI(E)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, KPN, El Nino Southern Oscillation"
-    },
-    "PreWinds_BTPWKI(E)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, KPN, El Nino Southern Oscillation"
-    },
-    "HighLowLat_BTPWKI(E)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, KPN, El Nino Southern Oscillation"
-    },
-    "Desert_BTPWKI(E)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, KPN, El Nino Southern Oscillation"
-    },
-    "Global_BTPWKI(N)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, KPN, North Atlantic Oscillation"
-    },
-    "PreWinds_BTPWKI(N)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, KPN, North Atlantic Oscillation"
-    },
-    "HighLowLat_BTPWKI(N)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, KPN, North Atlantic Oscillation"
-    },
-    "Desert_BTPWKI(N)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, KPN, North Atlantic Oscillation"
-    },
-    "Global_BTPWKI(A)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, KPN, Antarctic Oscillation"
-    },
-    "PreWinds_BTPWKI(A)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, KPN, Antarctic Oscillation"
-    },
-    "HighLowLat_BTPWKI(A)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, KPN, Antarctic Oscillation"
-    },
-    "Desert_BTPWKI(A)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, KPN, Antarctic Oscillation"
-    },
-    "Global_BTPWI(EN)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "PreWinds_BTPWI(EN)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "HighLowLat_BTPWI(EN)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "Desert_BTPWI(EN)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "Global_BTPWI(EA)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "PreWinds_BTPWI(EA)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "HighLowLat_BTPWI(EA)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "Desert_BTPWI(EA)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "Global_BTPWI(NA)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "PreWinds_BTPWI(NA)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "HighLowLat_BTPWI(NA)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "Desert_BTPWI(NA)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "Global_BTPKI(EN)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, KPN, El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "PreWinds_BTPKI(EN)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, KPN, El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "HighLowLat_BTPKI(EN)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, KPN, El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "Desert_BTPKI(EN)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, KPN, El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "Global_BTPKI(EA)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, KPN, El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "PreWinds_BTPKI(EA)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, KPN, El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "HighLowLat_BTPKI(EA)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, KPN, El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "Desert_BTPKI(EA)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, KPN, El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "Global_BTPKI(NA)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, KPN, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "PreWinds_BTPKI(NA)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, KPN, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "HighLowLat_BTPKI(NA)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, KPN, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "Desert_BTPKI(NA)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, KPN, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "Global_BTPI(ENA)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "PreWinds_BTPI(ENA)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "HighLowLat_BTPI(ENA)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "Desert_BTPI(ENA)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "Global_BTWKI(EN)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, KPN, El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "PreWinds_BTWKI(EN)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, KPN, El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "HighLowLat_BTWKI(EN)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, KPN, El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "Desert_BTWKI(EN)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, KPN, El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "Global_BTWKI(EA)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, KPN, El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "PreWinds_BTWKI(EA)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, KPN, El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "HighLowLat_BTWKI(EA)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, KPN, El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "Desert_BTWKI(EA)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, KPN, El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "Global_BTWKI(NA)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, KPN, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "PreWinds_BTWKI(NA)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, KPN, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "HighLowLat_BTWKI(NA)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, KPN, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "Desert_BTWKI(NA)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, KPN, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "Global_BTWI(ENA)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "PreWinds_BTWI(ENA)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "HighLowLat_BTWI(ENA)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "Desert_BTWI(ENA)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "Global_BTKI(ENA)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, KPN, El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "PreWinds_BTKI(ENA)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, KPN, El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "HighLowLat_BTKI(ENA)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, KPN, El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "Desert_BTKI(ENA)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Temperature, KPN, El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "Global_BPWKI(EN)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, KPN, El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "PreWinds_BPWKI(EN)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, KPN, El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "HighLowLat_BPWKI(EN)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, KPN, El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "Desert_BPWKI(EN)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, KPN, El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "Global_BPWKI(EA)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, KPN, El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "PreWinds_BPWKI(EA)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, KPN, El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "HighLowLat_BPWKI(EA)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, KPN, El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "Desert_BPWKI(EA)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, KPN, El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "Global_BPWKI(NA)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, KPN, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "PreWinds_BPWKI(NA)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, KPN, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "HighLowLat_BPWKI(NA)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, KPN, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "Desert_BPWKI(NA)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, KPN, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "Global_BPWI(ENA)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "PreWinds_BPWI(ENA)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "HighLowLat_BPWI(ENA)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "Desert_BPWI(ENA)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "Global_BPKI(ENA)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Precipitation, KPN, El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "PreWinds_BPKI(ENA)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Precipitation, KPN, El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "HighLowLat_BPKI(ENA)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Precipitation, KPN, El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "Desert_BPKI(ENA)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Precipitation, KPN, El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "Global_BWKI(ENA)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Wind, KPN, El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "PreWinds_BWKI(ENA)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Wind, KPN, El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "HighLowLat_BWKI(ENA)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Wind, KPN, El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "Desert_BWKI(ENA)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Wind, KPN, El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "Global_BTPWKI(EN)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, KPN, El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "PreWinds_BTPWKI(EN)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, KPN, El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "HighLowLat_BTPWKI(EN)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, KPN, El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "Desert_BTPWKI(EN)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, KPN, El Nino Southern Oscillation, North Atlantic Oscillation"
-    },
-    "Global_BTPWKI(EA)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, KPN, El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "PreWinds_BTPWKI(EA)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, KPN, El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "HighLowLat_BTPWKI(EA)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, KPN, El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "Desert_BTPWKI(EA)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, KPN, El Nino Southern Oscillation, Antarctic Oscillation"
-    },
-    "Global_BTPWKI(NA)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, KPN, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "PreWinds_BTPWKI(NA)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, KPN, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "HighLowLat_BTPWKI(NA)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, KPN, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "Desert_BTPWKI(NA)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, KPN, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "Global_BTPWI(ENA)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "PreWinds_BTPWI(ENA)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "HighLowLat_BTPWI(ENA)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "Desert_BTPWI(ENA)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "Global_BTPKI(ENA)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, KPN, El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "PreWinds_BTPKI(ENA)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, KPN, El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "HighLowLat_BTPKI(ENA)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, KPN, El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "Desert_BTPKI(ENA)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, KPN, El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "Global_BTWKI(ENA)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, KPN, El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "PreWinds_BTWKI(ENA)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, KPN, El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "HighLowLat_BTWKI(ENA)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, KPN, El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "Desert_BTWKI(ENA)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, KPN, El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "Global_BPWKI(ENA)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, KPN, El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "PreWinds_BPWKI(ENA)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, KPN, El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "HighLowLat_BPWKI(ENA)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, KPN, El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "Desert_BPWKI(ENA)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, KPN, El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "Global_BTPWKI(ENA)": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, KPN, El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "PreWinds_BTPWKI(ENA)": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, KPN, El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "HighLowLat_BTPWKI(ENA)": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, KPN, El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
-    },
-    "Desert_BTPWKI(ENA)": {
-        "Spatial Scheme": "Desert",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, KPN, El Nino Southern Oscillation, North Atlantic Oscillation, Antarctic Oscillation"
+        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, KPN, Teleconnections"
     }
 }
