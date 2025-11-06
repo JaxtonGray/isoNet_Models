@@ -21,54 +21,44 @@ LEAVE_OUT_POINTS = {
     "ethiopiaHigh" : Point(39.77, 12.542),
     "hotWet" : Point(72.82, 18.96)
 }
-#%%
+
 # Function to read in the GNIP data and convert it to a GeoDataFrame
 def read_gnip_data(file_path):
     data = pd.read_csv(file_path)
     
-    # Set the columns to keep
-    columns_to_keep = [
-        'Latitude',
-        'Longitude',
-        'Altitude',
-        'Sample Date',
-        'Measurand Symbol',
-        'Measurand Amount'
-    ]
-    # Select only the necessary columns
-    df = data[columns_to_keep]
-
-    # Rename columns for consistency and clarity
-    df = df.rename(columns={
-    'Latitude': 'Lat',
-    'Longitude': 'Lon',
-    'Altitude': 'Alt',
-    'Sample Date': 'Date',
-    'Measurand Symbol': 'Symbol',
-    'Measurand Amount': 'Amount'
-    })
-
-    # Set the typing of each column
-    # Convert Date Column to Datetime
-    df['Date'] = pd.to_datetime(df['Date'], utc=True)
-
-    # Set the typing of the other columns
-    df['Lat'] = df['Lat'].astype(float)
-    df['Lon'] = df['Lon'].astype(float)
-    df['Alt'] = df['Alt'].astype(float)
-    df['Symbol'] = df['Symbol'].astype(str)
-    df['Amount'] = df['Amount'].astype(float)
-
-    # Pivot the table to be long format
-    df = df.pivot_table(index=['Lat', 'Lon', 'Alt', 'Date'],
-                        columns='Symbol', 
-                        values='Amount', 
-                        aggfunc='first').reset_index()
-
     # Convert to GeoDataFrame
-    gdf = gpd.GeoDataFrame(df, geometry=gpd.points_from_xy(df.Lon, df.Lat))
+    gdf = gpd.GeoDataFrame(data, geometry=gpd.points_from_xy(data.Lon, data.Lat))
     return gdf
-# %%
-# Function to be used for reading in the Non-Gnip Data Sources
-# NOT AVAILABLE YET
+
+# Function to remove leave out points from the GNIP data based on X and Y coordinates
+# Returns: GeoDataFrame with leave out points removed, GeoDataFrame of leave out points found
+def remove_leave_out_points(gdf, leave_out_points):
+    # Collect matched frames in a list and concat once at the end. This
+    # avoids concatenating against an empty/all-NA DataFrame which triggers
+    # the FutureWarning about dtype inference.
+    matched_list = []
+
+    # Cycle through the points to leave out and find the matching points in the GNIP data
+    for point_name, point_geom in leave_out_points.items():
+        matched_points = gdf[gdf.intersects(point_geom)].copy()
+        if not matched_points.empty:
+            matched_points['LeaveOutPoint'] = point_name
+            matched_list.append(matched_points)
+
+            # Remove matched points from the original GeoDataFrame
+            gdf = gdf[~gdf.intersects(point_geom)]
+
+    # Concatenate all matched points into a single GeoDataFrame
+    leave_out_gdf = pd.concat(matched_list, ignore_index=True) if matched_list else gpd.GeoDataFrame(columns=['LeaveOutPoint', *gdf.columns], geometry='geometry')
+    return gdf, leave_out_gdf
 #%%
+if __name__ == "__main__":
+    # Read in the GNIP data
+    file_date = "2025-07-22"
+    gnip_file_path = f"../GNIP/GNIP_Cleaned ({file_date}).csv"
+    gnip_gdf = read_gnip_data(gnip_file_path)
+
+    # Remove leave out points from GNIP data
+    gnip_gdf_cleaned, leave_out_gdf = remove_leave_out_points(gnip_gdf, LEAVE_OUT_POINTS)
+# %%
+
