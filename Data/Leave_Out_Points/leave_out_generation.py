@@ -50,7 +50,7 @@ def remove_leave_out_points(gdf, leave_out_points):
 
     # Concatenate all matched points into a single GeoDataFrame
     leave_out_gdf = pd.concat(matched_list, ignore_index=True) if matched_list else gpd.GeoDataFrame(columns=['LeaveOutPoint', *gdf.columns], geometry='geometry')
-    return gdf, leave_out_gdf
+    return gdf, leave_out_gdf[['LeaveOutPoint', *gdf.columns]]
 #%%
 if __name__ == "__main__":
     # Read in the GNIP data
@@ -59,6 +59,11 @@ if __name__ == "__main__":
     gnip_gdf = read_gnip_data(gnip_file_path)
 
     # Remove leave out points from GNIP data
-    gnip_gdf_cleaned, leave_out_gdf = remove_leave_out_points(gnip_gdf, LEAVE_OUT_POINTS)
-# %%
+    gnip_gdf_removed, leave_out_gdf = remove_leave_out_points(gnip_gdf, LEAVE_OUT_POINTS)
 
+    # Save the GNIP data with leave out points removed
+    gnip_gdf_removed.to_csv(f"../GNIP/GNIP_Data ({file_date}).csv", index=False)
+
+    # Save the leave out points to a csv file
+    leave_out_gdf.to_csv(f"Leave_Out_Points_GNIP ({file_date}).csv", index=False)
+# %%
