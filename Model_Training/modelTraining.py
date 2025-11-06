@@ -47,10 +47,6 @@ def modelInfo(modelName):
     modelRuns = glob.glob(f'{modelDir}/Model_{modelName}_Run*.keras')
     modelNum = int(len(modelRuns)) + 1
 
-    # create test file to see where model is being saved
-    with open(f'{modelDir}/Model_{modelName}_Run{modelNum}.keras', 'w') as f:
-        f.write('Test File - Remove after training')
-
     # Extract scheme from model name
     modelScheme = modelName.split("_")[0]
 
