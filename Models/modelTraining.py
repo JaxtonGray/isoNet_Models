@@ -3,10 +3,8 @@
 import numpy as np
 import pandas as pd
 import geopandas as gpd
-import os
-import re
-import json
-import sys
+import os, re, json, sys, logging
+
 # Tensorflow, scikit, kerasTuner
 import tensorflow as tf
 from tensorflow.keras.models import Sequential
@@ -16,6 +14,9 @@ from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.metrics import RootMeanSquaredError, MeanAbsoluteError
 from sklearn.preprocessing import MinMaxScaler
 import keras_tuner as kt
+
+# Setup logging
+
 
 # Function to load in the important parts of the model rather than have a bunch of global variables
 def modelInfo(modelName):
