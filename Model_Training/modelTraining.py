@@ -1,3 +1,7 @@
+# This script contains functions to train and tune LSTM models for predicting isotopic values based on various features.
+# It is setup to be handled from the root directory and all paths are relative to that.
+
+
 ### Import Libraries
 # Base Libraries
 import numpy as np
@@ -15,9 +19,23 @@ from tensorflow.keras.metrics import RootMeanSquaredError, MeanAbsoluteError
 from sklearn.preprocessing import MinMaxScaler
 import keras_tuner as kt
 
+# Setup Logging
+# Check inside the Logs directory, see what the highest log number is and increment by 1
+os.makedirs('Logs', exist_ok=True)
+logNums = max([int(f[-5]) for f in os.listdir('Logs/')]) if os.listdir('Logs/') != [] else 0
+
+# Configure the logger
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+fh = logging.FileHandler(f'Logs/ModelTraining_Log_{logNums + 1}.log')
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+fh.setFormatter(formatter)
+logger.addHandler(fh)
+
 # Function to load in the important parts of the model rather than have a bunch of global variables
 def modelInfo(modelName):
-    with open(r"../modelDirectory.json", 'r') as file:
+    logger.info(f"Loading model information for: {modelName}")
+    with open(r"Model_Training/model_directory.json", 'r') as file:
         modelInfo = file.read()
         modelDir = json.loads(modelInfo)
 
@@ -35,8 +53,9 @@ def modelInfo(modelName):
 # 4. Peform a Sine Transformation on JulianDay
 # 5. Return the dataset, and old headers
 def importData(fileName):
+    logger.info(f"Importing data from file: {fileName}")
     # Read in the correct file
-    dataset = pd.read_csv(f'../../Data/{fileName}.csv')
+    dataset = pd.read_csv(f'Data/{fileName}.csv')
     oldCols = list(dataset.columns)
 
     # Remove any units (anything in parentheses)
