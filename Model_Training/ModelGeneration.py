@@ -87,7 +87,8 @@ def save_model_dir(model_dir):
 # Create a model directory for all model combinations inside the models directory
 def create_models_directory(model_dir):
     # Set the base path for models
-    base_path = r'../Models'
+    base_path = r'../Models/'
+    os.makedirs(base_path, exist_ok=True)
 
     # Cycle through each model and create a directory with the model name
     for index, row in model_dir.iterrows():
