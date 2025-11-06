@@ -1,7 +1,7 @@
 # This script contains functions to train and tune LSTM models for predicting isotopic values based on various features.
 # It is setup to be handled from the root directory and all paths are relative to that.
 
-
+#%%
 ### Import Libraries
 # Base Libraries
 import numpy as np
@@ -344,7 +344,7 @@ def predictAllTestData(modelScheme, modelFeatures, modelNum, testData, regionalM
     print("Finished predicting all test data")
 
 # Main Function
-def main():
+if __name__ == "__main__":
     # Load model Info
     modelNum, modelScheme, modelFeatures = modelInfo(sys.argv[1])
 
@@ -389,5 +389,4 @@ def main():
         testData = importData('DataTest')[0]
         logging.info("Test Data Imported")
         predictAllTestData(modelScheme, modelFeatures, modelNum, testData, regionalModels, splitData)
-
-main()
+        logging.info("Test Data Predicted")
