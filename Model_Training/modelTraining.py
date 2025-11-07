@@ -358,7 +358,7 @@ def predictAllTestData(modelScheme, modelFeatures, modelName, testData, regional
 if __name__ == "__main__":
     # Load model Info
     modelName = sys.argv[1]
-    modelScheme, modelFeatures = modelInfo(modelName)
+    modelScheme, modelFeatures, modelNum = modelInfo(modelName)
 
     logging.info(f"Model {modelName} - {modelScheme}")
     logging.info("---------------------------------")
