@@ -7,6 +7,14 @@
 
 # Importing required libraries
 import requests as req
+import zipfile as zf
+import os
+
+
+# Check current working directory and navigate to the Data/KPN folder if not already there
+cwd = os.getcwd()
+if not cwd.endswith("Data/KPN"):
+    os.chdir(os.path.join(cwd, "Data", "KPN"))
 
 # For V2 data this is the link to the data, check the link in the header of this for more information
 response = req.get("https://figshare.com/ndownloader/files/45057352")
@@ -14,4 +22,9 @@ with open("koppen-geiger.zip", "wb") as f:
     f.write(response.content)
     response.close()
 
+# Extract the contents of the zip file
+with zf.ZipFile("koppen-geiger.zip", "r") as zip_ref:
+    zip_ref.extractall()
 
+# Remove the zip file after extraction to save space
+os.remove("koppen-geiger.zip")
