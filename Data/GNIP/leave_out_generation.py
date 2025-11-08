@@ -7,6 +7,9 @@ import pandas as pd
 import geopandas as gpd
 from shapely.geometry import Point
 
+# Import train_test_split for creating training and validation sets
+from sklearn.model_selection import train_test_split
+
 # Set Global variable defining the points that are being left out
 LEAVE_OUT_POINTS = {
     "lowData" : Point(104.283, 52.3),
@@ -55,15 +58,20 @@ def remove_leave_out_points(gdf, leave_out_points):
 if __name__ == "__main__":
     # Read in the GNIP data
     file_date = "2025-07-22"
-    gnip_file_path = f"../GNIP/GNIP_Cleaned ({file_date}).csv"
+    gnip_file_path = f"/GNIP_Cleaned ({file_date}).csv"
     gnip_gdf = read_gnip_data(gnip_file_path)
 
     # Remove leave out points from GNIP data
     gnip_gdf_removed, leave_out_gdf = remove_leave_out_points(gnip_gdf, LEAVE_OUT_POINTS)
 
     # Save the GNIP data with leave out points removed
-    gnip_gdf_removed.to_csv(f"../GNIP/GNIP_Data ({file_date}).csv", index=False)
+    gnip_gdf_removed.to_csv(f"GNIP_Data ({file_date}).csv", index=False)
+
+    # Split the remaining GNIP data into training and validation sets
+    train_gdf, test_gdf = train_test_split(gnip_gdf_removed, test_size=0.2, random_state=42)
+    train_gdf.to_csv(f"GNIP_Train.csv", index=False)
+    test_gdf.to_csv(f"GNIP_Test.csv", index=False)
 
     # Save the leave out points to a csv file
-    leave_out_gdf.to_csv(f"Leave_Out_Points_GNIP ({file_date}).csv", index=False)
+    leave_out_gdf.to_csv(f"../Leave_Out_Points/Leave_Out_Points_GNIP ({file_date}).csv", index=False)
 # %%
