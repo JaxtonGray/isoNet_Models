@@ -58,7 +58,7 @@ def remove_leave_out_points(gdf, leave_out_points):
 if __name__ == "__main__":
     # Read in the GNIP data
     file_date = "2025-07-22"
-    gnip_file_path = f"/GNIP_Cleaned ({file_date}).csv"
+    gnip_file_path = f"GNIP_Cleaned ({file_date}).csv"
     gnip_gdf = read_gnip_data(gnip_file_path)
 
     # Remove leave out points from GNIP data
