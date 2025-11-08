@@ -1,4 +1,6 @@
 import cdsapi
+import os
+import zipfile as zf
 
 dataset = "sis-ecv-cmip5-bias-corrected"
 request = {
@@ -12,4 +14,8 @@ request = {
 }
 
 client = cdsapi.Client()
-client.retrieve(dataset, request, "datasets/temp.zip").download()
+client.retrieve(dataset, request, "temp.zip")
+
+# Note: After downloading, unzip the file to access the temperature data.
+with zf.ZipFile("temp.zip", 'r') as zip_ref:
+    zip_ref.extractall()

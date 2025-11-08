@@ -1,4 +1,6 @@
 import cdsapi
+import zipfile as zf
+import os
 
 dataset = "sis-ecv-cmip5-bias-corrected"
 request = {
@@ -12,4 +14,8 @@ request = {
 }
 
 client = cdsapi.Client()
-client.retrieve(dataset, request, "datasets/precip.zip").download()
+client.retrieve(dataset, request, "precip.zip")
+
+# Note: After downloading, unzip the file to access the precipitation data.
+with zf.ZipFile("precip.zip", 'r') as zip_ref:
+    zip_ref.extractall()
