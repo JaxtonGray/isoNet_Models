@@ -139,7 +139,7 @@ def addFeatures(df):
     
     return df.drop(columns=['geometry', 'index'])
 
-def main():
+if __name__ == "__main__":
     # Load training and test datasets
     dfTrain = loadDataset(r'GNIP\GNIP_Train.csv')
     dfTest = loadDataset(r'GNIP\GNIP_Test.csv')
@@ -151,5 +151,3 @@ def main():
     # Save the datasets
     dfTrain.to_csv(r'DataTrain.csv', index=False)
     dfTest.to_csv(r'DataTest.csv', index=False)
-
-main()
