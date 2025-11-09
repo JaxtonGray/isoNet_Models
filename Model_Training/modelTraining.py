@@ -26,7 +26,7 @@ logNums = max([int(f[-5]) for f in os.listdir('Logs/')]) if os.listdir('Logs/') 
 
 # Configure the logger
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.CRITICAL)
+logger.setLevel(logging.INFO)
 fh = logging.FileHandler(f'Logs/ModelTraining_Log_{logNums + 1}.log')
 formatter = logging.Formatter('%(asctime)s - %(module)s - %(levelname)s - %(message)s')
 fh.setFormatter(formatter)
@@ -201,7 +201,6 @@ def hyperParameterSearchSpace(hp):
 # 5. Return the best hyperparameters
 def hyperParameterTuning(xTrain, yTrain):
     logging.info("Starting hyperparameter tuning")
-    print('Start Tuning')
     # Create the Hyperband Tuner
     tuner = kt.Hyperband(hyperParameterSearchSpace, 
                         objective='val_loss', 
@@ -218,7 +217,6 @@ def hyperParameterTuning(xTrain, yTrain):
     # Get the best model hyperparameters
     best_hps = tuner.get_best_hyperparameters(num_trials=1)[0]
 
-    print('Finsihed Tuning')
     # Return the best hyperparameters
     return best_hps.values
     
