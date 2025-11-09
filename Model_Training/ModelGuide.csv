@@ -2,7 +2,7 @@
 Global,Global,None,FALSE,TRUE
 Preliminary Winds,PreWinds,None,FALSE,TRUE
 High Low Latitude,HighLowLat,None,FALSE,TRUE
-"Base Set (Coods, Date)",B,"Lat, Lon, Alt, Year, Date",TRUE,FALSE
+"Base Set (Coods, Date)",B,"Lat, Lon, Alt, Year, JulianDay_Sin",TRUE,FALSE
 Temperature,T,Temp,TRUE,FALSE
 Precipitation,P,Precip,TRUE,FALSE
 Wind,W,Wind,TRUE,FALSE
