@@ -97,7 +97,7 @@ def importData(fileName):
 # 2. Scale the Features array using MinMaxScaler
 # 3. Return the scaled X, Y, and the scaler used
 def scaleData(modelFeatures, dataset, regionalScaler = None):
-    logging.info("Scaling data")
+    logger.info("Scaling data")
     # Separate Features and Target
     features = dataset[modelFeatures]
     target = dataset[['O18', 'H2']]
@@ -126,7 +126,7 @@ def scaleData(modelFeatures, dataset, regionalScaler = None):
 # 4. Split data based on the spatial scheme region and add to a dictionary
 # 5. Return the dictionary of dataframes
 def schemeSplit(modelScheme, df):
-    logging.info(f"Splitting data based on scheme: {modelScheme}")
+    logger.info(f"Splitting data based on scheme: {modelScheme}")
     # Load in the schematic file
     scheme = pd.read_csv(f'../../Data/ModelSplit_Schemes/{modelScheme}.csv')
     # Convert the schematic file into a geodataframe
@@ -156,7 +156,7 @@ def schemeSplit(modelScheme, df):
 # 7. Compile the Model with Hyperparameters
 # 8. Return the Model
 def modelBuilder(modelFeatures, numNeurons1, numNeurons2, numNeurons3, lr):
-    logging.info("Building model")
+    logger.info("Building model")
     # Create a Sequential Model
     model = Sequential()
     # Add an Input Layer
@@ -188,7 +188,7 @@ def hyperParameterSearchSpace(hp):
     hp_numNeurons3 = hp.Choice('numNeurons_Dense2', values=[2**3, 2**4, 2**5, 2**6, 2**7, 2**8, 2**9, 2**10])
     hp_lr = hp.Choice('learning_rate', values=[1e-2, 1e-3, 1e-4])
 
-    model = modelBuilder(modelInfo(sys.argv[1])[2], hp_numNeurons1, hp_numNeurons2, hp_numNeurons3, hp_lr)
+    model = modelBuilder(modelInfo(sys.argv[1])[1], hp_numNeurons1, hp_numNeurons2, hp_numNeurons3, hp_lr)
 
     return model
 
@@ -200,7 +200,7 @@ def hyperParameterSearchSpace(hp):
 # 4. Get the best model hyperparameters
 # 5. Return the best hyperparameters
 def hyperParameterTuning(xTrain, yTrain):
-    logging.info("Starting hyperparameter tuning")
+    logger.info("Starting hyperparameter tuning")
     # Create the Hyperband Tuner
     tuner = kt.Hyperband(hyperParameterSearchSpace, 
                         objective='val_loss', 
@@ -229,13 +229,13 @@ def hyperParameterTuning(xTrain, yTrain):
 # 4. Train the model
 # 5. Return the trained model
 def trainModel(modelFeatures, xTrain, yTrain, hyperparams):
-    logging.info("Starting model training")
+    logger.info("Starting model training")
 
     # Using the best hyperparameters, build the model
     model = modelBuilder(modelFeatures, 
                          hyperparams['numNeurons_LSTM'], hyperparams['numNeurons_Dense1'], hyperparams['numNeurons_Dense2'], hyperparams['learning_rate'])
 
-    logging.info("Model training completed")
+    logger.info("Model training completed")
 
     return model
 
@@ -245,7 +245,7 @@ def trainModel(modelFeatures, xTrain, yTrain, hyperparams):
     # Train the model
     model.fit(xTrain, yTrain, epochs=1000, validation_split=0.2, callbacks=[stop_early], verbose=0)
 
-    logging.info("Model training completed")
+    logger.info("Model training completed")
 
     return model
 
@@ -257,7 +257,7 @@ def trainModel(modelFeatures, xTrain, yTrain, hyperparams):
 # 4. Train the model for each region and save the trained model to the regional model dictionary
 # 5. Return the regional model dictionary
 def traintuneAllModels(modelName, modelFeatures, regionalData):
-    logging.info("Starting tuning and training for all models")
+    logger.info("Starting tuning and training for all models")
     # Cycle through all the regional datasets
     regionalModels = {}
     regionalHyperparams = {}
@@ -310,7 +310,7 @@ def predictTestData(modelFeatures, modelName, xTest, yTest, model, scaler):
 # 5. Combine the test data and the predictions with original headers for each region
 # 6. Save the results to a CSV for each region
 def predictAllTestData(modelScheme, modelFeatures, modelName, testData, regionalModels, regionalData):
-    logging.info("Predicting for all test data")
+    logger.info("Predicting for all test data")
     # Convert testData into geoDataFrame
     gdf = gpd.GeoDataFrame(testData, geometry=gpd.points_from_xy(testData.Lon, testData.Lat))
 
@@ -364,18 +364,18 @@ if __name__ == "__main__":
     modelName = sys.argv[1]
     modelScheme, modelFeatures, modelNum = modelInfo(modelName)
 
-    logging.info(f"Model {modelName} - {modelScheme}")
-    logging.info("---------------------------------")
+    logger.info(f"Model {modelName} - Run Number: {modelNum}")
+    logger.info("---------------------------------")
 
     # Import train data and original headers
     trainData, oldCols = importData('DataTrain')
-    logging.info("Training Data Imported")
+    logger.info("Training Data Imported")
 
     # If a global spatial scheme is used do not split the data
     if modelScheme == "Global":
         # Scale and Split the train data
         xTrain, yTrain, scaler = scaleData(modelFeatures, trainData)
-        logging.info("Training Data Scaled")
+        logger.info("Training Data Scaled")
 
         # Hyperparameter Tuning
         best_hps = hyperParameterTuning(xTrain, yTrain)
@@ -385,17 +385,17 @@ if __name__ == "__main__":
 
         # Import test data and original headers
         testData = importData('DataTest')[0]
-        logging.info("Test Data Imported")
+        logger.info("Test Data Imported")
 
         # Predict the test data using the trained model
         predictTestData(modelFeatures, modelName, testData[modelFeatures], testData[['O18', 'H2']], model, scaler)
-        logging.info("Test Data Predicted")
+        logger.info("Test Data Predicted")
 
         # Save the model
         model.save(f'Models/{modelName}/Model_{modelName}.keras')
     else:
         # Split the data based on the spatial scheme
-        logging.info(f"Splitting training data based on Scheme: {modelScheme}")
+        logger.info(f"Splitting training data based on Scheme: {modelScheme}")
         splitData = schemeSplit(trainData)
         
         # Train and tune all models for non-global schemes
@@ -403,6 +403,6 @@ if __name__ == "__main__":
 
         # Predict all test data for all regional models for non-global schemes
         testData = importData('DataTest')[0]
-        logging.info("Test Data Imported")
+        logger.info("Test Data Imported")
         predictAllTestData(modelScheme, modelFeatures, modelName, testData, regionalModels, splitData)
-        logging.info("Test Data Predicted")
+        logger.info("Test Data Predicted")
