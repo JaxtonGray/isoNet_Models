@@ -34,13 +34,11 @@ logger.addHandler(fh)
 
 # Function to load in the important parts of the model rather than have a bunch of global variables
 #%%
-def modelInfo(modelName):
+def modelInfo(modelName, modelGuide='Model_Training/ModelGuide.csv'):
     #logger.info(f"Loading model information for: {modelName}")
     
-    # New model name contains model scheme and features so below is deprecated
-    #with open(r"Model_Training/model_directory.json", 'r') as file:
-    #    modelInfo = file.read()
-    #    modelDir = json.loads(modelInfo)
+    # Load in the model guide
+    modelGuideDF = pd.read_csv(modelGuide)
 
     # Determine the number of times the model has been trained
     modelDir = f'Models/{modelName}'
@@ -50,8 +48,16 @@ def modelInfo(modelName):
     # Extract scheme from model name
     modelScheme = modelName.split("_")[0]
 
-    # Extract features from model name
-    modelFeatures = re.findall(r'.', modelName.split("_")[1])
+    # Extract features abbreviations from model name
+    modelFeatures_Abb = re.findall(r'.', modelName.split("_")[1])
+
+    modelFeatures = []
+    for abb in modelFeatures_Abb:
+        features = modelGuideDF[modelGuideDF['Abbreviation'] == abb]['Code_Col'].to_string(index=False)
+        # Convert string of features to list based on commas
+        features = [f.strip() for f in features.split(',')]
+        if len(features) > 0:
+            modelFeatures += features
 
     return modelScheme, modelFeatures, modelNum
 #%%
