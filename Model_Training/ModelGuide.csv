@@ -1,10 +1,10 @@
-﻿Name,Abbreviation,Feature?,Scheme?
-Global,Global,FALSE,TRUE
-Preliminary Winds,PreWinds,FALSE,TRUE
-High Low Latitude,HighLowLat,FALSE,TRUE
-"Base Set (Coods, Date)",B,TRUE,FALSE
-Temperature,T,TRUE,FALSE
-Precipitation,P,TRUE,FALSE
-Wind,W,TRUE,FALSE
-KPN,K,TRUE,FALSE
-Teleconnections,I,TRUE,FALSE
+﻿Name,Abbreviation,Code_Col,Feature?,Scheme?
+Global,Global,None,FALSE,TRUE
+Preliminary Winds,PreWinds,None,FALSE,TRUE
+High Low Latitude,HighLowLat,None,FALSE,TRUE
+"Base Set (Coods, Date)",B,"Lat, Lon, Alt, Year, Date",TRUE,FALSE
+Temperature,T,Temp,TRUE,FALSE
+Precipitation,P,Precip,TRUE,FALSE
+Wind,W,Wind,TRUE,FALSE
+KPN,K,"KPN_A, KPN_B, KPN_C, KPN_D, KPN_E",TRUE,FALSE
+Teleconnections,I,None,TRUE,FALSE
