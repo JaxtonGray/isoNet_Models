@@ -299,7 +299,7 @@ def predictTestData(modelFeatures, modelDir, modelNum, xTest, yTest, model, scal
     # Save the results to a CSV
     os.makedirs(f'{modelDir}/TestResults', exist_ok=True)
     logger.debug(f"Saving test results to {modelDir}/TestResults/Model_Run{modelNum}_TestData.csv")
-    testResults.to_csv(f'Model_Run{modelNum}_TestData.csv', index=False)
+    testResults.to_csv(f'{modelDir}/TestResults/Model_Run{modelNum}_TestData.csv', index=False)
 
 # Predict all test data for all regional models for non-global schemes
 # Pseudocode:
