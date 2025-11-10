@@ -199,13 +199,13 @@ def hyperParameterSearchSpace(hp):
 # 3. Perform the search
 # 4. Get the best model hyperparameters
 # 5. Return the best hyperparameters
-def hyperParameterTuning(xTrain, yTrain):
+def hyperParameterTuning(xTrain, yTrain, modelDir, modelName, modelNum):
     logger.info("Starting hyperparameter tuning")
     # Create the Hyperband Tuner
     tuner = kt.Hyperband(hyperParameterSearchSpace, 
                         objective='val_loss', 
                         max_epochs=10, factor=3,
-                        directory='Hyperparameter_Tuning', project_name='Model_1',
+                        directory=modelDir, project_name=f'Model_{modelName}_Run{modelNum}_Hyperparameter_Tuning',
                         overwrite=True)
 
     # Create a callback to stop training early
@@ -286,7 +286,7 @@ def traintuneAllModels(modelName, modelFeatures, regionalData):
 # 2. Predict the test data using the trained model
 # 3. Combine the test data and the predictions with original headers
 # 4. Save the results to a CSV
-def predictTestData(modelFeatures, modelName, xTest, yTest, model, scaler):
+def predictTestData(modelFeatures, modelDir, modelNum, xTest, yTest, model, scaler):
     # Scale the test data using the scaler
     x = scaler.transform(xTest.values)
     
@@ -297,9 +297,9 @@ def predictTestData(modelFeatures, modelName, xTest, yTest, model, scaler):
     testResults = pd.DataFrame(np.concatenate((xTest, yTest, yPreds), axis=1), columns=modelFeatures + ['O18 A', 'H2 A', 'O18 P', 'H2 P'])
 
     # Save the results to a CSV
-    if not os.path.exists('TestResults'):
-        os.makedirs('TestResults')
-    testResults.to_csv(f'Model_{modelName}_TestData.csv', index=False)
+    os.makedirs(f'{modelDir}/TestResults', exist_ok=True)
+    logger.debug(f"Saving test results to {modelDir}/TestResults/Model_Run{modelNum}_TestData.csv")
+    testResults.to_csv(f'Model_Run{modelNum}_TestData.csv', index=False)
 
 # Predict all test data for all regional models for non-global schemes
 # Pseudocode:
@@ -363,6 +363,7 @@ if __name__ == "__main__":
     # Load model Info
     modelName = sys.argv[1]
     modelScheme, modelFeatures, modelNum = modelInfo(modelName)
+    modelDir = f'Models/{modelName}/Model_Run{modelNum}/'
 
     logger.info(f"Model {modelName} - Run Number: {modelNum}")
     logger.info("---------------------------------")
@@ -378,7 +379,7 @@ if __name__ == "__main__":
         logger.info("Training Data Scaled")
 
         # Hyperparameter Tuning
-        best_hps = hyperParameterTuning(xTrain, yTrain)
+        best_hps = hyperParameterTuning(xTrain, yTrain, modelDir, modelName, modelNum)
 
         # Train the Model
         model = trainModel(modelFeatures, xTrain, yTrain, best_hps)
@@ -388,11 +389,12 @@ if __name__ == "__main__":
         logger.info("Test Data Imported")
 
         # Predict the test data using the trained model
-        predictTestData(modelFeatures, modelName, testData[modelFeatures], testData[['O18', 'H2']], model, scaler)
+        predictTestData(modelFeatures, modelDir, modelNum, 
+                        testData[modelFeatures], testData[['O18', 'H2']], model, scaler)
         logger.info("Test Data Predicted")
 
         # Save the model
-        model.save(f'Models/{modelName}/Model_{modelName}.keras')
+        model.save(f'{modelDir}/Model_Run{modelNum}.keras')
     else:
         # Split the data based on the spatial scheme
         logger.info(f"Splitting training data based on Scheme: {modelScheme}")
