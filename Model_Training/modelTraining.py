@@ -201,11 +201,14 @@ def hyperParameterSearchSpace(hp):
 # 5. Return the best hyperparameters
 def hyperParameterTuning(xTrain, yTrain, modelDir, modelName, modelNum):
     logger.info("Starting hyperparameter tuning")
+
+    # Create the hyperparameter directory if it does not exist
+    os.makedirs(f'{modelDir}/Hyperparameters', exist_ok=True)
     # Create the Hyperband Tuner
     tuner = kt.Hyperband(hyperParameterSearchSpace, 
                         objective='val_loss', 
                         max_epochs=10, factor=3,
-                        directory=modelDir, project_name=f'Model_{modelName}_Run{modelNum}_Hyperparameter_Tuning',
+                        directory=f'{modelDir}/Hyperparameters', project_name=f'Model_Run{modelNum}_Hyperparameter_Tuning',
                         overwrite=True)
 
     # Create a callback to stop training early
