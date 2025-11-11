@@ -310,7 +310,7 @@ def predictTestData(modelFeatures, modelDir, modelNum, xTest, yTest, model, scal
 def predictLeaveOut(modelFeatures, modelDir, modelNum, model, scaler):
     # Load in the leave-out test data
     logger.info("Predicting for leave-out test data")
-    leaveOutDF = pd.read_csv(r'Data\Leave_Out_Points\Leave_Out_Points_GNIP (2025-07-22).csv')
+    leaveOutDF = pd.read_csv(r'Data/Leave_Out_Points/Leave_Out_Points_GNIP (2025-07-22).csv')
     xTest = leaveOutDF[modelFeatures]
     yTest = leaveOutDF[['O18', 'H2']]
 
