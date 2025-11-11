@@ -11,8 +11,13 @@
 
 # !/bin/bash
 # This section will grab the model name to run
-modelName=$(sed -n 1p modelList.txt)
-echo $modelName
+modelInfo=$(sed -n 1p modelList.txt)
+
+# Split the modelInfo into modelNum and modelName
+IFS=' ' read -ra arr <<< "$modelInfo"
+modelNum=${arr[0]}
+modelName=${arr[1]}
+
 
 # Set up the environment
 module load python/3.11
