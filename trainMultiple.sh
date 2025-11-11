@@ -12,8 +12,11 @@
 
 # !/bin/bash
 # This section will grab the model name to run
-modelName=$(sed -n ${SLURM_ARRAY_TASK_ID}p modelList.txt)
-echo $modelName
+modelInfo=$(sed -n ${SLURM_ARRAY_TASK_ID}p modelList.txt)
+
+IFS=' ' read -ra arr <<< "$modelInfo"
+modelNum=${arr[0]}
+modelName=${arr[1]}
 
 # Set up the environment
 module load python/3.11.5
@@ -25,4 +28,4 @@ pip install --no-index --upgrade pip
 pip install --no-index tensorflow pandas geopandas numpy scikit-learn keras-tuner
 
 # Run the training script
-python Model_Training/modelTraining.py "$modelName"
+python Model_Training/modelTraining.py "$modelNum" "$modelName"
