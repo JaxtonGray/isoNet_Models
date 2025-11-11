@@ -305,6 +305,29 @@ def predictTestData(modelFeatures, modelDir, modelNum, xTest, yTest, model, scal
     logger.debug(f"Saving test results to {modelDir}/TestResults/Model_Run{modelNum}_TestData.csv")
     testResults.to_csv(f'{modelDir}/TestResults/Model_Run{modelNum}_TestData.csv', index=False)
 
+
+# This section will predict against the leave-out test data:
+def predictLeaveOut(modelFeatures, modelDir, modelNum, xTest, yTest, model, scaler):
+    # Load in the leave-out test data
+    logger.info("Predicting for leave-out test data")
+    leaveOutDF = pd.read_csv(r'Data\Leave_Out_Points\Leave_Out_Points_GNIP (2025-07-22).csv')
+    xTest = leaveOutDF[modelFeatures]
+    yTest = leaveOutDF[['O18', 'H2']]
+
+    # Scale the test data using the scaler
+    x = scaler.transform(xTest.values)
+
+    # Predict the test data using the trained model
+    yPreds = model.predict(x, verbose=0)
+
+    # Combine the xTest DF with the predictions and actuals
+    results = pd.concat([xTest.reset_index(drop=True), yTest.reset_index(drop=True)], axis=1)
+    results[['O18 P', 'H2 P']] = pd.DataFrame(yPreds, columns=['O18 P', 'H2 P'])
+
+    # Save the results to a CSV
+    os.makedirs(f'{modelDir}/TestResults', exist_ok=True)
+    results.to_csv(f'{modelDir}/TestResults/Model_Run{modelNum}_LeaveOut_TestData.csv', index=False)
+
 # Predict all test data for all regional models for non-global schemes
 # Pseudocode:
 # 1. Load in test data and scheme
