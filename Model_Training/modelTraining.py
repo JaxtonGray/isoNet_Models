@@ -42,8 +42,6 @@ def modelInfo(modelName, modelGuide='Model_Training/ModelGuide.csv'):
 
     # Determine the number of times the model has been trained
     modelDir = f'Models/{modelName}'
-    modelRuns = glob.glob(f'{modelDir}/Model_{modelName}_Run*.keras')
-    modelNum = int(len(modelRuns)) + 1
 
     # Create the model directory if it does not exist
     os.makedirs(f'{modelDir}/Model_Run{modelNum}', exist_ok=True)
@@ -62,7 +60,7 @@ def modelInfo(modelName, modelGuide='Model_Training/ModelGuide.csv'):
         if len(features) > 0:
             modelFeatures += features
 
-    return modelScheme, modelFeatures, modelNum
+    return modelScheme, modelFeatures
 #%%
 # Function to import a dataset and transform headers for easier coding and convert Date column
 # Pseudocode:
@@ -191,7 +189,7 @@ def hyperParameterSearchSpace(hp):
     hp_numNeurons3 = hp.Choice('numNeurons_Dense2', values=[2**3, 2**4, 2**5, 2**6, 2**7, 2**8, 2**9, 2**10])
     hp_lr = hp.Choice('learning_rate', values=[1e-2, 1e-3, 1e-4])
 
-    model = modelBuilder(modelInfo(sys.argv[1])[1], hp_numNeurons1, hp_numNeurons2, hp_numNeurons3, hp_lr)
+    model = modelBuilder(modelInfo(sys.argv[2])[1], hp_numNeurons1, hp_numNeurons2, hp_numNeurons3, hp_lr)
 
     return model
 
@@ -367,8 +365,9 @@ def predictAllTestData(modelScheme, modelFeatures, modelName, testData, regional
 # Main Function
 if __name__ == "__main__":
     # Load model Info
-    modelName = sys.argv[1]
-    modelScheme, modelFeatures, modelNum = modelInfo(modelName)
+    modelNum = sys.argv[1]
+    modelName = sys.argv[2]
+    modelScheme, modelFeatures = modelInfo(modelName)
     modelDir = f'Models/{modelName}/Model_Run{modelNum}/'
 
     logger.info(f"Model {modelName} - Run Number: {modelNum}")
