@@ -14,6 +14,7 @@
 # This section will grab the model name to run
 modelInfo=$(sed -n ${SLURM_ARRAY_TASK_ID}p modelList.txt)
 
+# Split the modelInfo into modelNum and modelName
 IFS=' ' read -ra arr <<< "$modelInfo"
 modelNum=${arr[0]}
 modelName=${arr[1]}
