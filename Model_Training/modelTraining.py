@@ -45,6 +45,9 @@ def modelInfo(modelName, modelGuide='Model_Training/ModelGuide.csv'):
     modelRuns = glob.glob(f'{modelDir}/Model_{modelName}_Run*.keras')
     modelNum = int(len(modelRuns)) + 1
 
+    # Create the model directory if it does not exist
+    os.makedirs(f'{modelDir}/Model_Run{modelNum}', exist_ok=True)
+
     # Extract scheme from model name
     modelScheme = modelName.split("_")[0]
 

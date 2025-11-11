@@ -25,4 +25,4 @@ pip install --no-index --upgrade pip
 pip install --no-index tensorflow pandas geopandas numpy scikit-learn keras-tuner
 
 # Run the training script
-python Model_Training/modelTraining.py  "$modelName"
+python Model_Training/modelTraining.py "$modelName"
