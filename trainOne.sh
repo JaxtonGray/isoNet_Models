@@ -31,4 +31,4 @@ pip install --no-index tensorflow pandas geopandas numpy scikit-learn keras-tune
 cd $modelName
 
 # Run the training script
-python Model_Training/modelTraining.py "$modelName"
+python Model_Training/modelTraining.py "$modelNum" "$modelName"
