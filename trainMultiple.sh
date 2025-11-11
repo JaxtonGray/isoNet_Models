@@ -8,7 +8,7 @@
 #SBATCH --time=1:00:00
 #SBATCH --mail-user=jaxton.gray@ucalgary.ca
 #SBATCH --mail-type=BEGIN,END,FAIL
-#SBATCH --array=1-4
+#SBATCH --array=1-10
 
 # !/bin/bash
 # This section will grab the model name to run
@@ -23,7 +23,6 @@ virtualenv --no-download $SLURM_TMPDIR/env
 source $SLURM_TMPDIR/env/bin/activate
 pip install --no-index --upgrade pip
 pip install --no-index -r requirements.txt
-pip install --no-index tensorflow
 
 # Run the training script
 python Model_Training/modelTraining.py  "$modelName"
