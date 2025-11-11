@@ -307,7 +307,7 @@ def predictTestData(modelFeatures, modelDir, modelNum, xTest, yTest, model, scal
 
 
 # This section will predict against the leave-out test data:
-def predictLeaveOut(modelFeatures, modelDir, modelNum, xTest, yTest, model, scaler):
+def predictLeaveOut(modelFeatures, modelDir, modelNum, model, scaler):
     # Load in the leave-out test data
     logger.info("Predicting for leave-out test data")
     leaveOutDF = pd.read_csv(r'Data\Leave_Out_Points\Leave_Out_Points_GNIP (2025-07-22).csv')
@@ -420,6 +420,10 @@ if __name__ == "__main__":
         predictTestData(modelFeatures, modelDir, modelNum, 
                         testData[modelFeatures], testData[['O18', 'H2']], model, scaler)
         logger.info("Test Data Predicted")
+
+        # Predict the leave-out test data using the trained model
+        predictLeaveOut(modelFeatures, modelDir, modelNum, 
+                        model, scaler)
 
         # Save the model
         model.save(f'{modelDir}/Model_Run{modelNum}.keras')
