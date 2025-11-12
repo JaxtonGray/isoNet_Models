@@ -16,7 +16,7 @@ module load python/3.11
 virtualenv --no-download $SLURM_TMPDIR/env
 source $SLURM_TMPDIR/env/bin/activate
 pip install --no-index --upgrade pip
-pip install --no-index tensorflow pandas numpy
+pip install --no-index tensorflow pandas numpy scikit-learn
 
 # Run the training script
 python test.py
