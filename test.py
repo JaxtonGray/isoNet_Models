@@ -28,5 +28,9 @@ model = keras.models.load_model(r'Models/Global_B/Model_Run1/Model_Run1.keras')
 # Make predictions
 predictions = model.predict(features)
 
+# Inverse transform predictions if necessary
+# Assuming the target variable was also scaled during training
+predictions = scaler.inverse_transform(predictions)
+
 # Save predictions to CSV
 print(predictions)
