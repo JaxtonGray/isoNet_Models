@@ -397,7 +397,7 @@ if __name__ == "__main__":
     logger.info("---------------------------------")
 
     # Import train data and original headers
-    trainData, oldCols = importData(r'Data/DataTrain')
+    trainData, oldCols = importData(r'Data/DataTrain.csv')
     logger.info("Training Data Imported")
 
     # If a global spatial scheme is used do not split the data
@@ -413,7 +413,7 @@ if __name__ == "__main__":
         model = trainModel(modelFeatures, xTrain, yTrain, best_hps)
 
         # Import test data and original headers
-        testData = importData(r'Data/DataTest')[0]
+        testData = importData(r'Data/DataTest.csv')[0]
         logger.info("Test Data Imported")
 
         # Predict the test data using the trained model
