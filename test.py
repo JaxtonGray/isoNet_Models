@@ -35,5 +35,12 @@ predictions = model.predict(features)
 # Assuming the target variable was also scaled during training
 predictions = outputScaler.inverse_transform(predictions)
 
-# Save predictions to CSV
-print(predictions)
+
+# Convert predictions to DataFrame
+pred_df = pd.DataFrame(predictions, columns=['O18 P', 'H2 P'])
+
+# Combine predictions with original data
+result = pd.concat([data, pred_df], axis=1)
+
+# Save results to CSV
+result.to_csv(r'Test_Predictions.csv', index=False)
