@@ -8,7 +8,7 @@ import pandas as pd
 data = pd.read_csv(r'Data/DataTest.csv')
 
 # Preprocess data
-data['Date'] = pd.to_datetime(data['Date'])
+data['Date'] = pd.to_datetime(data['Date'], utc=True)
 data['Year'] = data['Date'].dt.year
 data['JulianDay'] = pd.to_datetime(data['Date']).dt.dayofyear
 data['JulianDay_Sin'] = np.sin(2 * np.pi * data['JulianDay'] / 365)
