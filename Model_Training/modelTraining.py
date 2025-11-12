@@ -35,7 +35,7 @@ logger.addHandler(fh)
 # Function to load in the important parts of the model rather than have a bunch of global variables
 #%%
 def modelInfo(modelName, modelGuide='Model_Training/ModelGuide.csv'):
-    #logger.info(f"Loading model information for: {modelName}")
+    logger.info(f"Loading model information for: {modelName}")
     
     # Load in the model guide
     modelGuideDF = pd.read_csv(modelGuide)
@@ -69,10 +69,10 @@ def modelInfo(modelName, modelGuide='Model_Training/ModelGuide.csv'):
 # 3. Convert Date into Year and Julian Day
 # 4. Peform a Sine Transformation on JulianDay
 # 5. Return the dataset, and old headers
-def importData(fileName):
-    logger.info(f"Importing data from file: {fileName}")
+def importData(filePath):
+    logger.info(f"Importing data from file: {filePath}")
     # Read in the correct file
-    dataset = pd.read_csv(f'Data/{fileName}.csv')
+    dataset = pd.read_csv(filePath)
     oldCols = list(dataset.columns)
 
     # Remove any units (anything in parentheses)
@@ -310,7 +310,7 @@ def predictTestData(modelFeatures, modelDir, modelNum, xTest, yTest, model, scal
 def predictLeaveOut(modelFeatures, modelDir, modelNum, model, scaler):
     # Load in the leave-out test data
     logger.info("Predicting for leave-out test data")
-    leaveOutDF = pd.read_csv(r'Data/Leave_Out_Points/Leave_Out_Points_GNIP (2025-07-22).csv')
+    leaveOutDF = importData(r'Data/Leave_Out_Points/Leave_Out_Points_GNIP (2025-07-22).csv')[0]
     xTest = leaveOutDF[modelFeatures]
     yTest = leaveOutDF[['O18', 'H2']]
 
@@ -397,7 +397,7 @@ if __name__ == "__main__":
     logger.info("---------------------------------")
 
     # Import train data and original headers
-    trainData, oldCols = importData('DataTrain')
+    trainData, oldCols = importData(r'Data/DataTrain')
     logger.info("Training Data Imported")
 
     # If a global spatial scheme is used do not split the data
@@ -413,7 +413,7 @@ if __name__ == "__main__":
         model = trainModel(modelFeatures, xTrain, yTrain, best_hps)
 
         # Import test data and original headers
-        testData = importData('DataTest')[0]
+        testData = importData(r'Data/DataTest')[0]
         logger.info("Test Data Imported")
 
         # Predict the test data using the trained model
