@@ -23,11 +23,4 @@ model = keras.models.load_model(r'Models/Global_B/Model_Run1/Model_Run1.keras')
 predictions = model.predict(features)
 
 # Save predictions to CSV
-output = pd.DataFrame({
-    'Date': data['Date'],
-    'Lat': data['Lat'],
-    'Lon': data['Lon'],
-    'Alt': data['Alt'],
-    'Predicted_Value': predictions.flatten()
-})
-output.to_csv(r'Predictions.csv', index=False)
+print(predictions)
