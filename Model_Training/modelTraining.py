@@ -17,6 +17,7 @@ from tensorflow.keras.callbacks import EarlyStopping
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.metrics import RootMeanSquaredError, MeanAbsoluteError
 from sklearn.preprocessing import MinMaxScaler
+from sklearn.externals import joblib
 import keras_tuner as kt
 
 # Setup Logging
@@ -295,13 +296,10 @@ def traintuneAllModels(modelName, modelFeatures, regionalData):
 def predictTestData(modelFeatures, modelDir, modelNum, xTest, yTest, model, scaler):
     # Scale the test data using the scaler
     x = scaler['features'].transform(xTest.values)
-    scalerTest = MinMaxScaler()
-    scalerTest.fit(yTest.values)
 
     
     # Predict the test data using the trained model
     yPreds = model.predict(x, verbose=0)
-    yPreds = scalerTest.inverse_transform(yPreds)
 
     # Combine the test data and the predictions with original headers
     testResults = pd.DataFrame(np.concatenate((xTest, yTest, yPreds), axis=1), columns=modelFeatures + ['O18 A', 'H2 A', 'O18 P', 'H2 P'])
@@ -322,12 +320,10 @@ def predictLeaveOut(modelFeatures, modelDir, modelNum, model, scaler):
 
     # Scale the test data using the scaler
     x = scaler['features'].transform(xTest.values)
-    scalerTest = MinMaxScaler()
-    scalerTest.fit(yTest.values)
 
     # Predict the test data using the trained model
     yPreds = model.predict(x, verbose=0)
-    yPreds = scalerTest.inverse_transform(yPreds)
+    
     # Combine the xTest DF with the predictions and actuals
     results = pd.concat([xTest.reset_index(drop=True), yTest.reset_index(drop=True)], axis=1)
     results[['O18 P', 'H2 P']] = pd.DataFrame(yPreds, columns=['O18 P', 'H2 P'])
@@ -413,6 +409,11 @@ if __name__ == "__main__":
         # Scale and Split the train data
         xTrain, yTrain, scaler = scaleData(modelFeatures, trainData)
         logger.info("Training Data Scaled")
+
+        # Save the scaler for later use
+        os.makedirs(f'{modelDir}/Scaler', exist_ok=True)
+        joblib.dump(scaler['features'], f'{modelDir}/Scaler/Feature_Scaler.save')
+        joblib.dump(scaler['targets'], f'{modelDir}/Scaler/Target_Scaler.save')
 
         # Hyperparameter Tuning
         best_hps = hyperParameterTuning(xTrain, yTrain, modelDir, modelName, modelNum)
