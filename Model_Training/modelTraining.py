@@ -16,7 +16,7 @@ from tensorflow.keras.layers import LSTM, Dense, InputLayer
 from tensorflow.keras.callbacks import EarlyStopping
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.metrics import RootMeanSquaredError, MeanAbsoluteError
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import MinMaxScaler
 import keras_tuner as kt
 
 # Setup Logging
@@ -106,7 +106,7 @@ def scaleData(modelFeatures, dataset, regionalScaler = None):
     # Scale the data if no regionalScaler is provided
     if regionalScaler is None:
         # Scale the Features
-        scaler = StandardScaler()
+        scaler = MinMaxScaler()
         X = scaler.fit_transform(features.values)
         Y = target.values
         return X, Y, scaler
@@ -311,7 +311,7 @@ def predictLeaveOut(modelFeatures, modelDir, modelNum, model, scaler):
     yTest = leaveOutDF[['O18', 'H2']]
 
     # Scale the test data using the scaler
-    x = scaler['features'].transform(xTest.values)
+    x = scaler.transform(xTest.values)
 
     # Predict the test data using the trained model
     yPreds = model.predict(x, verbose=0)
