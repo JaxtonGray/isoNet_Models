@@ -110,7 +110,8 @@ def scaleData(modelFeatures, dataset, regionalScaler = None):
         scalerTargets = MinMaxScaler()
         scaler = {'features': scalerFeatures, 'targets': scalerTargets}
         X = scalerFeatures.fit_transform(features.values)
-        Y = scalerTargets.fit_transform(target.values)
+        Y = target.values 
+        scalerTargets.fit(target.values)
         return X, Y, scaler
     
     else:
