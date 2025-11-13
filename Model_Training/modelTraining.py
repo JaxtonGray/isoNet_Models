@@ -16,8 +16,7 @@ from tensorflow.keras.layers import LSTM, Dense, InputLayer
 from tensorflow.keras.callbacks import EarlyStopping
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.metrics import RootMeanSquaredError, MeanAbsoluteError
-from sklearn.preprocessing import MinMaxScaler
-from sklearn.externals import joblib
+from sklearn.preprocessing import StandardScaler
 import keras_tuner as kt
 
 # Setup Logging
@@ -107,11 +106,9 @@ def scaleData(modelFeatures, dataset, regionalScaler = None):
     # Scale the data if no regionalScaler is provided
     if regionalScaler is None:
         # Scale the Features
-        scalerFeatures = MinMaxScaler()
-        scalerTargets = MinMaxScaler()
-        scaler = {'features': scalerFeatures, 'targets': scalerTargets}
-        X = scalerFeatures.fit_transform(features.values)
-        Y = scalerTargets.fit_transform(target.values)
+        scaler = StandardScaler()
+        X = scaler.fit_transform(features.values)
+        Y = target.values
         return X, Y, scaler
     
     else:
@@ -242,10 +239,6 @@ def trainModel(modelFeatures, xTrain, yTrain, hyperparams):
     model = modelBuilder(modelFeatures, 
                          hyperparams['numNeurons_LSTM'], hyperparams['numNeurons_Dense1'], hyperparams['numNeurons_Dense2'], hyperparams['learning_rate'])
 
-    logger.info("Model training completed")
-
-    return model
-
     # Early Stopping
     stop_early = EarlyStopping(monitor='val_loss', patience = 100, restore_best_weights=True)
 
@@ -295,9 +288,8 @@ def traintuneAllModels(modelName, modelFeatures, regionalData):
 # 4. Save the results to a CSV
 def predictTestData(modelFeatures, modelDir, modelNum, xTest, yTest, model, scaler):
     # Scale the test data using the scaler
-    x = scaler['features'].transform(xTest.values)
+    x = scaler.transform(xTest.values)
 
-    
     # Predict the test data using the trained model
     yPreds = model.predict(x, verbose=0)
 
@@ -323,7 +315,7 @@ def predictLeaveOut(modelFeatures, modelDir, modelNum, model, scaler):
 
     # Predict the test data using the trained model
     yPreds = model.predict(x, verbose=0)
-    
+
     # Combine the xTest DF with the predictions and actuals
     results = pd.concat([xTest.reset_index(drop=True), yTest.reset_index(drop=True)], axis=1)
     results[['O18 P', 'H2 P']] = pd.DataFrame(yPreds, columns=['O18 P', 'H2 P'])
@@ -409,11 +401,6 @@ if __name__ == "__main__":
         # Scale and Split the train data
         xTrain, yTrain, scaler = scaleData(modelFeatures, trainData)
         logger.info("Training Data Scaled")
-
-        # Save the scaler for later use
-        os.makedirs(f'{modelDir}/Scaler', exist_ok=True)
-        joblib.dump(scaler['features'], f'{modelDir}/Scaler/Feature_Scaler.save')
-        joblib.dump(scaler['targets'], f'{modelDir}/Scaler/Target_Scaler.save')
 
         # Hyperparameter Tuning
         best_hps = hyperParameterTuning(xTrain, yTrain, modelDir, modelName, modelNum)
