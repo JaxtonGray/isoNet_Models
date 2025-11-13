@@ -110,8 +110,7 @@ def scaleData(modelFeatures, dataset, regionalScaler = None):
         scalerTargets = MinMaxScaler()
         scaler = {'features': scalerFeatures, 'targets': scalerTargets}
         X = scalerFeatures.fit_transform(features.values)
-        Y = target.values 
-        scalerTargets.fit(target.values)
+        Y = scalerTargets.fit_transform(target.values)
         return X, Y, scaler
     
     else:
@@ -296,10 +295,13 @@ def traintuneAllModels(modelName, modelFeatures, regionalData):
 def predictTestData(modelFeatures, modelDir, modelNum, xTest, yTest, model, scaler):
     # Scale the test data using the scaler
     x = scaler['features'].transform(xTest.values)
+    scalerTest = MinMaxScaler()
+    scalerTest.fit(yTest.values)
+
     
     # Predict the test data using the trained model
     yPreds = model.predict(x, verbose=0)
-    yPreds = scaler['targets'].inverse_transform(yPreds)
+    yPreds = scalerTest.inverse_transform(yPreds)
 
     # Combine the test data and the predictions with original headers
     testResults = pd.DataFrame(np.concatenate((xTest, yTest, yPreds), axis=1), columns=modelFeatures + ['O18 A', 'H2 A', 'O18 P', 'H2 P'])
@@ -320,11 +322,12 @@ def predictLeaveOut(modelFeatures, modelDir, modelNum, model, scaler):
 
     # Scale the test data using the scaler
     x = scaler['features'].transform(xTest.values)
+    scalerTest = MinMaxScaler()
+    scalerTest.fit(yTest.values)
 
     # Predict the test data using the trained model
     yPreds = model.predict(x, verbose=0)
-    yPreds = scaler['targets'].inverse_transform(yPreds)
-
+    yPreds = scalerTest.inverse_transform(yPreds)
     # Combine the xTest DF with the predictions and actuals
     results = pd.concat([xTest.reset_index(drop=True), yTest.reset_index(drop=True)], axis=1)
     results[['O18 P', 'H2 P']] = pd.DataFrame(yPreds, columns=['O18 P', 'H2 P'])
