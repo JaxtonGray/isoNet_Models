@@ -8,7 +8,7 @@
 #SBATCH --time=1:45:00
 #SBATCH --mail-user=jaxton.gray@ucalgary.ca
 #SBATCH --mail-type=BEGIN,END,FAIL
-#SBATCH --array=1-10
+#SBATCH --array=1-2
 
 # !/bin/bash
 # This section will grab the model name to run
