@@ -12,9 +12,9 @@ from sklearn.model_selection import train_test_split
 
 # Set Global variable defining the points that are being left out
 LEAVE_OUT_POINTS = {
-    "lowData" : Point(104.283, 52.3),
-    "highData" : Point(7.584, 47.543),
-    "aridData" : Point(-2.17, 30.13),
+    "lowData" : Point(104.2833333, 52.3),
+    "highData" : Point(7.58371693, 47.54260867),
+    "aridData" : Point(5.6, 23.27),
     "northData" : Point(-105.117, 69.1),
     "equitData" : Point(6.72, 0.38),
     "southernData" : Point(-48.06, -22.66),
@@ -22,7 +22,7 @@ LEAVE_OUT_POINTS = {
     "lakeWoods" : Point(-93.72, 49.67),
     "tibetPlat" : Point(91.133, 29.7),
     "ethiopiaHigh" : Point(39.77, 12.542),
-    "hotWet" : Point(72.82, 18.96)
+    "hotWet" : Point(72.82, 18.9)
 }
 
 # Function to read in the GNIP data and convert it to a GeoDataFrame
@@ -36,24 +36,21 @@ def read_gnip_data(file_path):
 # Function to remove leave out points from the GNIP data based on X and Y coordinates
 # Returns: GeoDataFrame with leave out points removed, GeoDataFrame of leave out points found
 def remove_leave_out_points(gdf, leave_out_points):
-    # Collect matched frames in a list and concat once at the end. This
-    # avoids concatenating against an empty/all-NA DataFrame which triggers
-    # the FutureWarning about dtype inference.
-    matched_list = []
+    # Initialze an empty geodataframe that has the same columns as the input gdf
+    leave_out_gdf = gpd.GeoDataFrame(columns=gdf.columns)
 
-    # Cycle through the points to leave out and find the matching points in the GNIP data
-    for point_name, point_geom in leave_out_points.items():
-        matched_points = gdf[gdf.intersects(point_geom)].copy()
-        if not matched_points.empty:
-            matched_points['LeaveOutPoint'] = point_name
-            matched_list.append(matched_points)
+    # Cycle through the the Leave out points and sort out the leaveout points
+    for label, point in leave_out_points.items():
+        matched = gdf[gdf.geom_equals_exact(point, tolerance=0.01)]
+        leave_out_gdf = pd.concat([leave_out_gdf, matched])
+    
+    # Remove the leave out points from the original gdf and reset the index
+    gdf_removed = gdf[~gdf.index.isin(leave_out_gdf.index)].reset_index(drop=True)
+    leave_out_gdf = leave_out_gdf.reset_index(drop=True)
 
-            # Remove matched points from the original GeoDataFrame
-            gdf = gdf[~gdf.intersects(point_geom)]
-
-    # Concatenate all matched points into a single GeoDataFrame
-    leave_out_gdf = pd.concat(matched_list, ignore_index=True) if matched_list else gpd.GeoDataFrame(columns=['LeaveOutPoint', *gdf.columns], geometry='geometry')
-    return gdf, leave_out_gdf[['LeaveOutPoint', *gdf.columns]]
+    # Map the label of the leave out points to the points in the leave_out_gdf
+    leave_out_gdf['Label'] = leave_out_gdf.apply(lambda row: [label for label, point in leave_out_points.items() if row.geometry.equals_exact(point, tolerance=0.01)][0], axis=1)
+    return gdf_removed, leave_out_gdf
 #%%
 if __name__ == "__main__":
     # Read in the GNIP data
