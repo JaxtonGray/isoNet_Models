@@ -256,14 +256,14 @@ def trainModel(modelFeatures, xTrain, yTrain, hyperparams):
 # 3. Save the best hyperparameters to a new region dictionary
 # 4. Train the model for each region and save the trained model to the regional model dictionary
 # 5. Return the regional model dictionary
-def traintuneAllModels(modelName, modelFeatures, regionalData):
+def traintuneAllModels(modelName, modelFeatures, regionalData, modelDir, modelNum):
     logger.info("Starting tuning and training for all models")
     # Cycle through all the regional datasets
     regionalModels = {}
     regionalHyperparams = {}
 
     for region in regionalData.keys():
-        print(f'-----> Region: {region}')
+        logger.info(f"------> Tuning and training model for region: {region}")
         # Tune the model for each region
         bestHyperparams = hyperParameterTuning(modelFeatures, regionalData[region][0], regionalData[region][1])
         regionalHyperparams[region] = bestHyperparams
@@ -272,10 +272,16 @@ def traintuneAllModels(modelName, modelFeatures, regionalData):
         model = trainModel(modelFeatures, regionalData[region][0], regionalData[region][1], bestHyperparams)
         regionalModels[region] = model
 
+
+    # Save each regional model
+    os.makedirs(f'{modelDir}/Trained_Models', exist_ok=True)
+    for region in regionalModels.keys():
+        # Save the model to a file
+        regionalModels[region].save(f'{modelDir}/Trained_Models/Model_{modelName}_{region}_Run{modelNum}.keras')
+        logger.info(f"Saved model for region: {region} to {modelDir}/Trained_Models/Model_{modelName}_{region}_Run{modelNum}.keras")
     # Save the best hyperparameters to a file
-    if not os.path.exists(f'Trained_Models'):
-        os.makedirs(f'Trained_Models')
-    with open(f'Trained_Models/Model_{modelName}_Hyperparameters.json', 'w') as f:
+    os.makedirs(f'{modelDir}/Hyperparameters', exist_ok=True)
+    with open(f'{modelDir}/Hyperparameters/Model_{modelName}_Hyperparameters.json', 'w') as f:
         json.dump(regionalHyperparams, f)
 
     return regionalModels
@@ -332,13 +338,60 @@ def predictLeaveOut(modelFeatures, modelDir, modelNum, model, scaler):
 # 4. Predict the test data using the trained model for each region
 # 5. Combine the test data and the predictions with original headers for each region
 # 6. Save the results to a CSV for each region
-def predictAllTestData(modelScheme, modelFeatures, modelName, testData, regionalModels, regionalData):
+def predictAllTestData(modelScheme, modelFeatures, modelNum, testData, regionalModels, regionalData, modelDir):
     logger.info("Predicting for all test data")
     # Convert testData into geoDataFrame
     gdf = gpd.GeoDataFrame(testData, geometry=gpd.points_from_xy(testData.Lon, testData.Lat))
 
     # Load in the schematic file
-    scheme = pd.read_csv(f'../../Data/ModelSplit_Schemes/{modelScheme}.csv')
+    scheme = pd.read_csv(f'Data/ModelSplit_Schemes/{modelScheme}.csv')
+    # Convert the schematic file into a geodataframe
+    scheme = gpd.GeoDataFrame(scheme, geometry=gpd.GeoSeries.from_wkt(scheme['geometry']))
+
+    regionalPredictions = pd.DataFrame(columns=modelFeatures + ['O18 A', 'H2 A', 'O18 P', 'H2 P'])
+    for region in scheme.iterrows():
+        # Grab the regional model and the scaler for the region
+        model = regionalModels[region[1]['Region']]
+        scaler = regionalData[region[1]['Region']][2]
+        testData = gdf[gdf.within(region[1]['geometry'])].reset_index()
+
+        # Scale the test data using the scaler for each region
+        xTest = testData[modelFeatures]
+        x = scaler.transform(xTest.values)
+        yTest = testData[['O18', 'H2']].values
+
+        # Predict the test data using the trained model for each region
+        yPreds = model.predict(x, verbose=0)
+
+        # Combine the test data and the predictions with original headers for each region
+        testResults = pd.DataFrame(np.concatenate((xTest, yTest, yPreds), axis=1), 
+                                   columns=modelFeatures + ['O18 A', 'H2 A', 'O18 P', 'H2 P'])
+        
+        regionalPredictions = pd.concat([regionalPredictions, testResults], axis=0)
+    # Save all the results to a CSV
+    os.makedirs(f'{modelDir}/TestResults', exist_ok=True)
+    regionalPredictions.to_csv(f'{modelDir}/TestResults/Model_Run{modelNum}_TestData.csv', index=False)   
+
+# Predict the leave-out test data for all regional models
+# Pseudocode:
+# 1. Load in Leave-out data and scheme
+# 2. Cycle through all the regions
+# 3. Scale the test data using the scaler for each region
+# 4. Predict the test data using the trained model for each region
+# 5. Combine the test data and the predictions with original headers for each region
+# 6. Save the results to a CSV for each region
+def predictLeaveOutAll(modelScheme, modelFeatures, modelNum, regionalModels, regionalData, modelDir):
+    logger.info("Predicting for all leave-out test data")
+    
+    # Load in the leave-out test data
+    leaveOutDF = importData(r'Data/Leave_Out_Points/Leave_Out_Points_GNIP (2025-07-22).csv')[0]
+    
+    # Convert leaveOutDF into geoDataFrame
+    gdf = gpd.GeoDataFrame(leaveOutDF, geometry=gpd.points_from_xy(leaveOutDF.Lon, leaveOutDF.Lat))
+
+    # Load in the schematic file
+    scheme = pd.read_csv(f'Data/ModelSplit_Schemes/{modelScheme}.csv')
+
     # Convert the schematic file into a geodataframe
     scheme = gpd.GeoDataFrame(scheme, geometry=gpd.GeoSeries.from_wkt(scheme['geometry']))
 
@@ -363,22 +416,11 @@ def predictAllTestData(modelScheme, modelFeatures, modelName, testData, regional
         
         regionalPredictions = pd.concat([regionalPredictions, testResults], axis=0)
 
-        if not os.path.exists(f'Trained_Models'):
-            os.makedirs(f'Trained_Models')
-            # Save the model to a file
-            model.save(f'Trained_Models/{region[1]["Region"]}.keras')
-        else:
-            # Save the model to a file
-            model.save(f'Trained_Models/{region[1]["Region"]}.keras')
-
-        
-
     # Save all the results to a CSV
-    if not os.path.exists('TestResults'):
-        os.makedirs('TestResults')
-    regionalPredictions.to_csv(f'TestResults/Model_{modelName}_TestData.csv', index=False)
-
-    print("Finished predicting all test data")
+    if not os.path.exists(f'{modelDir}/TestResults'):
+        os.makedirs(f'{modelDir}/TestResults')
+    regionalPredictions.to_csv(f'{modelDir}/TestResults/Model_Run{modelNum}_LeaveOut_TestData.csv', index=False)
+    logger.info("Finished predicting all test data")
 
 #%%
 # Main Function
@@ -390,7 +432,6 @@ if __name__ == "__main__":
     modelDir = f'Models/{modelName}/Model_Run{modelNum}/'
 
     logger.info(f"Model {modelName} - Run Number: {modelNum}")
-    logger.info("---------------------------------")
 
     # Import train data and original headers
     trainData, oldCols = importData(r'Data/DataTrain.csv')
@@ -429,10 +470,11 @@ if __name__ == "__main__":
         splitData = schemeSplit(trainData)
         
         # Train and tune all models for non-global schemes
-        regionalModels = traintuneAllModels(modelName, modelFeatures, splitData)
+        regionalModels = traintuneAllModels(modelName, modelFeatures, splitData, modelDir, modelNum)
 
         # Predict all test data for all regional models for non-global schemes
         testData = importData('DataTest')[0]
         logger.info("Test Data Imported")
-        predictAllTestData(modelScheme, modelFeatures, modelName, testData, regionalModels, splitData)
+        predictAllTestData(modelScheme, modelFeatures, modelNum, testData, regionalModels, splitData, modelDir)
+        predictLeaveOutAll(modelScheme, modelFeatures, modelNum, regionalModels, splitData, modelDir)
         logger.info("Test Data Predicted")
