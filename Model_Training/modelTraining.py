@@ -129,7 +129,7 @@ def scaleData(modelFeatures, dataset, regionalScaler = None):
 def schemeSplit(modelScheme, df):
     logger.info(f"Splitting data based on scheme: {modelScheme}")
     # Load in the schematic file
-    scheme = pd.read_csv(f'../../Data/ModelSplit_Schemes/{modelScheme}.csv')
+    scheme = pd.read_csv(f'Data/ModelSplit_Schemes/{modelScheme}.csv')
     # Convert the schematic file into a geodataframe
     scheme = gpd.GeoDataFrame(scheme, geometry=gpd.GeoSeries.from_wkt(scheme['geometry']))
 
@@ -467,7 +467,7 @@ if __name__ == "__main__":
     else:
         # Split the data based on the spatial scheme
         logger.info(f"Splitting training data based on Scheme: {modelScheme}")
-        splitData = schemeSplit(trainData)
+        splitData = schemeSplit(modelScheme, trainData)
         
         # Train and tune all models for non-global schemes
         regionalModels = traintuneAllModels(modelName, modelFeatures, splitData, modelDir, modelNum)
