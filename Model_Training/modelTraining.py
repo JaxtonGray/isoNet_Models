@@ -467,7 +467,7 @@ if __name__ == "__main__":
     else:
         # Split the data based on the spatial scheme
         logger.info(f"Splitting training data based on Scheme: {modelScheme}")
-        splitData = schemeSplit(modelScheme, trainData)
+        splitData = schemeSplit(modelScheme, modelFeatures, trainData)
         
         # Train and tune all models for non-global schemes
         regionalModels = traintuneAllModels(modelName, modelFeatures, splitData, modelDir, modelNum)
