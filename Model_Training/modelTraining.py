@@ -404,6 +404,11 @@ def predictLeaveOutAll(modelScheme, modelFeatures, modelNum, regionalModels, reg
 
         # Scale the test data using the scaler for each region
         xTest = testData[modelFeatures]
+
+        # Since the leave-out data may not have any points in a region, check if xTest is empty
+        if xTest.empty:
+            continue
+        
         x = scaler.transform(xTest.values)
         yTest = testData[['O18', 'H2']].values
 
