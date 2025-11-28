@@ -473,7 +473,7 @@ if __name__ == "__main__":
         regionalModels = traintuneAllModels(modelName, modelFeatures, splitData, modelDir, modelNum)
 
         # Predict all test data for all regional models for non-global schemes
-        testData = importData('DataTest')[0]
+        testData = importData('Data/DataTest.csv')[0]
         logger.info("Test Data Imported")
         predictAllTestData(modelScheme, modelFeatures, modelNum, testData, regionalModels, splitData, modelDir)
         predictLeaveOutAll(modelScheme, modelFeatures, modelNum, regionalModels, splitData, modelDir)
