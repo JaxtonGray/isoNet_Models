@@ -126,7 +126,7 @@ def scaleData(modelFeatures, dataset, regionalScaler = None):
 # 3. Convert the dataset into a geodataframe
 # 4. Split data based on the spatial scheme region and add to a dictionary
 # 5. Return the dictionary of dataframes
-def schemeSplit(modelScheme, df):
+def schemeSplit(modelScheme, modelFeatures, df):
     logger.info(f"Splitting data based on scheme: {modelScheme}")
     # Load in the schematic file
     scheme = pd.read_csv(f'Data/ModelSplit_Schemes/{modelScheme}.csv')
@@ -141,7 +141,7 @@ def schemeSplit(modelScheme, df):
 
     for region in scheme.iterrows():
         regionData = gdf[gdf.within(region[1]['geometry'])].reset_index()
-        regionData_X, regionData_Y, regionData_scaler = scaleData(regionData)
+        regionData_X, regionData_Y, regionData_scaler = scaleData(modelFeatures, regionData)
         splitData[region[1]['Region']] = (regionData_X, regionData_Y, regionData_scaler)
 
     return splitData
