@@ -200,7 +200,7 @@ def hyperParameterSearchSpace(hp):
 # 3. Perform the search
 # 4. Get the best model hyperparameters
 # 5. Return the best hyperparameters
-def hyperParameterTuning(xTrain, yTrain, modelDir, modelName, modelNum):
+def hyperParameterTuning(xTrain, yTrain, modelDir, modelNum):
     logger.info("Starting hyperparameter tuning")
 
     # Create the hyperparameter directory if it does not exist
@@ -265,7 +265,7 @@ def traintuneAllModels(modelName, modelFeatures, regionalData, modelDir, modelNu
     for region in regionalData.keys():
         logger.info(f"------> Tuning and training model for region: {region}")
         # Tune the model for each region
-        bestHyperparams = hyperParameterTuning(modelFeatures, regionalData[region][0], regionalData[region][1])
+        bestHyperparams = hyperParameterTuning(regionalData[region][0], regionalData[region][1], modelDir, modelNum)
         regionalHyperparams[region] = bestHyperparams
 
         # Train the model for each region
@@ -444,7 +444,7 @@ if __name__ == "__main__":
         logger.info("Training Data Scaled")
 
         # Hyperparameter Tuning
-        best_hps = hyperParameterTuning(xTrain, yTrain, modelDir, modelName, modelNum)
+        best_hps = hyperParameterTuning(xTrain, yTrain, modelDir, modelNum)
 
         # Train the Model
         model = trainModel(modelFeatures, xTrain, yTrain, best_hps)
