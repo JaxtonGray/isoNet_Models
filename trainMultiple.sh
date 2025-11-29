@@ -8,7 +8,7 @@
 #SBATCH --time=2:30:00
 #SBATCH --mail-user=jaxton.gray@ucalgary.ca
 #SBATCH --mail-type=BEGIN,END,FAIL
-#SBATCH --array=1
+#SBATCH --array=1-30
 #SBATCH --output=SLURM_Output/model_training_%j_%a.out
 
 # !/bin/bash
