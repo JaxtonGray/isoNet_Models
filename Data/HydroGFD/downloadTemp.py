@@ -8,7 +8,7 @@ client = cdsapi.Client()
 
 dataset = "sis-ecv-cmip5-bias-corrected"
 request = {
-    "variable": "precipitation_flux",
+    "variable": "mean_2m_temperature",
     "model": "ec_earth",
     "experiment": "rcp_4_5",
     "period": [
@@ -18,10 +18,11 @@ request = {
     ]
 }
 
-output_file = "precipitation_flux_ec_earth_rcp45.zip"
+output_file = "mean_2m_temperature_ec_earth_rcp45.zip"
 
 client.retrieve(dataset, request, output_file)
 
 # Unzip the downloaded file
 with zipfile.ZipFile(output_file, 'r') as zip_ref:
     zip_ref.extractall(os.path.dirname(output_file))
+    
