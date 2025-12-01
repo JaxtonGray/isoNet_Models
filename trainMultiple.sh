@@ -20,6 +20,9 @@ IFS=' ' read -ra arr <<< "$modelInfo"
 modelNum=${arr[0]}
 modelName=${arr[1]}
 
+# Declare what model is to be trained
+echo "Model $modelName Run $modelNum is being trained"
+
 # Set up the environment
 module load python/3.11.5
 module load proj
@@ -31,3 +34,5 @@ pip install --no-index tensorflow pandas geopandas numpy scikit-learn keras-tune
 
 # Run the training script
 python Model_Training/modelTraining.py "$modelNum" "$modelName"
+
+echo "Model $modelName Run $modelNum finished training"
