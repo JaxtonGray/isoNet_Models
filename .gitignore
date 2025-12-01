@@ -33,3 +33,7 @@ Stats/Mapping/*
 # and the legend.txt file
 Data/KPN/**/*.tif
 Data/KPN/legend.txt
+
+# Ignore any ipynb notebook folders
+.ipynb_checkpoints/**
+**/.ipynb_checkpoints/
