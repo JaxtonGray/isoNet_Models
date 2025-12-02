@@ -8,6 +8,7 @@
 #SBATCH --time=02:30:00
 #SBATCH --mail-user=jaxton.gray@ucalgary.ca
 #SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH --output=SLURM_Output/model_training_%j.out
 
 # !/bin/bash
 # This section will grab the model name to run
@@ -18,9 +19,11 @@ IFS=' ' read -ra arr <<< "$modelInfo"
 modelNum=${arr[0]}
 modelName=${arr[1]}
 
+# Declare what model is to be trained
+echo "Model $modelName Run $modelNum is being trained"
 
 # Set up the environment
-module load python/3.11
+module load python/3.11.5
 module load proj
 
 virtualenv --no-download $SLURM_TMPDIR/env
@@ -28,7 +31,7 @@ source $SLURM_TMPDIR/env/bin/activate
 pip install --no-index --upgrade pip
 pip install --no-index tensorflow pandas geopandas numpy scikit-learn keras-tuner
 
-cd $modelName
-
 # Run the training script
 python Model_Training/modelTraining.py "$modelNum" "$modelName"
+
+echo "Model $modelName Run $modelNum finished training"

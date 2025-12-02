@@ -5,10 +5,11 @@
 #SBATCH --gpus-per-node=1
 #SBATCH --cpus-per-task=16
 #SBATCH --mem=64000MB
-#SBATCH --time=1:45:00
+#SBATCH --time=2:30:00
 #SBATCH --mail-user=jaxton.gray@ucalgary.ca
 #SBATCH --mail-type=BEGIN,END,FAIL
-#SBATCH --array=1-2
+#SBATCH --array=1-30
+#SBATCH --output=SLURM_Output/model_training_%j_%a.out
 
 # !/bin/bash
 # This section will grab the model name to run
@@ -18,6 +19,9 @@ modelInfo=$(sed -n ${SLURM_ARRAY_TASK_ID}p modelList.txt)
 IFS=' ' read -ra arr <<< "$modelInfo"
 modelNum=${arr[0]}
 modelName=${arr[1]}
+
+# Declare what model is to be trained
+echo "Model $modelName Run $modelNum is being trained"
 
 # Set up the environment
 module load python/3.11.5
@@ -30,3 +34,5 @@ pip install --no-index tensorflow pandas geopandas numpy scikit-learn keras-tune
 
 # Run the training script
 python Model_Training/modelTraining.py "$modelNum" "$modelName"
+
+echo "Model $modelName Run $modelNum finished training"
