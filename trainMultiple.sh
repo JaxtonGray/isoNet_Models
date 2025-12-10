@@ -5,10 +5,10 @@
 #SBATCH --gpus-per-node=1
 #SBATCH --cpus-per-task=16
 #SBATCH --mem=64000MB
-#SBATCH --time=2:30:00
+#SBATCH --time=02:30:00
 #SBATCH --mail-user=jaxton.gray@ucalgary.ca
 #SBATCH --mail-type=BEGIN,END,FAIL
-#SBATCH --array=1-30
+#SBATCH --array=1-10
 #SBATCH --output=SLURM_Output/model_training_%j_%a.out
 
 # !/bin/bash
@@ -31,6 +31,7 @@ virtualenv --no-download $SLURM_TMPDIR/env
 source $SLURM_TMPDIR/env/bin/activate
 pip install --no-index --upgrade pip
 pip install --no-index tensorflow pandas geopandas numpy scikit-learn keras-tuner
+pip install --no-index numpy
 
 # Run the training script
 python Model_Training/modelTraining.py "$modelNum" "$modelName"
