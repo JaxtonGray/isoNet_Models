@@ -1,5 +1,6 @@
 # Ignore the SLURM output files
 slurm*
+SLURM_Output/*
 
 # Ignore the large data files, just download them from the source using the scripts
 *.nc
