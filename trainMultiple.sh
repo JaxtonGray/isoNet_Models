@@ -8,7 +8,7 @@
 #SBATCH --time=02:30:00
 #SBATCH --mail-user=jaxton.gray@ucalgary.ca
 #SBATCH --mail-type=BEGIN,END,FAIL
-#SBATCH --array=1-1
+#SBATCH --array=1-30
 #SBATCH --output=SLURM_Output/model_training_%j_%a.out
 
 # !/bin/bash
@@ -24,7 +24,7 @@ modelName=${arr[1]}
 echo "Model $modelName Run $modelNum is being trained"
 
 # Set up the environment
-module load python/3.13
+module load python/3.12
 module load proj
 
 virtualenv --no-download $SLURM_TMPDIR/env

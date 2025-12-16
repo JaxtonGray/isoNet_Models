@@ -22,7 +22,8 @@ import keras_tuner as kt
 # Setup Logging
 # Check inside the Logs directory, see what the highest log number is and increment by 1
 os.makedirs('Logs', exist_ok=True)
-logNums = max([int(f[-5]) for f in os.listdir('Logs/')]) if os.listdir('Logs/') != [] else 0
+#logNums = max([int(f[-5]) for f in os.listdir('Logs/')]) if os.listdir('Logs/') != [] else 0
+logNums = 1
 
 # Configure the logger
 logger = logging.getLogger(__name__)
