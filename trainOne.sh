@@ -29,7 +29,8 @@ module load proj
 virtualenv --no-download $SLURM_TMPDIR/env
 source $SLURM_TMPDIR/env/bin/activate
 pip install --no-index --upgrade pip
-pip install --no-index numpy pandas geopandas tensorflow scikit-learn keras-tuner
+pip install --no-index tensorflow pandas geopandas numpy scikit-learn keras-tuner
+pip install --no-index numpy
 
 # Run the training script
 python Model_Training/modelTraining.py "$modelNum" "$modelName"

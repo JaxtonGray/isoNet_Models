@@ -484,3 +484,4 @@ if __name__ == "__main__":
         predictAllTestData(modelScheme, modelFeatures, modelNum, testData, regionalModels, splitData, modelDir)
         predictLeaveOutAll(modelScheme, modelFeatures, modelNum, regionalModels, splitData, modelDir)
         logger.info("Test Data Predicted")
+    print("Model Finished Training")
