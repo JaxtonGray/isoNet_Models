@@ -22,7 +22,8 @@ import keras_tuner as kt
 # Setup Logging
 # Check inside the Logs directory, see what the highest log number is and increment by 1
 os.makedirs('Logs', exist_ok=True)
-logNums = max([int(f[-5]) for f in os.listdir('Logs/')]) if os.listdir('Logs/') != [] else 0
+#logNums = max([int(f[-5]) for f in os.listdir('Logs/')]) if os.listdir('Logs/') != [] else 0
+logNums = 1
 
 # Configure the logger
 logger = logging.getLogger(__name__)
@@ -126,10 +127,10 @@ def scaleData(modelFeatures, dataset, regionalScaler = None):
 # 3. Convert the dataset into a geodataframe
 # 4. Split data based on the spatial scheme region and add to a dictionary
 # 5. Return the dictionary of dataframes
-def schemeSplit(modelScheme, df):
+def schemeSplit(modelScheme, modelFeatures, df):
     logger.info(f"Splitting data based on scheme: {modelScheme}")
     # Load in the schematic file
-    scheme = pd.read_csv(f'../../Data/ModelSplit_Schemes/{modelScheme}.csv')
+    scheme = pd.read_csv(f'Data/ModelSplit_Schemes/{modelScheme}.csv')
     # Convert the schematic file into a geodataframe
     scheme = gpd.GeoDataFrame(scheme, geometry=gpd.GeoSeries.from_wkt(scheme['geometry']))
 
@@ -141,7 +142,7 @@ def schemeSplit(modelScheme, df):
 
     for region in scheme.iterrows():
         regionData = gdf[gdf.within(region[1]['geometry'])].reset_index()
-        regionData_X, regionData_Y, regionData_scaler = scaleData(regionData)
+        regionData_X, regionData_Y, regionData_scaler = scaleData(modelFeatures, regionData)
         splitData[region[1]['Region']] = (regionData_X, regionData_Y, regionData_scaler)
 
     return splitData
@@ -200,7 +201,7 @@ def hyperParameterSearchSpace(hp):
 # 3. Perform the search
 # 4. Get the best model hyperparameters
 # 5. Return the best hyperparameters
-def hyperParameterTuning(xTrain, yTrain, modelDir, modelName, modelNum):
+def hyperParameterTuning(xTrain, yTrain, modelDir, modelNum):
     logger.info("Starting hyperparameter tuning")
 
     # Create the hyperparameter directory if it does not exist
@@ -265,7 +266,7 @@ def traintuneAllModels(modelName, modelFeatures, regionalData, modelDir, modelNu
     for region in regionalData.keys():
         logger.info(f"------> Tuning and training model for region: {region}")
         # Tune the model for each region
-        bestHyperparams = hyperParameterTuning(modelFeatures, regionalData[region][0], regionalData[region][1])
+        bestHyperparams = hyperParameterTuning(regionalData[region][0], regionalData[region][1], modelDir, modelNum)
         regionalHyperparams[region] = bestHyperparams
 
         # Train the model for each region
@@ -404,6 +405,11 @@ def predictLeaveOutAll(modelScheme, modelFeatures, modelNum, regionalModels, reg
 
         # Scale the test data using the scaler for each region
         xTest = testData[modelFeatures]
+
+        # Since the leave-out data may not have any points in a region, check if xTest is empty
+        if xTest.empty:
+            continue
+        
         x = scaler.transform(xTest.values)
         yTest = testData[['O18', 'H2']].values
 
@@ -444,7 +450,7 @@ if __name__ == "__main__":
         logger.info("Training Data Scaled")
 
         # Hyperparameter Tuning
-        best_hps = hyperParameterTuning(xTrain, yTrain, modelDir, modelName, modelNum)
+        best_hps = hyperParameterTuning(xTrain, yTrain, modelDir, modelNum)
 
         # Train the Model
         model = trainModel(modelFeatures, xTrain, yTrain, best_hps)
@@ -467,14 +473,15 @@ if __name__ == "__main__":
     else:
         # Split the data based on the spatial scheme
         logger.info(f"Splitting training data based on Scheme: {modelScheme}")
-        splitData = schemeSplit(trainData)
+        splitData = schemeSplit(modelScheme, modelFeatures, trainData)
         
         # Train and tune all models for non-global schemes
         regionalModels = traintuneAllModels(modelName, modelFeatures, splitData, modelDir, modelNum)
 
         # Predict all test data for all regional models for non-global schemes
-        testData = importData('DataTest')[0]
+        testData = importData('Data/DataTest.csv')[0]
         logger.info("Test Data Imported")
         predictAllTestData(modelScheme, modelFeatures, modelNum, testData, regionalModels, splitData, modelDir)
         predictLeaveOutAll(modelScheme, modelFeatures, modelNum, regionalModels, splitData, modelDir)
         logger.info("Test Data Predicted")
+    print("Model Finished Training")
