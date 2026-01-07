@@ -25,3 +25,12 @@ client.retrieve(dataset, request, output_file)
 # Unzip the downloaded file
 with zipfile.ZipFile(output_file, 'r') as zip_ref:
     zip_ref.extractall(os.path.dirname(output_file))
+
+# Move extracted files to a separate files folder
+os.makedirs("data_files", exist_ok=True)
+for file in os.listdir(os.getcwd()):
+    if file.endswith(".nc"):
+        os.rename(file, os.path.join("data_files", file))
+
+# Delete the original zip file to save space
+os.remove(output_file)
