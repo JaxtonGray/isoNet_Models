@@ -144,10 +144,15 @@ if __name__ == "__main__":
     dfTrain = loadDataset(r'GNIP\GNIP_Train.csv')
     dfTest = loadDataset(r'GNIP\GNIP_Test.csv')
 
+    # Load the leave-one-out dataset
+    dfLoo = loadDataset(r'Leave_Out_Points\Leave_Out_Points_GNIP (2025-07-22).csv')
+
     # Add the features
     dfTrain = addFeatures(dfTrain)
     dfTest = addFeatures(dfTest)
+    dfLoo = addFeatures(dfLoo)
 
     # Save the datasets
     dfTrain.to_csv(r'DataTrain.csv', index=False)
     dfTest.to_csv(r'DataTest.csv', index=False)
+    dfLoo.to_csv(r'Leave_Out_Points\DataLeaveOut.csv', index=False)
