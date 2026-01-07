@@ -6,16 +6,16 @@
 
 # Import libraries
 from glob import glob
-import sys
-import os
+import os, pathlib, datetime
 import pandas as pd
 import geopandas as gpd
 import rasterio as rio
+import xarray as xr
 
 # Load the dataset
 def loadDataset(path):
     data = pd.read_csv(path)
-    data['Date'] = pd.to_datetime(data['Date'])
+    data['Date'] = pd.to_datetime(data['Date'], utc=True)
     df = gpd.GeoDataFrame(data, geometry=gpd.points_from_xy(data.Lon, data.Lat))
     return df
 
@@ -36,16 +36,15 @@ def loadDataset(path):
 # a dictionary. Storing the specific raster to a key represeting the time period max min. The following will be a list:
 # 1. The raster object
 # 2. The first and only band of the raster as a numpy array
-def readRasters():
+def readKPNRasters(dir=r'KPN'):
     # Create a dictionary to hold the rasters
-    files = glob(r'KPN\*') # Get all the files in the current directory
-    files.remove(r'KPN\2041_2070') # Remove the directories that are future projections
-    files.remove(r'KPN\2071_2099') # Remove the directories that are future projections
+    folders = glob(os.path.join(dir, '*')) # Get all the files in the current directory
     rasters = {}
-    for file in files:
-        if os.path.isdir(file):
-            with rio.open(file + r'\koppen_geiger_0p1.tif') as src:
-                rasters[(int(file.split('_')[0].split('\\')[1]), int(file.split('_')[1]))] = [src, src.read(1)] 
+    for folder in folders:
+        # Ensure the folder is a valid time period
+        if os.path.isdir(folder) and int(pathlib.Path(folder).name.split('_')[0]) < datetime.datetime.now().year: 
+            with rio.open(os.path.join(folder, 'koppen_geiger_0p1.tif')) as src:
+                rasters[(int(folder.split('_')[0].split('\\')[1]), int(folder.split('_')[1]))] = [src, src.read(1)] 
         else:
             continue
     return rasters
@@ -70,15 +69,15 @@ def getKPN(df, rasters):
         row, col = rasters[date][0].index(point.geometry.x, point.geometry.y)
         df.at[i, 'KPN'] = rasters[date][1][row, col]
 
-    # Remove values that are equal to 0, ocean values or values that are not in the raster
-    df = df[df['KPN'] != 0]
+    # Change KPN of 0 to 'O' for Ocean, which is not in the raster data
+    df['KPN'].replace(0, 'O', inplace=True)
 
     return df.reset_index()
 
 # Now to load the legend and convert the KPN from a number to a string (A, B, C, D, E)
 # Return a dictionary with the key as the string and the value as the numbers as a list
-def loadLegend():
-    with open(r'KPN\legend.txt') as f:
+def loadKPNLegend(dir=r'KPN'):
+    with open(os.path.join(dir, 'legend.txt')) as f:
         legend = f.readlines()
         legend = [line.strip().split(':') for line in legend][3:33] # Remove header and footer
         legend = [(line[0].strip(), line[1].strip()[0]) for line in legend]
@@ -110,13 +109,13 @@ def oneHotEncodeKPN(df):
     
     return df
 
-def addKPN(df):
+def addKPN(df, dir=r'KPN'):
     # Read in the rasters
-    rasters = readRasters()
+    rasters = readKPNRasters(dir)
     # Get KPN for the dataset
     dfKPN = getKPN(df, rasters)
     # Load the legend
-    legend = loadLegend()
+    legend = loadKPNLegend(dir)
     # Convert the KPN to the string representation
     dfKPN = convertKPN(dfKPN, legend)
     # One-hot encode the KPN
