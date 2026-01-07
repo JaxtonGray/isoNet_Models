@@ -38,3 +38,9 @@ Data/KPN/legend.txt
 # Ignore any ipynb notebook folders
 .ipynb_checkpoints/**
 **/.ipynb_checkpoints/
+
+# Ignore pycache folder
+Data/__pycache__
+
+## Ignore temperaroy test files
+test.ipynb
