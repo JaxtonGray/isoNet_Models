@@ -137,7 +137,7 @@ def addFeatures(df):
         else:
             continue
     
-    return df.drop(columns=['geometry', 'index'])
+    return df.drop(columns=['geometry', 'index'], errors='ignore')
 
 if __name__ == "__main__":
     # Load training and test datasets
