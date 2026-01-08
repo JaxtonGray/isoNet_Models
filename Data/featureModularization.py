@@ -137,7 +137,7 @@ def addKPN(df, dir=r'KPN'):
 # Function that opens all the netcdf datasets containing a specific variable
 def open_datasets(variable_name, dir_path=r'HydroGFD/data_files/'):
     # Find all files matching the pattern
-    files = glob(f'Data/HydroGFD/data_files/{variable_name}*.nc')
+    files = glob(f'{dir_path}/{variable_name}*.nc')
 
     # Open multiple datasets and combine them by coordinates, overriding attributes as they are not consistent and unnecessary at this stage
     # dataset = xr.open_mfdataset(files, combine='by_coords', combine_attrs='override')
