@@ -123,20 +123,67 @@ def addKPN(df, dir=r'KPN'):
     dfKPN = oneHotEncodeKPN(dfKPN)
 
     return dfKPN
+# End of KPN Classification Script
 
-
+# Atmospheric Data Script
 ################################################################################
+# This part will be used to add atmospheric variables
+# 1. Read in the correct variable name from mapping
+# 2. Open all netcdfs containing that variable
+# 3. Combine the datasets by coordinates
+# 4. For each row in the dataframe, get the value of the variable at the corresponding lat, lon, and date
+# 5. Add the variable to the dataframe
+################################################################################
+# Function that opens all the netcdf datasets containing a specific variable
+def open_datasets(variable_name, dir_path=r'HydroGFD/data_files/'):
+    # Find all files matching the pattern
+    files = glob(f'Data/HydroGFD/data_files/{variable_name}*.nc')
+
+    # Open multiple datasets and combine them by coordinates, overriding attributes as they are not consistent and unnecessary at this stage
+    # dataset = xr.open_mfdataset(files, combine='by_coords', combine_attrs='override')
+    dataset = xr.combine_by_coords([xr.open_dataset(f) for f in files], combine_attrs='override')
+    return dataset
+
+# Grab the nearest value from the given dataset and dataframe row
+def attach_nearest_value(ds, df, var):
+    # Lambda function that will get the nearest value for a given row
+    nearest_value = lambda ds, row: ds.sel(
+        time=row['Date'].strftime('%Y-%m-%d'),
+        lat=row['Lat'],
+        lon=row['Lon'],
+        method='nearest'
+    )[var].item()
+
+    # Apply the function to each row in the dataframe
+    return df.apply(lambda row: nearest_value(ds, row), axis=1)
+
+# Add atmospheric data to the dataframe
+def addAtmosData(df, feature, dir_path):
+    # From the feature given, like precip, get the corresponding variable name in the dataset
+    var_map = {
+        'Precipitation': 'prAdjust',
+        'Temperature': 'tasAdjust',
+    }
+    var_name = var_map.get(feature)
+
+    # Open the datsets for the given variables
+    ds = open_datasets(var_name, dir_path)
+
+    # Attach the nearest values to the dataframe
+    df[feature] = attach_nearest_value(ds, df, var_name)
+    return df
 
 # Main function that will be called by the script determining which features to add
 def addFeatures(df):
-    features = ['KPN']
-
-    for feat in features:
-        if feat == 'KPN':
-            df = addKPN(df)
-        else:
-            continue
+    features = ['KPN', 'Precipitation', 'Temperature']
+    functions = {
+        'KPN': addKPN,
+        'Precipitation': lambda df: addAtmosData(df, 'Precipitation', r'HydroGFD/data_files/'),
+        'Temperature': lambda df: addAtmosData(df, 'Temperature', r'HydroGFD/data_files/'),
+    }
     
+    for feature in features:
+        df = functions[feature](df)
     return df.drop(columns=['geometry', 'index'], errors='ignore')
 
 if __name__ == "__main__":
