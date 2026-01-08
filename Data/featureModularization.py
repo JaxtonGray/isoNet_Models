@@ -68,11 +68,11 @@ def getKPN(df, rasters):
         # Get the climate classification
         row, col = rasters[date][0].index(point.geometry.x, point.geometry.y)
         df.at[i, 'KPN'] = rasters[date][1][row, col]
-
+    
     # Change KPN of 0 to 'O' for Ocean, which is not in the raster data
-    df['KPN'].replace(0, 'O', inplace=True)
+    df.replace({'KPN': {0: 'O'}}, inplace=True)
 
-    return df.reset_index()
+    return df.reset_index(drop=True)
 
 # Now to load the legend and convert the KPN from a number to a string (A, B, C, D, E)
 # Return a dictionary with the key as the string and the value as the numbers as a list
@@ -99,7 +99,8 @@ def convertKPN(df, legend):
         df.loc[df['KPN'].isin(values), 'temp'] = key
     df.drop(columns=['KPN'], inplace=True)
     df.rename(columns={'temp': 'KPN'}, inplace=True)
-    return df
+    
+    return df.reset_index(drop=True)
 
 # One-hot encode the KPN
 def oneHotEncodeKPN(df):
@@ -107,7 +108,7 @@ def oneHotEncodeKPN(df):
     df = pd.concat([df, pd.get_dummies(df['KPN'], prefix='KPN', dtype=int)], axis=1)
     df.drop(columns=['KPN'], inplace=True)
     
-    return df
+    return df.reset_index(drop=True)
 
 def addKPN(df, dir=r'KPN'):
     # Read in the rasters
