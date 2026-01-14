@@ -10,6 +10,7 @@
 
 # Setup the environment
 module load python/3.12
+module load proj
 virtualenv --no-download $SLURM_TMPDIR/env
 source $SLURM_TMPDIR/env/bin/activate
 pip install --no-index --upgrade pip
