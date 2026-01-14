@@ -1,75 +1,50 @@
-import requests, sys
-from rasterio.io import MemoryFile
+import os, sys
+import dask.array as da
+import xarray as xr
 import pandas as pd
 import geopandas as gpd
 
-# First function will retrieve the DEM data and save it as a GeoTIFF file
-def request_dem(api_key, left, bottom, right, top):
-    # Define the API endpoint and parameters
-    baseURL = "https://portal.opentopography.org/API/globaldem"
-    params = {
-        "demtype": "COP30",
-        "south": bottom,
-        "north": top,
-        "west": left,
-        "east": right,
-        "outputFormat": "GTiff",
-        "API_Key": api_key # Replace with your actual API key ideally not sent via github (that's how you get scammed)
-    }
+# Function that takes in a geopandas dataframe and returns a new dataframe of only the unique coordinates
+def get_unique_coordinates(gdf):
+    unique_geom = gdf.geometry.unique()
+    unique_gdf = gpd.GeoDataFrame(geometry=unique_geom, columns=['geometry'], crs=gdf.crs)
+    return unique_gdf
 
-    # Make the request to download the DEM data
-    response = requests.get(baseURL, params=params)
+# Function that uses the coordinates to extract elevation data from the dataset, if Dask arrays are used, this will be lazy loaded
+def extract_elevation_data(x, y, dataset, var='dsm'):
+    # Check to see if dataset variable is a Dask array
+    if isinstance(dataset[var].data, da.Array):
+        return dataset.sel(lon=x, lat=y, method="nearest")[var].compute().item()
+    else:
+        return dataset.sel(lon=x, lat=y, method="nearest")[var].item()
 
-    if response.status_code != 200:
-        raise Exception(f"Error fetching DEM data: {response.status_code}, {response.text}")
+if __name__ == "__main__":
+    # Read in the file that was given though the passed argument in the command line
+    # Only unique geometries will be used to reduce the number of lookups
+    df = pd.read_csv(sys.argv[1])
+    gdf = gpd.GeoDataFrame(
+        df, geometry=gpd.points_from_xy(df.Lon, df.Lat), crs="EPSG:4326"
+    )
+    unique_gdf = get_unique_coordinates(gdf)
+
+    # Read in the authentication token from a file
+    with open('auth_token.txt', 'r') as file:
+        auth_token = file.read().strip()
+
+    # Open the dataset with the authentication token
+    ds = xr.open_dataset(
+        f"https://edh:{auth_token}@data.earthdatahub.destine.eu/copernicus-dem/GLO-30-v0.zarr",
+        chunks = {},
+        engine="zarr",
+        decode_coords="all",
+        mask_and_scale=False
+    )
     
-    return response.content
+    # Extract elevation data for each unique coordinate
+    unique_gdf['elevation'] = unique_gdf.geometry.apply(lambda point: extract_elevation_data(point.x, point.y, ds))
 
-# Function that will take a point and return bounding box coordinates
-def get_bounding_box(point, buffer_distance):
-    buffered = point.buffer(buffer_distance)
-    bounds = buffered.bounds
-    return bounds  # returns (minx, miny, maxx, maxy)
+    # Extract the name of the input file without the extension and path
+    file_name = os.path.splitext(os.path.basename(sys.argv[1]))[0]
 
-# Function that retreives altitude from response content
-def dem_data_from_response(response_content):
-    with MemoryFile(response_content) as memfile:
-        with memfile.open() as dataset:
-            dem_data = dataset.read(1)
-            r = dataset
-    return dem_data, r
-
-# Return the elevation data from the DEM request
-def get_elevation_data(dem_array, raster, x, y):
-    return dem_array[raster.index(x, y)]
-
-# Function that combines all steps to get elevation for a point with buffer
-def fetch_elevation_for_point(api_key, point, buffer_distance):
-    bounds = get_bounding_box(point, buffer_distance)
-    dem_response = request_dem(api_key, *bounds)
-    dem_array, raster = dem_data_from_response(dem_response)
-    elevation = get_elevation_data(dem_array, raster, point.x, point.y)
-    return float(elevation)
-
-# Load the DataFrame containing information
-df_file = pd.read_csv(sys.argv[1])
-df_geoFile = gpd.GeoDataFrame(df_file, geometry=gpd.points_from_xy(df_file.Lon, df_file.Lat), crs='EPSG:4326')
-
-# Extract unique geometries to avoid redundant API calls and reduce costs
-unique_geom = df_geoFile.geometry.unique()
-gdf = gpd.GeoDataFrame(unique_geom, columns=['geometry'], geometry='geometry')
-
-# Read in the API key from a text file
-with open('opentopography_api_key.txt', 'r') as file:
-    api_key = file.read().strip()
-
-# Apply the function to get elevation for each point
-gdf['Elevation'] = gdf['geometry'].apply(lambda point: fetch_elevation_for_point(api_key, point, buffer_distance=0.01))
-
-# Save the Elevation data with the for that specific file into a new CSV
-# Extract the base name without extension from the input file path
-base_name = sys.argv[1].split('/')[-1].split('.')[0]
-output_csv = f"{base_name}_with_elevation.csv"
-
-# Save only the unique geometry columns along with Elevation
-gdf.to_csv(output_csv, index=False)
+    # Save the unique_gdf to a new file
+    unique_gdf.to_file(f"{file_name}_elevation.geojson", driver="GeoJSON")
