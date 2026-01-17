@@ -23,7 +23,7 @@ module load proj
 virtualenv --no-download $SLURM_TMPDIR/env
 source $SLURM_TMPDIR/env/bin/activate
 pip install --no-index --upgrade pip
-pip install --no-index xarray pandas geopandas dask
+pip install --no-index xarray pandas geopandas dask zarr fsspec aiohttp requests
 
 # Run the altitude retrieval script for the specified CSV file
 python downloadAltitude.py "$csvFile"

@@ -34,7 +34,7 @@ if __name__ == "__main__":
     # Open the dataset with the authentication token
     ds = xr.open_dataset(
         f"https://edh:{auth_token}@data.earthdatahub.destine.eu/copernicus-dem/GLO-30-v0.zarr",
-        chunks = {},
+        chunks = None,
         engine="zarr",
         decode_coords="all",
         mask_and_scale=False
