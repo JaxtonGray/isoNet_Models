@@ -1,3 +1,2 @@
-../DataTrain.csv
 ../DataTest.csv
 ../Leave_Out_Points/Leave_Out_Points_GNIP (2025-07-22).csv
