@@ -172,6 +172,52 @@ def addAtmosData(df, feature, dir_path):
     # Attach the nearest values to the dataframe
     df[feature] = attach_nearest_value(ds, df, var_name)
     return df
+# End of Atmospheric Data Script
+
+
+# Altitude Data Script 
+#############################################
+# This part will be used to add the Copernicus 30m DEM altitude data
+# 1. Load the pre-downloaded GeoJson file for the given dataset
+# 2. For each row in the dataframe, get the altitude value at the corresponding lat and lon
+# 3. Add the altitude value to the dataframe
+#############################################
+# Open the related GeoJson file
+def loadAltitudeData(dir='Altitude/data_files'):
+    # Get all files in the directory
+    altFiles = glob(os.path.join(dir, '*'))
+    
+    # Load each shapefile into a GeoDataFrame and combine them
+    gdfs = []
+    for file in altFiles:
+        gdf = gpd.read_file(file)
+        gdfs.append(gdf)
+    combined_gdf = gpd.GeoDataFrame(pd.concat(gdfs, ignore_index=True))
+    
+    # Return the combined GeoDataFrame with the unique geometry entries
+    return combined_gdf.drop_duplicates(subset='geometry').reset_index(drop=True)
+
+# Find an altitude for each point in the dataframe
+def findAltitude(point, alt_gdf):
+    # Find the altitude for a given point by checking which polygon it intersects in the altitude GeoDataFrame
+    matched = alt_gdf[alt_gdf.intersects(point)]
+
+    # If a match is found, return the altitude value
+    if not matched.empty:
+        return matched['Altitude'].item()
+    else:
+        return pd.NA  # Return NA if no match is found
+    
+# Add altitude data to the dataframe
+def addAltitudeData(df, dir='Altitude/data_files'):
+    # Load the altitude data
+    alt_gdf = loadAltitudeData(dir)
+    
+    # Apply the findAltitude function to each row in the dataframe
+    df['Alt'] = df['geometry'].apply(lambda point: findAltitude(point, alt_gdf))
+    
+    return df
+
 
 # Main function that will be called by the script determining which features to add
 def addFeatures(df):
@@ -180,6 +226,7 @@ def addFeatures(df):
         'KPN': addKPN,
         'Precipitation': lambda df: addAtmosData(df, 'Precipitation', r'HydroGFD/data_files/'),
         'Temperature': lambda df: addAtmosData(df, 'Temperature', r'HydroGFD/data_files/'),
+        'Altitude': addAltitudeData
     }
     
     for feature in features:
