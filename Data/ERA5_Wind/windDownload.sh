@@ -4,7 +4,7 @@
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=16
 #SBATCH --mem=64000MB
-#SBATCH --time=2:00:00
+#SBATCH --time=5:00:00
 #SBATCH --mail-user=jaxton.gray@ucalgary.ca
 #SBATCH --mail-type=BEGIN,END,FAIL
 
@@ -19,7 +19,6 @@ source $SLURM_TMPDIR/env/bin/activate
 # Load in the required libraries
 pip install --no-index --upgrade pip
 pip install --no-index cdsapi
-python downloadWindERA5.py
 
-# Give file permissions
-chmod 777 *
+# Run the download script
+python downloadWindERA5.py
