@@ -19,9 +19,6 @@ def retrieve_era5_wind_data(years, dir=r"data_files"):
 
 # Function that will be called to get the data in spurts of years
 def get_wind_data_in_spurts(min_year, max_year, spurt_size=5):
-    config = cdsapi.api.read_config("~/.cdsapirc")
-    print(config)
-
     # Generate year ranges in spurts
     year_ranges = []
     for start_year in range(min_year, max_year + 1, spurt_size):
@@ -33,6 +30,9 @@ def get_wind_data_in_spurts(min_year, max_year, spurt_size=5):
         retrieve_era5_wind_data(years)
 
 if __name__ == "__main__":
+    config = cdsapi.api.read_config("~/.cdsapirc")
+    print(config)
+
     # Make sure the data_files directory exists
     os.makedirs("data_files", exist_ok=True)
 
