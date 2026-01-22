@@ -19,6 +19,11 @@ def retrieve_era5_wind_data(years, dir=r"data_files"):
 
 # Function that will be called to get the data in spurts of years
 def get_wind_data_in_spurts(min_year, max_year, spurt_size=5):
+    print(os.getcwd())
+    home_dir = os.path.expanduser("~")
+    file_path = os.path.join(home_dir, ".cdsapirc")
+    print(os.path.exists(file_path))
+
     # Generate year ranges in spurts
     year_ranges = []
     for start_year in range(min_year, max_year + 1, spurt_size):
