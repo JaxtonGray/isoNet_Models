@@ -12,7 +12,7 @@
 #!/bin/bash
 
 # Setup the environment
-module load python/3.11.5
+module load python/3.12
 virtualenv --no-download $SLURM_TMPDIR/env
 source $SLURM_TMPDIR/env/bin/activate
 
