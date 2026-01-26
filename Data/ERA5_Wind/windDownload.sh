@@ -10,7 +10,7 @@
 
 
 #!/bin/bash
-
+$PWD
 # Setup the environment
 module load python/3.12
 virtualenv --no-download $SLURM_TMPDIR/env
