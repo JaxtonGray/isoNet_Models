@@ -18,13 +18,3 @@
 8 Global_BK
 9 Global_BK
 10 Global_BK
-1 HighLowLat_BK
-2 HighLowLat_BK
-3 HighLowLat_BK
-4 HighLowLat_BK
-5 HighLowLat_BK
-6 HighLowLat_BK
-7 HighLowLat_BK
-8 HighLowLat_BK
-9 HighLowLat_BK
-10 HighLowLat_BK
