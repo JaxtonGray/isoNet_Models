@@ -235,11 +235,11 @@ def addFeatures(df):
 
 if __name__ == "__main__":
     # Load training and test datasets
-    dfTrain = loadDataset(r'GNIP\GNIP_Train.csv')
-    dfTest = loadDataset(r'GNIP\GNIP_Test.csv')
+    dfTrain = loadDataset(os.path.join('GNIP', 'GNIP_Train.csv'))
+    dfTest = loadDataset(os.path.join('GNIP', 'GNIP_Test.csv'))
 
     # Load the leave-one-out dataset
-    dfLoo = loadDataset(r'Leave_Out_Points\Leave_Out_Points_GNIP (2025-07-22).csv')
+    dfLoo = loadDataset(os.path.join('Leave_Out_Points', 'Leave_Out_Points_GNIP (2025-07-22).csv'))
 
     # Add the features
     dfTrain = addFeatures(dfTrain)
