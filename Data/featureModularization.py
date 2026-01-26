@@ -19,7 +19,7 @@ os.makedirs(os.path.join('..', 'Logs'), exist_ok=True)
 # Create logger
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
-fh = logging.FileHandler(os.path.join('..', 'Logs', 'featureModularization.log'))
+fh = logging.FileHandler(os.path.join('..', 'Logs', 'featureModularization.log'), 'w+')
 formatter = logging.Formatter('%(asctime)s - %(module)s - %(levelname)s - %(message)s')
 fh.setFormatter(formatter)
 logger.addHandler(fh)
@@ -240,7 +240,7 @@ def addAltitudeData(df, dir='Altitude/data_files'):
 # Main function that will be called by the script determining which features to add
 def addFeatures(df):
     logger.info('Adding features to dataframe')
-    features = ['Altitude', 'Precipitation', 'Temperature']
+    features = ['KPN', 'Altitude', 'Precipitation', 'Temperature']
     functions = {
         'KPN': addKPN,
         'Precipitation': lambda df: addAtmosData(df, 'Precipitation', r'HydroGFD/data_files/'),
@@ -249,6 +249,7 @@ def addFeatures(df):
     }
     
     for feature in features:
+        logger.info(f'Adding feature: {feature}')
         df = functions[feature](df)
     return df.drop(columns=['geometry', 'index'], errors='ignore')
 
