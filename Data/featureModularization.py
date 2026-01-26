@@ -6,14 +6,27 @@
 
 # Import libraries
 from glob import glob
-import os, pathlib, datetime
+import os, pathlib, datetime, logging
 import pandas as pd
 import geopandas as gpd
 import rasterio as rio
 import xarray as xr
 
+# Set up logging
+# Check to make sure logging directory exists and works
+os.makedirs(os.path.join('..', 'Logs'), exist_ok=True)
+
+# Create logger
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+fh = logging.FileHandler(os.path.join('..', 'Logs', 'featureModularization.log'))
+formatter = logging.Formatter('%(asctime)s - %(module)s - %(levelname)s - %(message)s')
+fh.setFormatter(formatter)
+logger.addHandler(fh)
+
 # Load the dataset
 def loadDataset(path):
+    logger.info(f'Loading dataset from {path}')
     data = pd.read_csv(path)
     data['Date'] = pd.to_datetime(data['Date'], utc=True)
     df = gpd.GeoDataFrame(data, geometry=gpd.points_from_xy(data.Lon, data.Lat))
@@ -111,6 +124,7 @@ def oneHotEncodeKPN(df):
     return df.reset_index(drop=True)
 
 def addKPN(df, dir=r'KPN'):
+    logger.info('Adding KPN feature to dataframe')
     # Read in the rasters
     rasters = readKPNRasters(dir)
     # Get KPN for the dataset
@@ -136,6 +150,8 @@ def addKPN(df, dir=r'KPN'):
 ################################################################################
 # Function that opens all the netcdf datasets containing a specific variable
 def open_datasets(variable_name, dir_path=r'HydroGFD/data_files/'):
+    logger.info(f'Opening datasets for variable {variable_name} from {dir_path}')
+
     # Find all files matching the pattern
     files = glob(f'{dir_path}/{variable_name}*.nc')
 
@@ -159,6 +175,7 @@ def attach_nearest_value(ds, df, var):
 
 # Add atmospheric data to the dataframe
 def addAtmosData(df, feature, dir_path):
+    logger.info(f'Adding atmospheric data for {feature} from {dir_path}')
     # From the feature given, like precip, get the corresponding variable name in the dataset
     var_map = {
         'Precipitation': 'prAdjust',
@@ -210,6 +227,7 @@ def findAltitude(point, alt_gdf):
     
 # Add altitude data to the dataframe
 def addAltitudeData(df, dir='Altitude/data_files'):
+    logger.info(f'Adding altitude data from {dir}')
     # Load the altitude data
     alt_gdf = loadAltitudeData(dir)
     
@@ -221,6 +239,7 @@ def addAltitudeData(df, dir='Altitude/data_files'):
 
 # Main function that will be called by the script determining which features to add
 def addFeatures(df):
+    logger.info('Adding features to dataframe')
     features = ['Altitude', 'Precipitation', 'Temperature']
     functions = {
         'KPN': addKPN,
@@ -235,17 +254,21 @@ def addFeatures(df):
 
 if __name__ == "__main__":
     # Load training and test datasets
+    logger.info('Loading training and test datasets')
     dfTrain = loadDataset(os.path.join('GNIP', 'GNIP_Train.csv'))
     dfTest = loadDataset(os.path.join('GNIP', 'GNIP_Test.csv'))
-
     # Load the leave-one-out dataset
     dfLoo = loadDataset(os.path.join('Leave_Out_Points', 'Leave_Out_Points_GNIP (2025-07-22).csv'))
+    logger.info('Datasets loaded successfully')
 
+    logger.info('Adding features to datasets')
     # Add the features
     dfTrain = addFeatures(dfTrain)
     dfTest = addFeatures(dfTest)
     dfLoo = addFeatures(dfLoo)
+    logger.info('Features added successfully')
 
+    logger.info('Saving datasets to CSV files')
     # Save the datasets
     dfTrain.to_csv(r'DataTrain.csv', index=False)
     dfTest.to_csv(r'DataTest.csv', index=False)
