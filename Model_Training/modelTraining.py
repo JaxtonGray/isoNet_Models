@@ -313,7 +313,7 @@ def predictTestData(modelFeatures, modelDir, modelNum, xTest, yTest, model, scal
 def predictLeaveOut(modelFeatures, modelDir, modelNum, model, scaler):
     # Load in the leave-out test data
     logger.info("Predicting for leave-out test data")
-    leaveOutDF = importData(r'Data/Leave_Out_Points/Leave_Out_Points_GNIP (2025-07-22).csv')[0]
+    leaveOutDF = importData(r'Data\Leave_Out_Points\DataLeaveOut.csv')[0]
     xTest = leaveOutDF[modelFeatures]
     yTest = leaveOutDF[['O18', 'H2']]
 
@@ -385,7 +385,7 @@ def predictLeaveOutAll(modelScheme, modelFeatures, modelNum, regionalModels, reg
     logger.info("Predicting for all leave-out test data")
     
     # Load in the leave-out test data
-    leaveOutDF = importData(r'Data/Leave_Out_Points/Leave_Out_Points_GNIP (2025-07-22).csv')[0]
+    leaveOutDF = importData(r'Data\Leave_Out_Points\DataLeaveOut.csv')[0]
     
     # Convert leaveOutDF into geoDataFrame
     gdf = gpd.GeoDataFrame(leaveOutDF, geometry=gpd.points_from_xy(leaveOutDF.Lon, leaveOutDF.Lat))
