@@ -9,7 +9,7 @@
 #SBATCH --mail-user=jaxton.gray@ucalgary.ca
 #SBATCH --mail-type=BEGIN,END,FAIL
 #SBATCH --array=1-122
-#SBATCH --output=SLURM_Output/model_training_%j_%a.out
+#SBATCH --output=SLURM_Output/model_training_%A_%a.out
 
 # !/bin/bash
 # This section will grab the model name to run
