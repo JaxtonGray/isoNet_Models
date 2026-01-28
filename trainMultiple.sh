@@ -5,10 +5,10 @@
 #SBATCH --gpus-per-node=1
 #SBATCH --cpus-per-task=16
 #SBATCH --mem=64000MB
-#SBATCH --time=02:30:00
+#SBATCH --time=03:30:00
 #SBATCH --mail-user=jaxton.gray@ucalgary.ca
 #SBATCH --mail-type=BEGIN,END,FAIL
-#SBATCH --array=1-122
+#SBATCH --array=1-120
 #SBATCH --output=SLURM_Output/model_training_%A_%a.out
 
 # !/bin/bash
