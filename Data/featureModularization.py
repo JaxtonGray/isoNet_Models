@@ -192,6 +192,35 @@ def addAtmosData(df, feature, dir_path):
 # End of Atmospheric Data Script
 
 
+# Teleconnection Indices Script
+#############################################
+# This part will read in the long format of the teleconnection indices and add them to the dataframe
+# 1. Read in the teleconnection indices CSV file
+# 2. Attach the indices to the dataframe based on the Year and Month
+#############################################
+
+# Open the dataset containing the teleconnection indices
+def openTeleInd(dir=os.path.join('Teleconnection_Indices', 'teleconnection_indices.csv')):
+    logger.info(f'Opening teleconnection indices from {dir}')
+    tele_df = pd.read_csv(dir)
+    return tele_df
+
+# Add Teleconnection Indices to the dataframe
+def addTeleconnectionData(df):
+    logger.info('Adding teleconnection indices to dataframe')
+
+    # Open the teleconnection indices dataset
+    teleDF = openTeleInd()
+
+    # Extract the NAO and ENSO indices based on Year and Month
+    df['Year'] = df['Date'].dt.year
+    df['Month'] = df['Date'].dt.month
+    df = df.merge(teleDF, how='left', left_on=['Year', 'Month'], right_on=['Year', 'Month'])
+    df.drop(columns=['Year', 'Month'], inplace=True)
+
+    return df
+    
+
 # Altitude Data Script 
 #############################################
 # This part will be used to add the Copernicus 30m DEM altitude data
@@ -240,12 +269,14 @@ def addAltitudeData(df, dir='Altitude/data_files'):
 # Main function that will be called by the script determining which features to add
 def addFeatures(df):
     logger.info('Adding features to dataframe')
-    features = ['KPN', 'Altitude', 'Precipitation', 'Temperature']
+    #features = ['KPN', 'Altitude', 'Precipitation', 'Temperature', 'Teleconnection']
+    features = ['Teleconnection']
     functions = {
         'KPN': addKPN,
         'Precipitation': lambda df: addAtmosData(df, 'Precipitation', r'HydroGFD/data_files/'),
         'Temperature': lambda df: addAtmosData(df, 'Temperature', r'HydroGFD/data_files/'),
-        'Altitude': addAltitudeData
+        'Altitude': addAltitudeData,
+        'Teleconnection': addTeleconnectionData
     }
     
     for feature in features:
@@ -254,12 +285,28 @@ def addFeatures(df):
     return df.drop(columns=['geometry', 'index'], errors='ignore')
 
 if __name__ == "__main__":
+    # Determine if you need to append the features or start fresh
+    appendTrain = os.path.exists(r'DataTrain.csv')
+    appendTest = os.path.exists(r'DataTest.csv')
+    appendLoo = os.path.exists(os.path.join('Leave_Out_Points', r'DataLeaveOut.csv'))
+
+    if appendLoo and appendTest and appendTrain: 
+        pathTrain = r'DataTrain.csv'
+        pathTest = r'DataTest.csv'
+        pathLoo = os.path.join('Leave_Out_Points', r'DataLeaveOut.csv')
+        logger.info('Appending features to existing datasets')
+    else:
+        pathTrain = os.path.join('GNIP', 'GNIP_Train.csv')
+        pathTest = os.path.join('GNIP', 'GNIP_Test.csv')
+        pathLoo = os.path.join('Leave_Out_Points', 'Leave_Out_Points_GNIP (2025-07-22).csv')
+        logger.info('Creating new datasets with features')
+
     # Load training and test datasets
     logger.info('Loading training and test datasets')
-    dfTrain = loadDataset(os.path.join('GNIP', 'GNIP_Train.csv'))
-    dfTest = loadDataset(os.path.join('GNIP', 'GNIP_Test.csv'))
+    dfTrain = loadDataset(pathTrain)
+    dfTest = loadDataset(pathTest)
     # Load the leave-one-out dataset
-    dfLoo = loadDataset(os.path.join('Leave_Out_Points', 'Leave_Out_Points_GNIP (2025-07-22).csv'))
+    dfLoo = loadDataset(pathLoo)
     logger.info('Datasets loaded successfully')
 
     logger.info('Adding features to datasets')
