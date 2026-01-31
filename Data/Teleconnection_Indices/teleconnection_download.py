@@ -2,7 +2,7 @@
 # and the Antarctic Oscillation (AAO).
 #%%
 # Import required libraries
-import io
+import io, datetime
 import pandas as pd
 import requests
 
@@ -24,6 +24,9 @@ def retrieve_index(index, url, header, end):
 
     # Rename first 2 columns to title case
     df_melted.rename(columns={'YEAR': 'Year', 'MONTH': 'Month'}, inplace=True)
+
+    # Change the month column to numeric from Short code JAN --> 1, FEB --> 2, etc.
+    df_melted['Month'] = df_melted['Month'].apply(lambda x: datetime.datetime.strptime(x.title(), '%b').month)
 
     return df_melted
 
