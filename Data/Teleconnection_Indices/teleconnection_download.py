@@ -31,7 +31,6 @@ if __name__ == "__main__":
     teleIndices = {
         'ENSO': {'url': r'https://www.cpc.ncep.noaa.gov/data/indices/soi', 'header': 3, 'end':78},
         'NAO': {'url': r'https://www.cpc.ncep.noaa.gov/products/precip/CWlink/pna/norm.nao.monthly.b5001.current.ascii.table', 'header': 0, 'end': -1},
-        'AAO': {'url': r'https://www.cpc.ncep.noaa.gov/products/precip/CWlink/daily_ao_index/aao/monthly.aao.index.b79.current.ascii.table', 'header': 0, 'end': -1}
     }
 
     # Loop through teleconnection indices and retrieve data and append it to the dictionary
