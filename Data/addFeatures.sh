@@ -9,13 +9,13 @@
 #SBATCH --mail-type=BEGIN,END,FAIL
 
 # Setup the environment
-module load python/3.12 openmpi mpi4py
-module load proj
+module load python/3.12
+module load openmpi mpi4py netcdf hdf5 proj 
 virtualenv --no-download $SLURM_TMPDIR/env
 source $SLURM_TMPDIR/env/bin/activate
 
 # Load required libraries
-pip install --no-index rasterio xarray geopandas h5netcdf netcdf4 
+pip install --no-index rasterio xarray geopandas h5netcdf netcdf4 mpi4py h5py
 pip install --no-index pandas
 
 # Run the script

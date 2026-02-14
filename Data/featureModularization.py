@@ -157,7 +157,7 @@ def open_datasets(variable_name, dir_path=r'HydroGFD/data_files/'):
 
     # Open multiple datasets and combine them by coordinates, overriding attributes as they are not consistent and unnecessary at this stage
     # dataset = xr.open_mfdataset(files, combine='by_coords', combine_attrs='override')
-    dataset = xr.combine_by_coords([xr.open_dataset(f) for f in files], combine_attrs='override')
+    dataset = xr.combine_by_coords([xr.open_dataset(f, engine='h5netcdf') for f in files], combine_attrs='override')
     return dataset
 
 # Grab the nearest value from the given dataset and dataframe row
@@ -269,8 +269,8 @@ def addAltitudeData(df, dir='Altitude/data_files'):
 # Main function that will be called by the script determining which features to add
 def addFeatures(df):
     logger.info('Adding features to dataframe')
-    #features = ['KPN', 'Altitude', 'Precipitation', 'Temperature', 'Teleconnection']
-    features = ['Teleconnection']
+    features = ['Altitude', 'Precipitation', 'Temperature', 'Teleconnection']
+    #features = ['KPN']
     functions = {
         'KPN': addKPN,
         'Precipitation': lambda df: addAtmosData(df, 'Precipitation', r'HydroGFD/data_files/'),
@@ -316,8 +316,8 @@ if __name__ == "__main__":
     dfLoo = addFeatures(dfLoo)
     logger.info('Features added successfully')
 
-    logger.info('Saving datasets to CSV files')
     # Save the datasets
+    logger.info('Saving datasets to CSV files')
     dfTrain.to_csv(r'DataTrain.csv', index=False)
     dfTest.to_csv(r'DataTest.csv', index=False)
-    dfLoo.to_csv(r'Leave_Out_Points\DataLeaveOut.csv', index=False)
+    dfLoo.to_csv(os.path.join('Leave_Out_Points', 'DataLeaveOut.csv'), index=False)
