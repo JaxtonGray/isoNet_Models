@@ -269,8 +269,8 @@ def addAltitudeData(df, dir='Altitude/data_files'):
 # Main function that will be called by the script determining which features to add
 def addFeatures(df):
     logger.info('Adding features to dataframe')
-    features = ['Altitude', 'Precipitation', 'Temperature', 'Teleconnection']
-    #features = ['KPN']
+    #features = ['Altitude', 'Precipitation', 'Temperature', 'Teleconnection']
+    features = ['KPN']
     functions = {
         'KPN': addKPN,
         'Precipitation': lambda df: addAtmosData(df, 'Precipitation', r'HydroGFD/data_files/'),
