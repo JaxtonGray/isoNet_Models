@@ -89,7 +89,7 @@ def importData(filePath):
     #Add year and JulianDay_Sin to oldCols 
     oldCols += ['Year', 'JulianDay_Sin']
     
-    return dataset, oldCols
+    return dataset.dropna(), oldCols
 #%%
 # Function that will sort dataset into scaled X and Y
 # Pseudocode:
