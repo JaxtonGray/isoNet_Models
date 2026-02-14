@@ -7,20 +7,12 @@
         "Spatial Scheme": "PreWinds",
         "Features": "Base Set (Coods, Date)"
     },
-    "HighLowLat_B": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date)"
-    },
     "Global_BT": {
         "Spatial Scheme": "Global",
         "Features": "Base Set (Coods, Date), Temperature"
     },
     "PreWinds_BT": {
         "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature"
-    },
-    "HighLowLat_BT": {
-        "Spatial Scheme": "HighLowLat",
         "Features": "Base Set (Coods, Date), Temperature"
     },
     "Global_BP": {
@@ -31,32 +23,12 @@
         "Spatial Scheme": "PreWinds",
         "Features": "Base Set (Coods, Date), Precipitation"
     },
-    "HighLowLat_BP": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Precipitation"
-    },
-    "Global_BW": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Wind"
-    },
-    "PreWinds_BW": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Wind"
-    },
-    "HighLowLat_BW": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Wind"
-    },
     "Global_BK": {
         "Spatial Scheme": "Global",
         "Features": "Base Set (Coods, Date), KPN"
     },
     "PreWinds_BK": {
         "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), KPN"
-    },
-    "HighLowLat_BK": {
-        "Spatial Scheme": "HighLowLat",
         "Features": "Base Set (Coods, Date), KPN"
     },
     "Global_BI": {
@@ -67,10 +39,6 @@
         "Spatial Scheme": "PreWinds",
         "Features": "Base Set (Coods, Date), Teleconnections"
     },
-    "HighLowLat_BI": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Teleconnections"
-    },
     "Global_BTP": {
         "Spatial Scheme": "Global",
         "Features": "Base Set (Coods, Date), Temperature, Precipitation"
@@ -79,32 +47,12 @@
         "Spatial Scheme": "PreWinds",
         "Features": "Base Set (Coods, Date), Temperature, Precipitation"
     },
-    "HighLowLat_BTP": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation"
-    },
-    "Global_BTW": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, Wind"
-    },
-    "PreWinds_BTW": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, Wind"
-    },
-    "HighLowLat_BTW": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, Wind"
-    },
     "Global_BTK": {
         "Spatial Scheme": "Global",
         "Features": "Base Set (Coods, Date), Temperature, KPN"
     },
     "PreWinds_BTK": {
         "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, KPN"
-    },
-    "HighLowLat_BTK": {
-        "Spatial Scheme": "HighLowLat",
         "Features": "Base Set (Coods, Date), Temperature, KPN"
     },
     "Global_BTI": {
@@ -115,32 +63,12 @@
         "Spatial Scheme": "PreWinds",
         "Features": "Base Set (Coods, Date), Temperature, Teleconnections"
     },
-    "HighLowLat_BTI": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, Teleconnections"
-    },
-    "Global_BPW": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind"
-    },
-    "PreWinds_BPW": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind"
-    },
-    "HighLowLat_BPW": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind"
-    },
     "Global_BPK": {
         "Spatial Scheme": "Global",
         "Features": "Base Set (Coods, Date), Precipitation, KPN"
     },
     "PreWinds_BPK": {
         "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Precipitation, KPN"
-    },
-    "HighLowLat_BPK": {
-        "Spatial Scheme": "HighLowLat",
         "Features": "Base Set (Coods, Date), Precipitation, KPN"
     },
     "Global_BPI": {
@@ -151,34 +79,6 @@
         "Spatial Scheme": "PreWinds",
         "Features": "Base Set (Coods, Date), Precipitation, Teleconnections"
     },
-    "HighLowLat_BPI": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Precipitation, Teleconnections"
-    },
-    "Global_BWK": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Wind, KPN"
-    },
-    "PreWinds_BWK": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Wind, KPN"
-    },
-    "HighLowLat_BWK": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Wind, KPN"
-    },
-    "Global_BWI": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Wind, Teleconnections"
-    },
-    "PreWinds_BWI": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Wind, Teleconnections"
-    },
-    "HighLowLat_BWI": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Wind, Teleconnections"
-    },
     "Global_BKI": {
         "Spatial Scheme": "Global",
         "Features": "Base Set (Coods, Date), KPN, Teleconnections"
@@ -187,32 +87,12 @@
         "Spatial Scheme": "PreWinds",
         "Features": "Base Set (Coods, Date), KPN, Teleconnections"
     },
-    "HighLowLat_BKI": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), KPN, Teleconnections"
-    },
-    "Global_BTPW": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind"
-    },
-    "PreWinds_BTPW": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind"
-    },
-    "HighLowLat_BTPW": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind"
-    },
     "Global_BTPK": {
         "Spatial Scheme": "Global",
         "Features": "Base Set (Coods, Date), Temperature, Precipitation, KPN"
     },
     "PreWinds_BTPK": {
         "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, KPN"
-    },
-    "HighLowLat_BTPK": {
-        "Spatial Scheme": "HighLowLat",
         "Features": "Base Set (Coods, Date), Temperature, Precipitation, KPN"
     },
     "Global_BTPI": {
@@ -223,34 +103,6 @@
         "Spatial Scheme": "PreWinds",
         "Features": "Base Set (Coods, Date), Temperature, Precipitation, Teleconnections"
     },
-    "HighLowLat_BTPI": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Teleconnections"
-    },
-    "Global_BTWK": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, KPN"
-    },
-    "PreWinds_BTWK": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, KPN"
-    },
-    "HighLowLat_BTWK": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, KPN"
-    },
-    "Global_BTWI": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, Teleconnections"
-    },
-    "PreWinds_BTWI": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, Teleconnections"
-    },
-    "HighLowLat_BTWI": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, Teleconnections"
-    },
     "Global_BTKI": {
         "Spatial Scheme": "Global",
         "Features": "Base Set (Coods, Date), Temperature, KPN, Teleconnections"
@@ -258,34 +110,6 @@
     "PreWinds_BTKI": {
         "Spatial Scheme": "PreWinds",
         "Features": "Base Set (Coods, Date), Temperature, KPN, Teleconnections"
-    },
-    "HighLowLat_BTKI": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, KPN, Teleconnections"
-    },
-    "Global_BPWK": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, KPN"
-    },
-    "PreWinds_BPWK": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, KPN"
-    },
-    "HighLowLat_BPWK": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, KPN"
-    },
-    "Global_BPWI": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, Teleconnections"
-    },
-    "PreWinds_BPWI": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, Teleconnections"
-    },
-    "HighLowLat_BPWI": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, Teleconnections"
     },
     "Global_BPKI": {
         "Spatial Scheme": "Global",
@@ -295,46 +119,6 @@
         "Spatial Scheme": "PreWinds",
         "Features": "Base Set (Coods, Date), Precipitation, KPN, Teleconnections"
     },
-    "HighLowLat_BPKI": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Precipitation, KPN, Teleconnections"
-    },
-    "Global_BWKI": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Wind, KPN, Teleconnections"
-    },
-    "PreWinds_BWKI": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Wind, KPN, Teleconnections"
-    },
-    "HighLowLat_BWKI": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Wind, KPN, Teleconnections"
-    },
-    "Global_BTPWK": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, KPN"
-    },
-    "PreWinds_BTPWK": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, KPN"
-    },
-    "HighLowLat_BTPWK": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, KPN"
-    },
-    "Global_BTPWI": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, Teleconnections"
-    },
-    "PreWinds_BTPWI": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, Teleconnections"
-    },
-    "HighLowLat_BTPWI": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, Teleconnections"
-    },
     "Global_BTPKI": {
         "Spatial Scheme": "Global",
         "Features": "Base Set (Coods, Date), Temperature, Precipitation, KPN, Teleconnections"
@@ -342,45 +126,5 @@
     "PreWinds_BTPKI": {
         "Spatial Scheme": "PreWinds",
         "Features": "Base Set (Coods, Date), Temperature, Precipitation, KPN, Teleconnections"
-    },
-    "HighLowLat_BTPKI": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, KPN, Teleconnections"
-    },
-    "Global_BTWKI": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, KPN, Teleconnections"
-    },
-    "PreWinds_BTWKI": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, KPN, Teleconnections"
-    },
-    "HighLowLat_BTWKI": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, Wind, KPN, Teleconnections"
-    },
-    "Global_BPWKI": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, KPN, Teleconnections"
-    },
-    "PreWinds_BPWKI": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, KPN, Teleconnections"
-    },
-    "HighLowLat_BPWKI": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Precipitation, Wind, KPN, Teleconnections"
-    },
-    "Global_BTPWKI": {
-        "Spatial Scheme": "Global",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, KPN, Teleconnections"
-    },
-    "PreWinds_BTPWKI": {
-        "Spatial Scheme": "PreWinds",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, KPN, Teleconnections"
-    },
-    "HighLowLat_BTPWKI": {
-        "Spatial Scheme": "HighLowLat",
-        "Features": "Base Set (Coods, Date), Temperature, Precipitation, Wind, KPN, Teleconnections"
     }
 }

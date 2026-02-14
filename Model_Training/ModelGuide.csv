@@ -1,9 +1,8 @@
-﻿Name,Abbreviation,Code_Col,Feature?,Scheme?
-Global,Global,None,FALSE,TRUE
-Preliminary Winds,PreWinds,None,FALSE,TRUE
-"Base Set (Coods, Date)",B,"Lat, Lon, Alt, Year, JulianDay_Sin",TRUE,FALSE
-Temperature,T,Temp,TRUE,FALSE
-Precipitation,P,Precip,TRUE,FALSE
-Wind,W,Wind,TRUE,FALSE
-KPN,K,"KPN_A, KPN_B, KPN_C, KPN_D, KPN_E",TRUE,FALSE
-Teleconnections,I,"ENSO, NAO",TRUE,FALSE
+Name,Abbreviation,Code_Col,Feature?,Scheme?
+Global,Global,,False,True
+Preliminary Winds,PreWinds,,False,True
+"Base Set (Coods, Date)",B,"Lat, Lon, Alt, Year, JulianDay_Sin",True,False
+Temperature,T,Temp,True,False
+Precipitation,P,Precip,True,False
+KPN,K,"KPN_A, KPN_B, KPN_C, KPN_D, KPN_E",True,False
+Teleconnections,I,"ENSO, NAO",True,False
