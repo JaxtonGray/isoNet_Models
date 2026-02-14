@@ -22,13 +22,11 @@ import keras_tuner as kt
 # Setup Logging
 # Check inside the Logs directory, see what the highest log number is and increment by 1
 os.makedirs('Logs', exist_ok=True)
-#logNums = max([int(f[-5]) for f in os.listdir('Logs/')]) if os.listdir('Logs/') != [] else 0
-logNums = 1
 
 # Configure the logger
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
-fh = logging.FileHandler(f'Logs/ModelTraining_Log_{logNums + 1}.log')
+fh = logging.FileHandler(f'Logs/ModelTraining_Log_{sys.argv[2]}_Run{sys.argv[1]}.log')
 formatter = logging.Formatter('%(asctime)s - %(module)s - %(levelname)s - %(message)s')
 fh.setFormatter(formatter)
 logger.addHandler(fh)
