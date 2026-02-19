@@ -41,6 +41,3 @@ Data/KPN/legend.txt
 
 # Ignore pycache folder
 Data/__pycache__
-
-## Ignore temperaroy test files
-test.ipynb
