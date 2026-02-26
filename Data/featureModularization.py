@@ -7,6 +7,8 @@
 # Import libraries
 from glob import glob
 import os, pathlib, datetime, logging
+import numpy as np
+from scipy.ndimage import distance_transform_edt
 import pandas as pd
 import geopandas as gpd
 import rasterio as rio
@@ -173,6 +175,36 @@ def attach_nearest_value(ds, df, var):
     # Apply the function to each row in the dataframe
     return df.apply(lambda row: nearest_value(ds, row), axis=1)
 
+# Function to find the nearest valid grid point for a given point and time within a specified buffer 
+# and grid selection distance, if the original point is missing data. 
+def find_nearest_valid_grid(ds, point, time, buffer=5, grid_select=2):
+    # Arguments
+    # ds: xarray dataset containing the variable of interest (e.g., 'prAdjust')
+    # point: shapely Point object with the coordinates of the target location
+    # time: the specific time for which to find the nearest valid grid point
+    # buffer: the size of the area around the point to consider for finding valid grid points
+    # grid_select: the maximum distance (in grid units) to consider when selecting valid grid points
+    # Returns
+    # The value of the nearest valid grid point for the specified time
+    dsFiltered = ds.sel(
+        lon=slice(point.x - buffer, point.x + buffer), 
+        lat=slice(point.y - buffer, point.y + buffer),
+        time=time)['prAdjust']
+    
+    mask = np.isnan(dsFiltered.values)
+    dist, ids = distance_transform_edt(mask, return_indices=True)
+
+    # Add a condition to only consider points within the specified grid_select distance
+    valid_mask = np.where(dist < grid_select, True, False)
+    mask = np.logical_and(mask, valid_mask)
+    
+    data = dsFiltered.values.copy()
+    data[mask] = data[tuple(ids[:, mask])]
+    
+    filled_arr = xr.DataArray(data, coords=dsFiltered.coords, dims=dsFiltered.dims, attrs=dsFiltered.attrs)
+    
+    return filled_arr.sel(lon=point.x, lat=point.y, method='nearest').values.item()
+
 # Add atmospheric data to the dataframe
 def addAtmosData(df, feature, dir_path):
     logger.info(f'Adding atmospheric data for {feature} from {dir_path}')
@@ -188,6 +220,14 @@ def addAtmosData(df, feature, dir_path):
 
     # Attach the nearest values to the dataframe
     df[feature] = attach_nearest_value(ds, df, var_name)
+
+    # Cycle through the dataframe and find any rows where the value is NaN
+    for i, row in df[df[feature].isna()].iterrows():
+        point = row['geometry']
+        time = row['Date']
+        nearest_value = find_nearest_valid_grid(ds, point, time)
+        df.at[i, feature] = nearest_value  # Get the value from the tuple returned by find_nearest_valid_grid
+
     return df
 # End of Atmospheric Data Script
 
