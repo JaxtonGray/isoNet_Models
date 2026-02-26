@@ -41,3 +41,6 @@ Data/KPN/legend.txt
 
 # Ignore pycache folder
 Data/__pycache__
+
+# Ignore the test.ipynb file, it is just for testing and debugging
+test.ipynb
