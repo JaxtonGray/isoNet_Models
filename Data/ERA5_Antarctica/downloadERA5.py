@@ -53,7 +53,7 @@ if __name__ == "__main__":
     # Then download the data for the specified years and vars
     for var in variables:
         logger.info(f"Starting download for variable: {var}")
-        for year in range(1979, 1980):
+        for year in range(1960, 2026):
             logger.info(f"---> Year: {year}")
             download_era5_antarctica_daily_statistic(var, year, 
                                                      os.path.join("data_files", f"era5_antarctica_daily_statistic_{var}_{year}.nc"))
