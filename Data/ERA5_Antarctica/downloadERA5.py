@@ -1,5 +1,13 @@
 import os
 import cdsapi
+import logging
+
+logger = logging.getLogger(__name__)
+fh = logging.FileHandler('download_era5.log')
+fh.setLevel(logging.INFO)
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+fh.setFormatter(formatter)
+logger.addHandler(fh)
 
 def download_era5_antarctica_daily_statistic(var, year, outputfile):
     dataset = "derived-era5-single-levels-daily-statistics"
@@ -44,6 +52,8 @@ if __name__ == "__main__":
     variables = ["2m_temperature", "total_precipitation"]
     # Then download the data for the specified years and vars
     for var in variables:
+        logger.info(f"Starting download for variable: {var}")
         for year in range(1979, 1980):
+            logger.info(f"---> Year: {year}")
             download_era5_antarctica_daily_statistic(var, year, 
                                                      os.path.join("data_files", f"era5_antarctica_daily_statistic_{var}_{year}.nc"))
