@@ -4,7 +4,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 fh = logging.FileHandler('download_era5.log')
-fh.setLevel(logging.INFO)
+logger.setLevel(logging.INFO)
 formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
 fh.setFormatter(formatter)
 logger.addHandler(fh)
@@ -51,6 +51,7 @@ if __name__ == "__main__":
     # Define the var and years to download
     variables = ["2m_temperature", "total_precipitation"]
     # Then download the data for the specified years and vars
+    logger.info("Starting ERA5 download process")
     for var in variables:
         logger.info(f"Starting download for variable: {var}")
         for year in range(1960, 2026):

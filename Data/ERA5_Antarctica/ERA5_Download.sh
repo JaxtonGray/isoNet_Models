@@ -13,7 +13,7 @@ module load python/3.11
 virtualenv --no-download $SLURM_TMPDIR/env
 source $SLURM_TMPDIR/env/bin/activate
 pip install --no-index --upgrade pip
-pip install --no-index cdsapi
+pip install "cdsapi>=0.7.7"
 
 # Run the program
 python downloadERA5.py
