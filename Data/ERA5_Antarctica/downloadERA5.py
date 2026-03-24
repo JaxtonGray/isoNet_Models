@@ -13,7 +13,7 @@ def download_era5_antarctica_daily_statistic(var, year, outputfile):
     dataset = "derived-era5-single-levels-daily-statistics"
     request = {
         "product_type": "reanalysis",
-        "var": [
+        "variable": [
             f"{var}"
         ],
         "year": f"{year}",
