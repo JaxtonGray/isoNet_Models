@@ -3,6 +3,10 @@
 # which will then add the features to the dataset. This will allow me to easily add and remove features as needed by just not having those numbers in the call to the script
 # The Features are as follows:
 # 1. KPN
+# 2. Altitude
+# 3. Precipitation
+# 4. Temperature
+# 5. Teleconnection Indices (NAO and ENSO)
 
 # Import libraries
 from glob import glob
@@ -149,10 +153,20 @@ def addKPN(df, dir=r'KPN'):
 # 3. Combine the datasets by coordinates
 # 4. For each row in the dataframe, get the value of the variable at the corresponding lat, lon, and date
 # 5. Add the variable to the dataframe
+# 6. If the value is NaN, find the nearest valid grid point within 1 grid cell and use that value instead
+# 7. For Antarctic points, open the ERA5 api dataset and get the value from there instead
+################################################################################
+# Atmospheric Data Script
+################################################################################
+# This part will be used to add atmospheric variables
+# 1. Read in the correct variable name from mapping
+# 2. Open all netcdfs containing that variable
+# 3. Combine the datasets by coordinates
+# 4. For each row in the dataframe, get the value of the variable at the corresponding lat, lon, and date
+# 5. Add the variable to the dataframe
 ################################################################################
 # Function that opens all the netcdf datasets containing a specific variable
 def open_datasets(variable_name, dir_path=r'HydroGFD/data_files/'):
-    logger.info(f'Opening datasets for variable {variable_name} from {dir_path}')
 
     # Find all files matching the pattern
     files = glob(f'{dir_path}/{variable_name}*.nc')
@@ -162,26 +176,14 @@ def open_datasets(variable_name, dir_path=r'HydroGFD/data_files/'):
     dataset = xr.combine_by_coords([xr.open_dataset(f, engine='h5netcdf') for f in files], combine_attrs='override')
     return dataset
 
-# Grab the nearest value from the given dataset and dataframe row
-def attach_nearest_value(ds, df, var):
-    # Lambda function that will get the nearest value for a given row
-    nearest_value = lambda ds, row: ds.sel(
-        time=row['Date'].strftime('%Y-%m-%d'),
-        lat=row['Lat'],
-        lon=row['Lon'],
-        method='nearest'
-    )[var].item()
-
-    # Apply the function to each row in the dataframe
-    return df.apply(lambda row: nearest_value(ds, row), axis=1)
-
 # Function to find the nearest valid grid point for a given point and time within a specified buffer 
 # and grid selection distance, if the original point is missing data. 
-def find_nearest_valid_grid(ds, point, time, buffer=5, grid_select=2):
+def find_nearest_valid_grid(ds, point, time, var, buffer=5, grid_select=2):
     # Arguments
     # ds: xarray dataset containing the variable of interest (e.g., 'prAdjust')
     # point: shapely Point object with the coordinates of the target location
     # time: the specific time for which to find the nearest valid grid point
+    # var: the variable name to extract from the dataset
     # buffer: the size of the area around the point to consider for finding valid grid points
     # grid_select: the maximum distance (in grid units) to consider when selecting valid grid points
     # Returns
@@ -189,7 +191,7 @@ def find_nearest_valid_grid(ds, point, time, buffer=5, grid_select=2):
     dsFiltered = ds.sel(
         lon=slice(point.x - buffer, point.x + buffer), 
         lat=slice(point.y - buffer, point.y + buffer),
-        time=time)['prAdjust']
+        time=time)[var]
     
     mask = np.isnan(dsFiltered.values)
     dist, ids = distance_transform_edt(mask, return_indices=True)
@@ -205,9 +207,33 @@ def find_nearest_valid_grid(ds, point, time, buffer=5, grid_select=2):
     
     return filled_arr.sel(lon=point.x, lat=point.y, method='nearest').values.item()
 
+# Grab nearest grid point values for variable in dataset for all rows via vectorized indexing. For rows that are NaN, apply 
+# find_nearest_valid_grid to get the nearest valid grid point value within the specified buffer and grid selection distance.
+def attach_nearest_value_vectorized(ds, df, var):
+    # Extract the variable values at the nearest grid points for all rows in the dataframe
+    times_da = xr.DataArray(df['Date'].dt.strftime('%Y-%m-%d').values, dims='points')
+    lats_da = xr.DataArray(df['Lat'].values, dims='points')
+    lons_da = xr.DataArray(df['Lon'].values, dims='points')
+
+    # Use xarray's sel method with vectorized indexing to get the nearest values for all rows at once
+    nearest_values = ds.sel(
+        time=times_da,
+        lat=lats_da,
+        lon=lons_da,
+        method='nearest'
+    )[var]
+
+    # If any values are NaN, apply the find_nearest_valid_grid function to those specific rows
+    for i, value in enumerate(nearest_values.values):
+        if np.isnan(value):
+            point = df.iloc[i]['geometry']
+            time = df.iloc[i]['Date'].strftime('%Y-%m-%d')
+            nearest_values.values[i] = find_nearest_valid_grid(ds, point, time, var)
+
+    return nearest_values
+
 # Add atmospheric data to the dataframe
 def addAtmosData(df, feature, dir_path):
-    logger.info(f'Adding atmospheric data for {feature} from {dir_path}')
     # From the feature given, like precip, get the corresponding variable name in the dataset
     var_map = {
         'Precipitation': 'prAdjust',
@@ -219,18 +245,10 @@ def addAtmosData(df, feature, dir_path):
     ds = open_datasets(var_name, dir_path)
 
     # Attach the nearest values to the dataframe
-    df[feature] = attach_nearest_value(ds, df, var_name)
-
-    # Cycle through the dataframe and find any rows where the value is NaN
-    for i, row in df[df[feature].isna()].iterrows():
-        point = row['geometry']
-        time = row['Date']
-        nearest_value = find_nearest_valid_grid(ds, point, time)
-        df.at[i, feature] = nearest_value  # Get the value from the tuple returned by find_nearest_valid_grid
+    df[feature] = attach_nearest_value_vectorized(ds, df, var_name)
 
     return df
 # End of Atmospheric Data Script
-
 
 # Teleconnection Indices Script
 #############################################
