@@ -25,24 +25,31 @@ def convert_to_era5_longitude(lon):
         return lon
 
 # This function will take in a latitude, longitude, and time, and will return the corresponding ERA5 data
-# for that location and time. It will use the xarray library to query the ERA5 dataset.
-def get_era5_data(lat, lon, time, ds, variable=['t2m', 'tp']):
+# for that location and date. It will use the xarray library to query the ERA5 dataset.
+def get_era5_data(lat, lon, date, ds, variable=['t2m', 'tp']):
     # Convert longitude to ERA5 format
     lon_era5 = convert_to_era5_longitude(lon)
-    
-    # Query the ERA5 dataset for the given latitude, longitude, and time
-    era5_data = ds[variable].sel(
-        latitude=lat,
-        longitude=lon_era5,
-        valid_time=time,
-        method='nearest'
-    ).load()
+
+    # Given that this is an hourly dataset, we will query for the entire day (24 hours) and then take the average over 3h and then over 1D to get the daily average for the given date.
+    # Start and end times for the query
+    date_start = pd.Timestamp(date).floor('D') # Start of the day
+    date_end = date_start + pd.Timedelta(hours=23) # End of the day
+
+    if isinstance(variable, list):
+        # Query the ERA5 dataset for the given latitude, longitude, and time
+        era5_data = ds[variable].sel(
+            latitude=lat,
+            longitude=lon_era5,
+            method='nearest'
+        ).sel(
+            valid_time=slice(date_start, date_end)
+        ).load().resample(valid_time='3h').mean().resample(valid_time='1D').mean()
     
     # If variable is a list, return a dictionary of variable names and their corresponding values
     if isinstance(variable, list):
-        return {var: float(era5_data[var].values) for var in variable}
+        return {var: float(era5_data[var].values.item()) for var in variable}
     else:
-        return float(era5_data.values)
+        return float(era5_data.values.item())
 
 if __name__ == "__main__":
     # First, we will read in the ERA5 data. This will be done using the earthdata.destine API
