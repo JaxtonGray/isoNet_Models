@@ -5,15 +5,6 @@ import pandas as pd
 import geopandas as gpd
 import numpy as np
 
-# First, we will read in the ERA5 data. This will be done using the earthdata.destine API
-# Which requires an account and an API key. Follow their instructions to set up an account and obtain an API key.
-ds = xr.open_dataset(
-        "https://data.earthdatahub.destine.eu/era5/reanalysis-era5-single-levels-v0.zarr",
-        storage_options={"client_kwargs":{"trust_env":True}},
-        chunks={},
-        engine="zarr",
-    )
-
 # This function will read in the total original dataset and find only the Antarctica data points
 # Defined here as any data point with a latitude less than or equal to -60 degrees.
 def read_antartica_data(file_path):
@@ -54,6 +45,15 @@ def get_era5_data(lat, lon, time, ds, variable=['t2m', 'tp']):
         return float(era5_data.values)
 
 if __name__ == "__main__":
+    # First, we will read in the ERA5 data. This will be done using the earthdata.destine API
+    # Which requires an account and an API key. Follow their instructions to set up an account and obtain an API key.
+    ds = xr.open_dataset(
+            "https://data.earthdatahub.destine.eu/era5/reanalysis-era5-single-levels-v0.zarr",
+            storage_options={"client_kwargs":{"trust_env":True}},
+            chunks={},
+            engine="zarr",
+        )
+
     # Read in the Antarctica dataset
     gdf_ant = read_antartica_data(os.path.join('..', 'GNIP', 'GNIP_Data (2025-07-22).csv'))
 
