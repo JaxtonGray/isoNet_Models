@@ -15,7 +15,7 @@ virtualenv --no-download $SLURM_TMPDIR/env
 source $SLURM_TMPDIR/env/bin/activate
 
 # Load required libraries
-pip install --no-index xarray geopandas h5netcdf netcdf4 mpi4py h5py
+pip install --no-index xarray dask geopandas requests aiohttp h5netcdf netcdf4 mpi4py h5py fsspec zarr
 pip install --no-index pandas
 
 # Run the script
