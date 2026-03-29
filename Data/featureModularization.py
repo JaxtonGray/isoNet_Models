@@ -60,10 +60,14 @@ def readKPNRasters(dir=r'KPN'):
     folders = glob(os.path.join(dir, '*')) # Get all the files in the current directory
     rasters = {}
     for folder in folders:
-        # Ensure the folder is a valid time period
-        if os.path.isdir(folder) and int(pathlib.Path(folder).name.split('_')[0]) < datetime.datetime.now().year: 
-            with rio.open(os.path.join(folder, 'koppen_geiger_0p1.tif')) as src:
-                rasters[(int(folder.split('_')[0].split('\\')[1]), int(folder.split('_')[1]))] = [src, src.read(1)] 
+        # Ensure the folder is a directory and not a file
+        if os.path.isdir(folder):
+            folderYearStart, folderYearEnd = int(pathlib.Path(folder).name.split('_')[0]), int(pathlib.Path(folder).name.split('_')[1])
+            
+            # Only read in rasters for time periods that have already occurred
+            if folderYearStart < datetime.datetime.now().year: 
+                with rio.open(os.path.join(folder, 'koppen_geiger_0p1.tif')) as src:
+                    rasters[(folderYearStart, folderYearEnd)] = [src, src.read(1)] 
         else:
             continue
     return rasters
