@@ -129,6 +129,9 @@ def getKPN(df, rasters):
     # Replace any remaining zero values with NaN
     df['KPN'] = df['KPN'].replace(0, np.nan)
 
+    # Drop any rows that still have NaN values in the KPN column, as we will not be able to fill those in with the nearest non-zero value
+    df = df.dropna(subset=['KPN'])
+
     return df.reset_index(drop=True)
 
 # Now to load the legend and convert the KPN from a number to a string (A, B, C, D, E)
@@ -395,7 +398,6 @@ def addAltitudeData(df, dir='Altitude/data_files'):
     df['Alt'] = df['geometry'].apply(lambda point: findAltitude(point, alt_gdf))
     
     return df
-
 
 # Main function that will be called by the script determining which features to add
 def addFeatures(df):
