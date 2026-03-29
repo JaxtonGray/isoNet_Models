@@ -182,7 +182,7 @@ def open_datasets(variable_name, dir_path=r'HydroGFD/data_files/'):
 
 # Function to find the nearest valid grid point for a given point and time within a specified buffer 
 # and grid selection distance, if the original point is missing data. 
-def find_nearest_valid_grid(ds, point, time, var, buffer=5, grid_select=2):
+def find_nearest_valid_grid_xarrayds(ds, point, time, var, buffer=5, grid_select=2):
     # Arguments
     # ds: xarray dataset containing the variable of interest (e.g., 'prAdjust')
     # point: shapely Point object with the coordinates of the target location
@@ -202,7 +202,9 @@ def find_nearest_valid_grid(ds, point, time, var, buffer=5, grid_select=2):
 
     # Add a condition to only consider points within the specified grid_select distance
     valid_mask = np.where(dist < grid_select, True, False)
-    mask = np.logical_and(mask, valid_mask)
+
+    # Combine the original mask with the valid_mask to ensure we only consider valid points within the grid_select distance
+    mask = np.logical_and(mask, valid_mask) 
     
     data = dsFiltered.values.copy()
     data[mask] = data[tuple(ids[:, mask])]
@@ -232,7 +234,7 @@ def attach_nearest_value_vectorized(ds, df, var):
         if np.isnan(value):
             point = df.iloc[i]['geometry']
             time = df.iloc[i]['Date'].strftime('%Y-%m-%d')
-            nearest_values.values[i] = find_nearest_valid_grid(ds, point, time, var)
+            nearest_values.values[i] = find_nearest_valid_grid_xarrayds(ds, point, time, var)
 
     return nearest_values
 
