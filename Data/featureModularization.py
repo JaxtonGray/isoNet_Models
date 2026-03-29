@@ -232,6 +232,36 @@ def attach_nearest_value_vectorized(ds, df, var):
 
     return nearest_values
 
+# Define a function that takes in a df, finds the Null Antarctica data, and fills with found value in the Antarctica DataFrame
+def fillAntarcticaData(df, feature, antDF_Path = r'ERA5_Antarctica\GNIP_With_ERA5.csv'):
+    # If the workflow is followed the antDF should contain all the missing points below -60 Lat, so we can just do a spatial join to fill in the missing data
+    # Load antarctic data
+    antDF = pd.read_csv(antDF_Path)
+    antDF['Date'] = pd.to_datetime(antDF['Date'], utc=True)
+    antGDF = gpd.GeoDataFrame(antDF, geometry=gpd.points_from_xy(antDF.Lon, antDF.Lat))
+
+    # The antGDF has total average daily precipitation data in meters, I need it in kg/m2/s, which is roughly 86.4 times smaller
+    # Since the data is in meters per day, we can convert it to kg/m2/s by dividing by 86.4
+    # We will also rename the temperature, and precipitation columns to match the original df
+    antGDF['Precipitation'] = antGDF['tp'] / 86.4
+    antGDF['Temperature'] = antGDF['t2m']
+    antGDF = antGDF.drop(columns=['tp', 't2m'])
+    
+    # Grab all the antarctic points from the original df, and then do a spatial join to fill in the missing data
+    antGDF_df = df[df['Lat'] <= -60]
+    # Spatial join to fill in the missing data
+    joinedDF = gpd.sjoin(antGDF_df, antGDF, how='left', on_attribute=['Date']
+                         ).rename(columns={'Precipitation_right':'Precipitation', 'Temperature_right': 'Temperature'})
+    nonNull_values = joinedDF[~joinedDF['Precipitation'].isnull() & ~joinedDF['Temperature'].isnull()][['Precipitation', 'Temperature']]
+    
+    # Iter through the rows, and since the data has the same index as the original df, we can fill in the missing values 
+    # in the original df with the values from the joinedDF
+    filledDF = df.copy()
+    for i, row in nonNull_values.iterrows():
+        filledDF.at[i, feature] = row[feature]
+    
+    return filledDF
+
 # Add atmospheric data to the dataframe
 def addAtmosData(df, feature, dir_path):
     # From the feature given, like precip, get the corresponding variable name in the dataset
@@ -246,6 +276,9 @@ def addAtmosData(df, feature, dir_path):
 
     # Attach the nearest values to the dataframe
     df[feature] = attach_nearest_value_vectorized(ds, df, var_name)
+
+    # For Antarctic points, fill in the data from the ERA5 Antarctica dataset
+    df = fillAntarcticaData(df, feature)
 
     return df
 # End of Atmospheric Data Script
