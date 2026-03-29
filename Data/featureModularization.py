@@ -72,6 +72,35 @@ def readKPNRasters(dir=r'KPN'):
             continue
     return rasters
     
+# Create a function to grab the nearest non-0 KPN point for a given raster, within a given grid selection distance. 
+def find_nearest_non_zero_kpn(rasterArr, row, col, grid_select=2):
+    # Args: 
+    # rasterArr: a numpy array representing the KPN raster, where 0 is the non-KPN value
+    # row: the row index of the point for which to find the nearest non-zero value
+    # col: the column index of the point for which to find the nearest non-zero value
+    # grid_select: the distance within which to search for the nearest non-zero point
+        # - Default is 2, which means we will only consider points within less than 2 grid cells away from the original point.
+    # Returns:
+    # The value of the nearest non-zero point in the raster for the given row and column, 
+    # within the specified grid selection distance.
+
+    # Create a mask of the non-zero points in the raster
+    mask = rasterArr == 0
+
+    # Use distance_transform_edt to calculate the euclidean distance to the nearest non-zero point for each point in the raster
+    distance, ids = distance_transform_edt(mask, return_indices=True)
+
+    # Add a condition to only consider points within the specified grid_select distance
+    valid_mask = np.where(distance < grid_select, True, False)
+
+    # Combine the original mask with the valid_mask to ensure we only consider valid points within the grid_select distance
+    mask = np.logical_and(mask, valid_mask)
+
+    # Fill in the zero values in the raster with the nearest non-zero value using the indices returned by distance_transform_edt
+    filled_raster = rasterArr.copy()
+    filled_raster[mask] = rasterArr[tuple(ids[:, mask])]
+
+    return filled_raster[row, col].item()
 
 # Get the climate classification for the dataframe by iterating through it and using the correct
 # raster for the time period and latitude and longitude of the row
@@ -90,10 +119,15 @@ def getKPN(df, rasters):
 
         # Get the climate classification
         row, col = rasters[date][0].index(point.geometry.x, point.geometry.y)
-        df.at[i, 'KPN'] = rasters[date][1][row, col]
+        kpnValue = rasters[date][1][row, col].item()
+
+        # If the value is 0, check the nearest non-zero value within a grid selection distance of 2
+        if kpnValue == 0:
+            kpnValue = find_nearest_non_zero_kpn(rasters[date][1], row, col)
+        df.at[i, 'KPN'] = kpnValue
     
-    # Change KPN of 0 to 'O' for Ocean, which is not in the raster data
-    df.replace({'KPN': {0: 'O'}}, inplace=True)
+    # Replace any remaining zero values with NaN
+    df['KPN'] = df['KPN'].replace(0, np.nan)
 
     return df.reset_index(drop=True)
 
