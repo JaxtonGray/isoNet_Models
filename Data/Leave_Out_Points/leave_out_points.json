@@ -1,13 +1,13 @@
 {
-    "lowData": "LAT: 52.3, LON: 104.283",
-    "highData": "LAT: 47.543, LON: 7.584",
-    "aridData": "LAT: 30.13, LON: -2.17",
-    "northData": "LAT: 69.1, LON: -105.117",
-    "equitData": "LAT: 0.38, LON: 6.72",
-    "southernData": "LAT: -22.66, LON: -48.06",
-    "antData": "LAT: -67.57, LON: -68.13",
-    "lakeWoods": "LAT: 49.67, LON: -93.72",
-    "tibetPlat": "LAT: 29.7, LON: 91.133",
-    "ethiopiaHigh": "LAT: 12.542, LON: 39.77",
-    "hotWet": "LAT: 18.96, LON: 72.82"
+    "lowData": {"LAT": 52.3, "LON": 104.283},
+    "highData": {"LAT": 47.543, "LON": 7.584},
+    "aridData": {"LAT": 30.13, "LON": -2.17},
+    "northData": {"LAT": 69.1, "LON": -105.117},
+    "equitData": {"LAT": 0.38, "LON": 6.72},
+    "southernData": {"LAT": -22.66, "LON": -48.06},
+    "antData": {"LAT": -67.57, "LON": -68.13},
+    "lakeWoods": {"LAT": 49.67, "LON": -93.72},
+    "tibetPlat": {"LAT": 29.7, "LON": 91.133},
+    "ethiopiaHigh": {"LAT": 12.542, "LON": 39.77},
+    "hotWet": {"LAT": 18.96, "LON": 72.82}
 }
