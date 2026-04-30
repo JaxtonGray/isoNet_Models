@@ -113,7 +113,7 @@ def get_correct_date(row, ogData):
     elif len(matching_rows) > 1:
         # Rounding errors may cause the possible Julian Day values to be off by 1, so we check for a match within a range of +/- 1 day.
         for _, matching_row in matching_rows.iterrows():
-            if np.isclose(matching_row['JulianDay'], possible_julian_days, atol=1).any():
+            if np.isclose(matching_row['JulianDay'], possible_julian_days, atol=5).any():
                 date = matching_row['Date']
 
     if date is None:
@@ -121,6 +121,13 @@ def get_correct_date(row, ogData):
         for _, matching_row in matching_rows.iterrows():
             if matching_row['O18'] == o18_a and matching_row['H2'] == h2_a:
                 date = matching_row['Date']
+    
+    if date is None:
+        # If still no matching date is found, we check possible Julian Day values and if one is negative, it is likely not a Julian Day value
+        for jd in possible_julian_days:
+            if jd > 0:
+                # Convert back from day of year to date
+                date = pd.to_datetime(f'{year}-01-01') + pd.Timedelta(days=jd - 1)
 
     return date
 
@@ -176,9 +183,15 @@ if __name__ == '__main__':
     testDataset['JulianDay'] = testDataset['Date'].dt.dayofyear
     testDataset['Year'] = testDataset['Date'].dt.year
 
+    # Grab the correct LOO dataset as well, since I will need to add in the correct date for the leave out results as well
+    looDataset = pd.read_csv(os.path.join('..', 'Data', 'Leave_Out_Points', 'Leave_Out_Points_GNIP (2025-07-22).csv'))
+    looDataset['Date'] = pd.to_datetime(looDataset['Date'])
+    looDataset['JulianDay'] = looDataset['Date'].dt.dayofyear
+    looDataset['Year'] = looDataset['Date'].dt.year
+
     # Apply the function to each row of the test results dataframe to get the correct date
     testResults['Date'] = testResults.apply(lambda row: get_correct_date(row, testDataset), axis=1)
-    leaveOutResults['Date'] = leaveOutResults.apply(lambda row: get_correct_date(row, testDataset), axis=1)
+    leaveOutResults['Date'] = leaveOutResults.apply(lambda row: get_correct_date(row, looDataset), axis=1)
 
     # Save the combined results as csv files
     testResults.to_csv('Combined_Test_Results.csv', index=False)
