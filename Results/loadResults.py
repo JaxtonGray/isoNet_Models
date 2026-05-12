@@ -131,6 +131,11 @@ def get_correct_date(row, ogData):
 
     return date
 
+def fix_na_from_column_headers(df, isotope):
+    # For some reason if column H2 is NA, the value is in column H2 A. This function fixes that.
+    values = df.apply(lambda row: row[f'{isotope} A'] if pd.isna(row[f'{isotope}']) else row[f'{isotope}'], axis=1)
+    return values
+
 def add_leaveOutPoint_names(results, pointsGDF):
     # Arguments:
     #   - results: A dataframe containing the leave out results, with columns for lat and long coordinates
@@ -179,19 +184,25 @@ if __name__ == '__main__':
     testDataset = pd.read_csv(os.path.join('..', 'Data', 'DataTest.csv'))
 
     # Convert the Date column to a datetime object, and add in a Julian Day column and a Year column
-    testDataset['Date'] = pd.to_datetime(testDataset['Date'])
+    testDataset['Date'] = pd.to_datetime(testDataset['Date'], utc=True)
     testDataset['JulianDay'] = testDataset['Date'].dt.dayofyear
     testDataset['Year'] = testDataset['Date'].dt.year
 
     # Grab the correct LOO dataset as well, since I will need to add in the correct date for the leave out results as well
     looDataset = pd.read_csv(os.path.join('..', 'Data', 'Leave_Out_Points', 'Leave_Out_Points_GNIP (2025-07-22).csv'))
-    looDataset['Date'] = pd.to_datetime(looDataset['Date'])
+    looDataset['Date'] = pd.to_datetime(looDataset['Date'], utc=True)
     looDataset['JulianDay'] = looDataset['Date'].dt.dayofyear
     looDataset['Year'] = looDataset['Date'].dt.year
 
     # Apply the function to each row of the test results dataframe to get the correct date
     testResults['Date'] = testResults.apply(lambda row: get_correct_date(row, testDataset), axis=1)
     leaveOutResults['Date'] = leaveOutResults.apply(lambda row: get_correct_date(row, looDataset), axis=1)
+
+    # Fix the NA values where observed values are split between isotope and isotope A columns, in the LOO results only
+    leaveOutResults['O18 A'] = fix_na_from_column_headers(leaveOutResults, 'O18')
+    leaveOutResults['H2 A'] = fix_na_from_column_headers(leaveOutResults, 'H2')
+    # Drop the original O18 and H2 columns since they are now redundant
+    leaveOutResults = leaveOutResults.drop(columns=['O18', 'H2'])
 
     # Save the combined results as csv files
     testResults.to_csv('Combined_Test_Results.csv', index=False)
