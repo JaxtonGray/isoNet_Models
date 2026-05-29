@@ -246,6 +246,10 @@ def addKPN(df, dir=os.path.join('..', 'Data', 'KPN')):
 
     return dfKPN
 
+# Altitude Data Import
+# NOTE: The altitude data is imported through pre-made shape files, make sure that the shape files are made
+# before running the script. This is done through the BLANK script.
+
 # Function to read in the data from the file
 def read_data(file_path: str) -> gpd.GeoDataFrame:
     try:
