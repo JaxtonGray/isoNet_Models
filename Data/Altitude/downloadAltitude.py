@@ -24,11 +24,12 @@ if __name__ == "__main__":
 
     # Open the dataset from EarthData
     ds = xr.open_dataset(
-        f"https://edh:{auth_token}@data.earthdatahub.destine.eu/copernicus-dem/GLO-30-v0.zarr",
-        chunks = None,
-        engine="zarr",
-        decode_coords="all",
-        mask_and_scale=False
+    "https://api.earthdatahub.destine.eu/copernicus-dem/GLO-30-v0.zarr",
+    storage_options={"client_kwargs":{"trust_env":True}},
+    chunks={},
+    engine="zarr",
+    decode_coords="all",
+    mask_and_scale=False,
     )
 
     # Vectorize the points in the unique gdf
