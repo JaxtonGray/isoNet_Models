@@ -21,6 +21,7 @@ import numpy as np
 import xarray as xr
 import rasterio as rio
 from scipy.ndimage import distance_transform_edt
+from itertools import product
 
 # Climate Data Import
 # 1. Open all NetCDF files and combine them into a single xarray dataset
@@ -260,10 +261,116 @@ def read_data(file_path: str) -> gpd.GeoDataFrame:
         print(f"Error reading the file: {e}")
         sys.exit(1)
 
+# Read in the data and extract the unique coordinates, then use those coordinates to pull the altitude data from the EarthData API
+def get_unique_coordinates(gdf):
+    unique_geom = gdf.geometry.unique()
+    unique_gdf = gpd.GeoDataFrame(geometry=unique_geom, columns=['geometry'], crs=gdf.crs)
+    return unique_gdf
+
+# From a given dataframe of unique coordinates, pull the altitude data from the EarthData API and attach it to the dataframe
+def grab_altitude(gdf_unique: gpd.GeoDataFrame, ds: xr.Dataset, var_name: str) -> gpd.GeoDataFrame:
+    # Args:
+    #   - gdf_unique: a GeoDataFrame containing the unique coordinates for which to pull altitude
+    #   - ds: the xarray dataset containing the altitude data from EarthData
+    #   - var_name: the name of the variable in the dataset that contains the altitude data (e.g., 'dsm')
+    # Returns:
+    #  - gdf_unique: the input GeoDataFrame with an additional column for altitude data pulled from the dataset
+
+ 
+    # Vectorize the points in the unique gdf
+    xs = xr.DataArray(gdf_unique.geometry.x.values, dims='points')
+    ys = xr.DataArray(gdf_unique.geometry.y.values, dims='points')
+
+    # Select all the nearest points in the dataset and attach them to the unique dataframe
+    gdf_unique['Alt'] = (
+        ds[var_name]
+        .sel(lon=xs, lat=ys, method="nearest")
+        .values
+    )
+
+    # Grab the CRS from the dataset and set it for the GeoDataFrame
+    crs_wkt = ds['spatial_ref'].attrs['crs_wkt']
+    gdf_unique = gdf_unique.set_crs(crs_wkt)
+
+    return gdf_unique
+
+# Function to add teleconnection indices to the dataframe
+# Open the dataset containing the teleconnection indices
+def openTeleInd(dir=os.path.join('Teleconnection_Indices', 'teleconnection_indices.csv')):
+    tele_df = pd.read_csv(dir)
+    return tele_df
+
+# Add Teleconnection Indices to the dataframe
+def addTeleconnectionData(df, dir=os.path.join('..', 'Data', 'Teleconnection_Indices', 'teleconnection_indices.csv')):
+    # Open the teleconnection indices dataset
+    teleDF = openTeleInd(dir=dir)
+
+    # Extract the NAO and ENSO indices based on Year and Month
+    df['Year'] = df['Date'].dt.year
+    df['Month'] = df['Date'].dt.month
+    df = df.merge(teleDF, how='left', left_on=['Year', 'Month'], right_on=['Year', 'Month'])
+    df.drop(columns=['Year', 'Month'], inplace=True)
+
+    return df
+    
+
 if __name__ == "__main__":
     # Read in the necessary data
-    gdf = read_data(r'Runs/Charlotte_Runs/combined_sites.csv')#read_data(sys.argv[1])
-    #ds = read_climate_data(dir_path=os.path.join('Data', 'HydroGFD', 'data_files'))
-    #rasters = readKPNRasters(dir=os.path.join('Data', 'KPN'))
-    gdf = addKPN(gdf, dir=os.path.join('Data', 'KPN'))
-    print(gdf.columns)
+    file_path = r'Runs\Charlotte_Runs\combined_sites.csv' #sys.argv[1]
+    isoCols = ['d18O', 'd2H']
+    dir_path = os.path.dirname(file_path)
+    gdf = read_data(file_path)
+    
+    # Add a check to see if the altitude data has already been pulled for the unique coordinates, if so, use that file instead of pulling the data again
+    altitudes_path = os.path.join(dir_path, 'altitudes.geojson')
+    if not os.path.exists(altitudes_path):
+        unique_gdf = get_unique_coordinates(gdf)
+
+        # Open the dataset from EarthData
+        copDEM = xr.open_dataset(
+            "https://api.earthdatahub.destine.eu/copernicus-dem/GLO-30-v0.zarr",
+            storage_options={"client_kwargs":{"trust_env":True}},
+            chunks={},
+            engine="zarr",
+            decode_coords="all",
+            mask_and_scale=False,
+        )
+
+        # Attach the altitude data to the unique gdf
+        gdf_unique = grab_altitude(unique_gdf, copDEM, var_name='dsm')
+        # Save to the directory (NOTE: Add a check for later to see if one already exists and use that instead)
+        gdf_unique.to_file(os.path.join(dir_path, 'altitudes.geojson'), driver='GeoJSON')
+    else:
+        gdf_unique = gpd.read_file(altitudes_path)
+
+    # Go through and grab the min and max range of date values from the original dataframe
+    # Then create a new dataframe with all the combinations of unique coordinates and dates within that range
+    min_date, max_date = gdf['Date'].min(), gdf['Date'].max()
+    date_range = pd.date_range(start=min_date, end=max_date, freq='D')
+    runs_df = pd.DataFrame(list(product(date_range, gdf_unique.geometry)), columns=['Date', 'geometry'])
+    runs_gdf = gpd.GeoDataFrame(runs_df, geometry='geometry', crs=gdf.crs)
+    
+    # Attach the latitude and longitude to the new dataframe
+    runs_gdf['Lat'] = runs_gdf.geometry.y
+    runs_gdf['Lon'] = runs_gdf.geometry.x
+
+    # Attach the original data to the new dataframe by matching on the date and geometry, this will add the d18O and d2H values to the new dataframe 
+    # where they exist in the original dataframe
+    runs_gdf = runs_gdf.join(gdf.set_index(['Date', 'geometry'])[isoCols], on=['Date', 'geometry'], how='left')
+
+    # Add the KPN data to the dataframe
+    runs_gdf = addKPN(runs_gdf, dir=os.path.join('Data', 'KPN'))
+
+    # Add the teleconnection indices to the dataframe
+    runs_gdf = addTeleconnectionData(runs_gdf, dir=os.path.join('Data', 'Teleconnection_Indices', 'teleconnection_indices.csv'))
+
+    # Add the climate data to the dataframe
+    ds = read_climate_data(dir_path=os.path.join('Data', 'HydroGFD', 'data_files'))
+    runs_gdf['Temperature'] = attach_nearest_value_vectorized(ds, runs_gdf, var='tasAdjust')
+    runs_gdf['Precipitation'] = attach_nearest_value_vectorized(ds, runs_gdf, var='prAdjust')
+
+    # Add Altitude data to the dataframe by joining on the geometry column
+    runs_gdf = runs_gdf.join(gdf_unique.set_index('geometry')['Alt'], on='geometry', how='left')
+
+    # Save the new dataframe to a new file in the same directory as the original file, with the name 'filled_data.csv'
+    runs_gdf.to_csv(os.path.join(dir_path, 'filled_data.csv'), index=False)
