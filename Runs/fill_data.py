@@ -316,8 +316,13 @@ def addTeleconnectionData(df, dir=os.path.join('..', 'Data', 'Teleconnection_Ind
 
 if __name__ == "__main__":
     # Read in the necessary data
-    file_path = r'Runs\Charlotte_Runs\combined_sites.csv' #sys.argv[1]
-    isoCols = ['d18O', 'd2H']
+    file_path = sys.argv[1]
+
+    # Check to see if there is more than one argument (if yes, the following arguments are the isotope columns)
+    isoCols = None
+    if len(sys.argv) > 2:
+        isoCols = sys.argv[2:]
+   
     dir_path = os.path.dirname(file_path)
     gdf = read_data(file_path)
     
@@ -355,8 +360,9 @@ if __name__ == "__main__":
     runs_gdf['Lon'] = runs_gdf.geometry.x
 
     # Attach the original data to the new dataframe by matching on the date and geometry, this will add the d18O and d2H values to the new dataframe 
-    # where they exist in the original dataframe
-    runs_gdf = runs_gdf.join(gdf.set_index(['Date', 'geometry'])[isoCols], on=['Date', 'geometry'], how='left')
+    # where they exist in the original dataframe. Only do this if there are isotope columns specified in the arguments, otherwise skip this step.
+    if isoCols is not None:
+        runs_gdf = runs_gdf.join(gdf.set_index(['Date', 'geometry'])[isoCols], on=['Date', 'geometry'], how='left')
 
     # Add the KPN data to the dataframe
     runs_gdf = addKPN(runs_gdf, dir=os.path.join('Data', 'KPN'))
@@ -372,5 +378,5 @@ if __name__ == "__main__":
     # Add Altitude data to the dataframe by joining on the geometry column
     runs_gdf = runs_gdf.join(gdf_unique.set_index('geometry')['Alt'], on='geometry', how='left')
 
-    # Save the new dataframe to a new file in the same directory as the original file, with the name 'filled_data.csv'
-    runs_gdf.to_csv(os.path.join(dir_path, 'filled_data.csv'), index=False)
+    # Save the new dataframe to a new file in the same directory as the original file, with the name input_data.csv
+    runs_gdf.to_csv(os.path.join(dir_path, 'input_data.csv'), index=False)
