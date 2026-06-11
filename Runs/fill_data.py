@@ -365,13 +365,13 @@ if __name__ == "__main__":
         runs_gdf = runs_gdf.join(gdf.set_index(['Date', 'geometry'])[isoCols], on=['Date', 'geometry'], how='left')
 
     # Add the KPN data to the dataframe
-    runs_gdf = addKPN(runs_gdf, dir=os.path.join('Data', 'KPN'))
+    runs_gdf = addKPN(runs_gdf, dir=os.path.join('..', 'Data', 'KPN'))
 
     # Add the teleconnection indices to the dataframe
-    runs_gdf = addTeleconnectionData(runs_gdf, dir=os.path.join('Data', 'Teleconnection_Indices', 'teleconnection_indices.csv'))
+    runs_gdf = addTeleconnectionData(runs_gdf, dir=os.path.join('..', 'Data', 'Teleconnection_Indices', 'teleconnection_indices.csv'))
 
     # Add the climate data to the dataframe
-    ds = read_climate_data(dir_path=os.path.join('Data', 'HydroGFD', 'data_files'))
+    ds = read_climate_data(dir_path=os.path.join('..', 'Data', 'HydroGFD', 'data_files'))
     runs_gdf['Temperature'] = attach_nearest_value_vectorized(ds, runs_gdf, var='tasAdjust')
     runs_gdf['Precipitation'] = attach_nearest_value_vectorized(ds, runs_gdf, var='prAdjust')
 
