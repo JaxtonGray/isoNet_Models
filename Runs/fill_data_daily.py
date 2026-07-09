@@ -406,5 +406,8 @@ if __name__ == "__main__":
     # Add Altitude data to the dataframe by joining on the geometry column
     runs_gdf = runs_gdf.join(gdf_unique.set_index('geometry')['Alt'], on='geometry', how='left')
 
-    # Save the new dataframe to a new file in the same directory as the original file, with the name input_data.csv
-    runs_gdf.to_csv(os.path.join(dir_path, 'input_data.csv'), index=False)
+    # Drop the geometry column, as it is no longer needed
+    runs_gdf.drop(columns=['geometry'], inplace=True)
+
+    # Save the new dataframe to a new file in the same directory as the original file, with the name input_data_daily.csv
+    runs_gdf.to_csv(os.path.join(dir_path, 'input_data_daily.csv'), index=False)
