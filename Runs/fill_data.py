@@ -14,7 +14,7 @@
 # 4. Altitude (float)
 # 5. Teleconnection Indices (ENSO, NAO) (float)
 
-import os, sys, glob, pathlib, datetime
+import os, sys, glob, pathlib, datetime, logging
 import pandas as pd
 import geopandas as gpd
 import numpy as np
@@ -23,6 +23,14 @@ import rasterio as rio
 from scipy.ndimage import distance_transform_edt
 from itertools import product
 
+# Setup Logger
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+fh = logging.FileHandler(os.path.join('..', 'Logs', 'FillData.log'), mode='w')
+formatter = logging.Formatter('%(asctime)s - %(module)s - %(levelname)s - Line: %(lineno)d - Message: %(message)s')
+fh.setFormatter(formatter)
+logger.addHandler(fh)
+
 # Climate Data Import
 # 1. Open all NetCDF files and combine them into a single xarray dataset
 # 2. Function that will find the nearest valid grid point for a given point and time within a specified buffer
@@ -30,11 +38,23 @@ from itertools import product
 
 # Read in the temperature and precipitation data from the appropriate files
 def read_climate_data(dir_path: str = os.path.join('..', 'Data', 'HydroGFD', 'data_files')) -> xr.Dataset:
-    # Grab all the NetCDF files in the directory
-    files = glob.glob(os.path.join(dir_path, '*.nc'))
+    logger.info('Load in Climate Data')
+    files = sorted(glob.glob(os.path.join(dir_path, '*.nc')))
 
-    # Open each file then combine them into a single dataset (assuming they have the same variables and dimensions)
-    ds = xr.combine_by_coords([xr.open_dataset(file, engine = 'h5netcdf') for file in files], combine_attrs = 'override')
+    datasets = [
+    xr.open_dataset(
+        f,
+        engine="netcdf4",
+        chunks={"time":365}
+    )
+    for f in files
+    ]
+
+    ds = xr.combine_by_coords(
+        datasets,
+        combine_attrs="override"
+    )
+
     return ds
 
 # Function to find the nearest valid grid point for a given point and time within a specified buffer 
@@ -84,12 +104,12 @@ def attach_nearest_value_vectorized(ds: xr.Dataset,
     lons_da = xr.DataArray(df['Lon'].values, dims='points')
 
     # Use xarray's sel method with vectorized indexing to get the nearest values for all rows at once
-    nearest_values = ds.sel(
+    nearest_values = ds[var].sel(
         time=times_da,
         lat=lats_da,
         lon=lons_da,
         method='nearest'
-    )[var]
+    )
 
     # If any values are NaN, apply the find_nearest_valid_grid function to those specific rows
     for i, value in enumerate(nearest_values.values):
@@ -98,7 +118,7 @@ def attach_nearest_value_vectorized(ds: xr.Dataset,
             time = df.iloc[i]['Date'].strftime('%Y-%m-%d')
             nearest_values.values[i] = find_nearest_valid_grid_xarrayds(ds, point, time, var)
 
-    return nearest_values
+    return nearest_values.values
 # End of Climate Data Import
 
 
@@ -112,6 +132,7 @@ def attach_nearest_value_vectorized(ds: xr.Dataset,
 
 # Read in the KPN rasters
 def readKPNRasters(dir=os.path.join('..', 'Data', 'KPN')):
+    logger.info('Load in the KPN Data')
     # Create a dictionary to hold the rasters
     folders = glob.glob(os.path.join(dir, '*')) # Get all the files in the current directory
     rasters = {}
@@ -253,6 +274,7 @@ def addKPN(df, dir=os.path.join('..', 'Data', 'KPN')):
 
 # Function to read in the data from the file
 def read_data(file_path: str) -> gpd.GeoDataFrame:
+    logger.info('Load in saved data')
     try:
         data = pd.read_csv(file_path)
         data['Date'] = pd.to_datetime(data['Date'], utc=True)
@@ -297,6 +319,7 @@ def grab_altitude(gdf_unique: gpd.GeoDataFrame, ds: xr.Dataset, var_name: str) -
 # Function to add teleconnection indices to the dataframe
 # Open the dataset containing the teleconnection indices
 def openTeleInd(dir=os.path.join('Teleconnection_Indices', 'teleconnection_indices.csv')):
+    logger.info('Read in Teleconnection Indices')
     tele_df = pd.read_csv(dir)
     return tele_df
 
@@ -329,6 +352,7 @@ if __name__ == "__main__":
     # Add a check to see if the altitude data has already been pulled for the unique coordinates, if so, use that file instead of pulling the data again
     altitudes_path = os.path.join(dir_path, 'altitudes.geojson')
     if not os.path.exists(altitudes_path):
+        logger.info('Retreive Altitude data')
         unique_gdf = get_unique_coordinates(gdf)
 
         # Open the dataset from EarthData
@@ -346,6 +370,7 @@ if __name__ == "__main__":
         # Save to the directory (NOTE: Add a check for later to see if one already exists and use that instead)
         gdf_unique.to_file(os.path.join(dir_path, 'altitudes.geojson'), driver='GeoJSON')
     else:
+        logger.info('Load in saved Altitude data')
         gdf_unique = gpd.read_file(altitudes_path)
 
     # Go through and grab the min and max range of date values from the original dataframe
@@ -362,6 +387,7 @@ if __name__ == "__main__":
     # Attach the original data to the new dataframe by matching on the date and geometry, this will add the d18O and d2H values to the new dataframe 
     # where they exist in the original dataframe. Only do this if there are isotope columns specified in the arguments, otherwise skip this step.
     if isoCols is not None:
+        logger.info('Attach original isotope values')
         runs_gdf = runs_gdf.join(gdf.set_index(['Date', 'geometry'])[isoCols], on=['Date', 'geometry'], how='left')
 
     # Add the KPN data to the dataframe
@@ -372,7 +398,9 @@ if __name__ == "__main__":
 
     # Add the climate data to the dataframe
     ds = read_climate_data(dir_path=os.path.join('..', 'Data', 'HydroGFD', 'data_files'))
+    logger.debug('Attach Temperature')
     runs_gdf['Temperature'] = attach_nearest_value_vectorized(ds, runs_gdf, var='tasAdjust')
+    logger.debug('Attach Precipitation')
     runs_gdf['Precipitation'] = attach_nearest_value_vectorized(ds, runs_gdf, var='prAdjust')
 
     # Add Altitude data to the dataframe by joining on the geometry column
