@@ -388,7 +388,7 @@ if __name__ == "__main__":
 
     # Go through and grab the min and max range of date values from the original dataframe
     # Then create a new dataframe with all the combinations of unique coordinates and dates within that range
-    startDate, endDate = pd.to_datetime(setup_data['Start Date']), pd.to_datetime(setup_data['End Date'])
+    startDate, endDate = pd.to_datetime(setup_data['Start Date'], utc=True), pd.to_datetime(setup_data['End Date'], utc=True)
     date_range = pd.date_range(start=startDate, end=endDate, freq='MS') # Monthly frequency, start of month
     mid_range = date_range + pd.DateOffset(days=14) # Add 14 days to the start of the month to get the middle of the month (15th of the month)
     runs_df = pd.DataFrame(list(product(mid_range, gdf_unique.geometry)), columns=['Date', 'geometry'])
