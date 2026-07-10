@@ -30,4 +30,4 @@ pip install --no-index pandas geopandas numpy scipy rasterio xarray dask netcdf4
 pip list | grep h5
 
 # Run the training script
-python fill_data_monthly.py LeaveOut/DataLeaveOut.csv O18 H2
+python fill_data_monthly.py LeaveOut/DataLeaveOut.csv
