@@ -1,5 +1,5 @@
 Name: Leave_Out_Points
-dO18 Col: O18
+dO18: O18
 dH2: H2
 Start Date: 2000-01-01
 End Date: 2010-12-31
