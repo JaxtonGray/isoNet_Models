@@ -335,18 +335,31 @@ def addTeleconnectionData(df, dir=os.path.join('..', 'Data', 'Teleconnection_Ind
     df.drop(columns=['Year', 'Month'], inplace=True)
 
     return df
-    
+
+def read_setup_data(dir_path: str) -> dict:
+    # File will be labeled as setup.txt and will contain the following information:
+    # Column names for the isotope data, if they exist. If they do not exist setup N/A
+    # Start and end date for the data
+    file_path = os.path.join(dir_path, 'setup.txt')
+
+    with open(file_path, 'r') as f:
+        lines = f.readlines()
+        lines = [line.strip() for line in lines]
+        setup_data = {}
+        for line in lines:
+            key, value = line.split(':')
+            setup_data[key.strip()] = value.strip()
+
+    return setup_data
 
 if __name__ == "__main__":
     # Read in the necessary data
     file_path = sys.argv[1]
 
-    # Check to see if there is more than one argument (if yes, the following arguments are the isotope columns)
-    isoCols = None
-    if len(sys.argv) > 2:
-        isoCols = sys.argv[2:]
-   
     dir_path = os.path.dirname(file_path)
+
+    setup_data = read_setup_data(dir_path)
+   
     gdf = read_data(file_path)
     
     # Add a check to see if the altitude data has already been pulled for the unique coordinates, if so, use that file instead of pulling the data again
@@ -375,8 +388,8 @@ if __name__ == "__main__":
 
     # Go through and grab the min and max range of date values from the original dataframe
     # Then create a new dataframe with all the combinations of unique coordinates and dates within that range
-    min_date, max_date = gdf['Date'].min(), gdf['Date'].max()
-    date_range = pd.date_range(start=min_date, end=max_date, freq='MS') # Monthly frequency, start of month
+    startDate, endDate = pd.to_datetime(setup_data['Start Date']), pd.to_datetime(setup_data['End Date'])
+    date_range = pd.date_range(start=startDate, end=endDate, freq='MS') # Monthly frequency, start of month
     mid_range = date_range + pd.DateOffset(days=14) # Add 14 days to the start of the month to get the middle of the month (15th of the month)
     runs_df = pd.DataFrame(list(product(mid_range, gdf_unique.geometry)), columns=['Date', 'geometry'])
     runs_gdf = gpd.GeoDataFrame(runs_df, geometry='geometry', crs=gdf.crs)
@@ -385,11 +398,20 @@ if __name__ == "__main__":
     runs_gdf['Lat'] = runs_gdf.geometry.y
     runs_gdf['Lon'] = runs_gdf.geometry.x
 
+    isoCols = [setup_data['dO18'], setup_data['dH2']]
     # Attach the original data to the new dataframe by matching on the date and geometry, this will add the d18O and d2H values to the new dataframe 
     # where they exist in the original dataframe. Only do this if there are isotope columns specified in the arguments, otherwise skip this step.
-    if isoCols is not None:
+    if isoCols[0] != None or isoCols[1] != None:
         logger.info('Attach original isotope values')
         runs_gdf = runs_gdf.join(gdf.set_index(['Date', 'geometry'])[isoCols], on=['Date', 'geometry'], how='left')
+    elif isoCols[0] == None and isoCols[1] != None:
+        logger.info('Attach original d2H values')
+        runs_gdf = runs_gdf.join(gdf.set_index(['Date', 'geometry'])[isoCols[1]], on=['Date', 'geometry'], how='left')
+    elif isoCols[0] != None and isoCols[1] == None:
+        logger.info('Attach original d18O values')
+        runs_gdf = runs_gdf.join(gdf.set_index(['Date', 'geometry'])[isoCols[0]], on=['Date', 'geometry'], how='left')
+    else:
+        logger.info('No isotope columns specified, skipping attachment of original isotope values')
 
     # Add the KPN data to the dataframe
     runs_gdf = addKPN(runs_gdf, dir=os.path.join('..', 'Data', 'KPN'))
@@ -411,4 +433,4 @@ if __name__ == "__main__":
     runs_gdf.drop(columns=['geometry'], inplace=True)
 
     # Save the new dataframe to a new file in the same directory as the original file, with the name input_data.csv
-    runs_gdf.to_csv(os.path.join(dir_path, 'input_data_monthly.csv'), index=False)
+    runs_gdf.to_csv(os.path.join(dir_path, f'{setup_data["Name"]}_{startDate}_{endDate}_monthly.csv'), index=False)
