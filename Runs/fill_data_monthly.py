@@ -14,7 +14,7 @@
 # 4. Altitude (float)
 # 5. Teleconnection Indices (ENSO, NAO) (float)
 
-import os, sys, glob, pathlib, datetime, logging
+import os, sys, glob, pathlib, datetime, logging, argparse
 import pandas as pd
 import geopandas as gpd
 import numpy as np
@@ -22,6 +22,12 @@ import xarray as xr
 import rasterio as rio
 from scipy.ndimage import distance_transform_edt
 from itertools import product
+
+# Set up the argument parser
+parser = argparse.ArgumentParser(description='Fill in missing data for runs with the different models.')
+parser.add_argument('file_path', type=str, help='The file path to the input CSV')
+parser.add_argument('--batch', type=str, help='Run in batch mode (takes in two years instead of what is provided in setup file)')
+args = parser.parse_args()
 
 # Setup Logger
 logger = logging.getLogger(__name__)
@@ -349,12 +355,21 @@ def read_setup_data(dir_path: str) -> dict:
         for line in lines:
             key, value = line.split(':')
             setup_data[key.strip()] = value.strip()
+    
+    if args.batch:
+        # If running in batch mode, override the start and end dates to be the values provided in arguments
+        dates = args.batch.split('-')
+        start_date = pd.to_datetime(f'{dates[0]}-01-01', utc=True)
+        end_date = pd.to_datetime(f'{dates[1]}-12-31', utc=True)
+        setup_data['Start Date'] = start_date
+        setup_data['End Date'] = end_date
 
     return setup_data
 
 if __name__ == "__main__":
+
     # Read in the necessary data
-    file_path = sys.argv[1]
+    file_path = args.file_path
 
     dir_path = os.path.dirname(file_path)
 
