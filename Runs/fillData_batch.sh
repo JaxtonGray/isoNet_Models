@@ -9,7 +9,7 @@
 #SBATCH --mail-user=jaxton.gray@ucalgary.ca
 #SBATCH --mail-type=BEGIN,END,FAIL
 #SBATCH --array=1-7
-#SBATCH --output=../SLURM_Output/fill_data_%j.out
+#SBATCH --output=../SLURM_Output/fill_data_%A_%a.out
 
 # !/bin/bash
 # This section will grab the years to run
