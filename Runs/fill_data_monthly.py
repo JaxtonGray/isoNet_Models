@@ -448,4 +448,4 @@ if __name__ == "__main__":
     runs_gdf.drop(columns=['geometry'], inplace=True)
 
     # Save the new dataframe to a new file in the same directory as the original file, with the name input_data.csv
-    runs_gdf.to_csv(os.path.join(dir_path, f'{setup_data["Name"]}_{startDate.strftime("%Y-%m-%d")}_{endDate.strftime("%Y-%m-%d")}_monthly.csv'), index=False)
+    runs_gdf.to_csv(os.path.join(dir_path, f'{setup_data["Name"]}_{startDate.strftime("%Y")}_{endDate.strftime("%Y")}_monthly.csv'), index=False)
