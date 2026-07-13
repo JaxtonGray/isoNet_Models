@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --account=def-stadnykt-ab
-#SBATCH --job-name=FillData
+#SBATCH --job-name=FillData_Batch
 #SBATCH --nodes=1
 #SBATCH --gpus-per-node=h100:1
 #SBATCH --cpus-per-task=16

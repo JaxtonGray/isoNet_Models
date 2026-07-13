@@ -363,6 +363,9 @@ def read_setup_data(dir_path: str) -> dict:
         end_date = pd.to_datetime(f'{dates[1]}-12-31', utc=True)
         setup_data['Start Date'] = start_date
         setup_data['End Date'] = end_date
+        setup_data['Batch'] = True
+    else:
+        setup_data['Batch'] = False
 
     return setup_data
 
@@ -447,5 +450,9 @@ if __name__ == "__main__":
     # Drop the geometry column, as it is no longer needed
     runs_gdf.drop(columns=['geometry'], inplace=True)
 
+    if setup_data['Batch']:
+        batch_dir = os.path.join(dir_path, 'Batch')
+        os.makedirs(batch_dir, exist_ok=True)
+
     # Save the new dataframe to a new file in the same directory as the original file, with the name input_data.csv
-    runs_gdf.to_csv(os.path.join(dir_path, f'{setup_data["Name"]}_{startDate.strftime("%Y")}_{endDate.strftime("%Y")}_monthly.csv'), index=False)
+    runs_gdf.to_csv(os.path.join(batch_dir, f'{setup_data["Name"]}_{startDate.strftime("%Y")}_{endDate.strftime("%Y")}_monthly.csv'), index=False)
