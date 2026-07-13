@@ -451,7 +451,7 @@ if __name__ == "__main__":
     runs_gdf.drop(columns=['geometry'], inplace=True)
 
     if setup_data['Batch']:
-        batch_dir = os.path.join(dir_path, 'Batch')
+        batch_dir = os.path.join(dir_path, 'batch_files')
         os.makedirs(batch_dir, exist_ok=True)
         runs_gdf.to_csv(os.path.join(batch_dir, f'{setup_data["Name"]}_{startDate.strftime("%Y")}_{endDate.strftime("%Y")}_monthly.csv'), index=False)
     else:
