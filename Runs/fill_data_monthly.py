@@ -440,9 +440,9 @@ if __name__ == "__main__":
     # Add the climate data to the dataframe
     ds = read_climate_data(dir_path=os.path.join('..', 'Data', 'HydroGFD', 'data_files'))
     logger.debug('Attach Temperature')
-    runs_gdf['Temperature'] = attach_nearest_value_vectorized(ds, runs_gdf, var='tasAdjust')
+    runs_gdf['Temp'] = attach_nearest_value_vectorized(ds, runs_gdf, var='tasAdjust')
     logger.debug('Attach Precipitation')
-    runs_gdf['Precipitation'] = attach_nearest_value_vectorized(ds, runs_gdf, var='prAdjust')
+    runs_gdf['Precip'] = attach_nearest_value_vectorized(ds, runs_gdf, var='prAdjust')
 
     # Add Altitude data to the dataframe by joining on the geometry column
     runs_gdf = runs_gdf.join(gdf_unique.set_index('geometry')['Alt'], on='geometry', how='left')
