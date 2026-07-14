@@ -17,6 +17,7 @@
 import os, sys, glob, pathlib, datetime, logging, argparse
 import pandas as pd
 import geopandas as gpd
+from shapely.geometry import box
 import numpy as np
 import xarray as xr
 import rasterio as rio
@@ -27,6 +28,7 @@ from itertools import product
 parser = argparse.ArgumentParser(description='Fill in missing data for runs with the different models.')
 parser.add_argument('file_path', type=str, help='The file path to the input CSV')
 parser.add_argument('--batch', type=str, help='Run in batch mode (takes in two years instead of what is provided in setup file)')
+parser.add_argument('--batch_global', type=str, help='Run in batch modewith a global mode setup')
 args = parser.parse_args()
 
 # Setup Logger
@@ -342,6 +344,17 @@ def addTeleconnectionData(df, dir=os.path.join('..', 'Data', 'Teleconnection_Ind
 
     return df
 
+def batch_global_setup(global_path: str, index: int) -> gpd.GeoDataFrame:
+    # Read in the setup file from the global directory
+    file_path = os.path.join(global_path, 'adaptive_boxes.geojson')
+    adaptive_boxes = gpd.read_file(file_path)
+    #adaptive_boxes = pd.read_csv(file_path)
+    #adaptive_boxes['bound_box'] = adaptive_boxes.apply(lambda row: box(row['min_lon'], row['min_lat'], row['max_lon'], row['max_lat']), axis=1)
+    #adaptive_boxes = gpd.GeoDataFrame(adaptive_boxes, geometry='geometry', crs='EPSG:4326')
+
+    # Grab the row that matches the index and year
+    return adaptive_boxes.iloc[index]
+
 def read_setup_data(dir_path: str) -> dict:
     # File will be labeled as setup.txt and will contain the following information:
     # Column names for the isotope data, if they exist. If they do not exist setup N/A
@@ -363,22 +376,32 @@ def read_setup_data(dir_path: str) -> dict:
         end_date = pd.to_datetime(f'{dates[1]}-12-31', utc=True)
         setup_data['Start Date'] = start_date
         setup_data['End Date'] = end_date
-        setup_data['Batch'] = True
-    else:
-        setup_data['Batch'] = False
+
+    elif args.batch_global:
+        # If running in batch_global mode, this will read setup document from the global directory
+        # Setup file contains boxes for data to be contained in separated into by geography
+        index, year = args.batch_global.split(' ')
+        bbox = batch_global_setup(global_path='Global_Modelling', index=int(index))
+        setup_data['Start Date'] = pd.to_datetime(f'{year}-01-01', utc=True)
+        setup_data['End Date'] = pd.to_datetime(f'{year}-12-31', utc=True)
+        setup_data['bbox'] = bbox
+
 
     return setup_data
 
 if __name__ == "__main__":
-
     # Read in the necessary data
     file_path = args.file_path
 
     dir_path = os.path.dirname(file_path)
 
     setup_data = read_setup_data(dir_path)
-   
-    gdf = read_data(file_path)
+
+    if args.batch_global:
+        allPoints = gpd.read_file(file_path)
+        gdf = allPoints[allPoints.geometry.intersects(setup_data['bbox'].geometry)]
+    else:
+        gdf = read_data(file_path)
     
     # Add a check to see if the altitude data has already been pulled for the unique coordinates, if so, use that file instead of pulling the data again
     altitudes_path = os.path.join(dir_path, 'altitudes.geojson')
@@ -447,13 +470,20 @@ if __name__ == "__main__":
     # Add Altitude data to the dataframe by joining on the geometry column
     runs_gdf = runs_gdf.join(gdf_unique.set_index('geometry')['Alt'], on='geometry', how='left')
 
+    # ADD CHECK FOR GLOBAL BATCH
+
     # Drop the geometry column, as it is no longer needed
     runs_gdf.drop(columns=['geometry'], inplace=True)
 
-    if setup_data['Batch']:
+    if args.batch:
         batch_dir = os.path.join(dir_path, 'batch_files')
         os.makedirs(batch_dir, exist_ok=True)
         runs_gdf.to_csv(os.path.join(batch_dir, f'{setup_data["Name"]}_{startDate.strftime("%Y")}_{endDate.strftime("%Y")}_monthly.csv'), index=False)
+    elif args.batch_global:
+        batch_dir = os.path.join(dir_path, 'batch_files')
+        os.makedirs(batch_dir, exist_ok=True)
+        minx, miny, maxx, maxy = setup_data['bbox'].geometry.bounds
+        runs_gdf.to_csv(os.path.join(batch_dir, f'{setup_data["Name"]}_{setup_data['Start Date'].strftime("%Y")}_({minx:.2f}_{miny:.2f}_{maxx:.2f}_{maxy:.2f})_monthly.csv'), index=False)
     else:
         # Save the new dataframe to a new file in the same directory as the original file, with the name input_data.csv
         runs_gdf.to_csv(os.path.join(dir_path, f'{setup_data["Name"]}_{startDate.strftime("%Y")}_{endDate.strftime("%Y")}_monthly.csv'), index=False)
