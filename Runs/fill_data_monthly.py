@@ -363,16 +363,19 @@ def read_setup_data(dir_path: str) -> dict:
     # File will be labeled as setup.txt and will contain the following information:
     # Column names for the isotope data, if they exist. If they do not exist setup N/A
     # Start and end date for the data
-    file_path = os.path.join(dir_path, 'setup.txt')
-    logger.debug(f'Reading setup data from {file_path}')
+    if args.batch_global == None:
+        # No need for a setup file in the global directory, as the setup data will be read in from the adaptive_boxes.geojson file
+        # So only read in the setup file if not running in batch_global mode
+        file_path = os.path.join(dir_path, 'setup.txt')
+        logger.debug(f'Reading setup data from {file_path}')
 
-    with open(file_path, 'r') as f:
-        lines = f.readlines()
-        lines = [line.strip() for line in lines]
-        setup_data = {}
-        for line in lines:
-            key, value = line.split(':')
-            setup_data[key.strip()] = value.strip()
+        with open(file_path, 'r') as f:
+            lines = f.readlines()
+            lines = [line.strip() for line in lines]
+            setup_data = {}
+            for line in lines:
+                key, value = line.split(':')
+                setup_data[key.strip()] = value.strip()
     
     if args.batch:
         # If running in batch mode, override the start and end dates to be the values provided in arguments
