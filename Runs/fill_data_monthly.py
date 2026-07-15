@@ -390,6 +390,8 @@ def read_setup_data(dir_path: str) -> dict:
         # Setup file contains boxes for data to be contained in separated into by geography
         index, year = args.batch_global.split(' ')
         bbox = batch_global_setup(global_path='Global_Modelling', index=int(index))
+        setup_data = {} # Initialize an empty dictionary to hold the setup data
+        setup_data['Name'] = f'Global'
         setup_data['Start Date'] = pd.to_datetime(f'{year}-01-01', utc=True)
         setup_data['End Date'] = pd.to_datetime(f'{year}-12-31', utc=True)
         setup_data['bbox'] = bbox
