@@ -14,14 +14,30 @@
 # 4. Altitude (float)
 # 5. Teleconnection Indices (ENSO, NAO) (float)
 
-import os, sys, glob, pathlib, datetime
+import os, sys, glob, pathlib, datetime, logging, argparse
 import pandas as pd
 import geopandas as gpd
+from shapely.geometry import box
 import numpy as np
 import xarray as xr
 import rasterio as rio
 from scipy.ndimage import distance_transform_edt
 from itertools import product
+
+# Set up the argument parser
+parser = argparse.ArgumentParser(description='Fill in missing data for runs with the different models.')
+parser.add_argument('file_path', type=str, help='The file path to the input CSV')
+parser.add_argument('--batch', type=str, help='Run in batch mode (takes in two years instead of what is provided in setup file)')
+parser.add_argument('--batch_global', type=str, help='Run in batch modewith a global mode setup')
+args = parser.parse_args()
+
+# Setup Logger
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+fh = logging.FileHandler(os.path.join('..', 'Logs', 'FillData.log'), mode='w')
+formatter = logging.Formatter('%(asctime)s - %(module)s - %(levelname)s - Line: %(lineno)d - Message: %(message)s')
+fh.setFormatter(formatter)
+logger.addHandler(fh)
 
 # Climate Data Import
 # 1. Open all NetCDF files and combine them into a single xarray dataset
@@ -30,11 +46,23 @@ from itertools import product
 
 # Read in the temperature and precipitation data from the appropriate files
 def read_climate_data(dir_path: str = os.path.join('..', 'Data', 'HydroGFD', 'data_files')) -> xr.Dataset:
-    # Grab all the NetCDF files in the directory
-    files = glob.glob(os.path.join(dir_path, '*.nc'))
+    logger.info('Load in Climate Data')
+    files = sorted(glob.glob(os.path.join(dir_path, '*.nc')))
 
-    # Open each file then combine them into a single dataset (assuming they have the same variables and dimensions)
-    ds = xr.combine_by_coords([xr.open_dataset(file, engine = 'h5netcdf') for file in files], combine_attrs = 'override')
+    datasets = [
+    xr.open_dataset(
+        f,
+        engine="netcdf4",
+        chunks={"time":365}
+    )
+    for f in files
+    ]
+
+    ds = xr.combine_by_coords(
+        datasets,
+        combine_attrs="override"
+    )
+
     return ds
 
 # Function to find the nearest valid grid point for a given point and time within a specified buffer 
@@ -84,12 +112,12 @@ def attach_nearest_value_vectorized(ds: xr.Dataset,
     lons_da = xr.DataArray(df['Lon'].values, dims='points')
 
     # Use xarray's sel method with vectorized indexing to get the nearest values for all rows at once
-    nearest_values = ds.sel(
+    nearest_values = ds[var].sel(
         time=times_da,
         lat=lats_da,
         lon=lons_da,
         method='nearest'
-    )[var]
+    )
 
     # If any values are NaN, apply the find_nearest_valid_grid function to those specific rows
     for i, value in enumerate(nearest_values.values):
@@ -98,7 +126,7 @@ def attach_nearest_value_vectorized(ds: xr.Dataset,
             time = df.iloc[i]['Date'].strftime('%Y-%m-%d')
             nearest_values.values[i] = find_nearest_valid_grid_xarrayds(ds, point, time, var)
 
-    return nearest_values
+    return nearest_values.values
 # End of Climate Data Import
 
 
@@ -112,6 +140,7 @@ def attach_nearest_value_vectorized(ds: xr.Dataset,
 
 # Read in the KPN rasters
 def readKPNRasters(dir=os.path.join('..', 'Data', 'KPN')):
+    logger.info('Load in the KPN Data')
     # Create a dictionary to hold the rasters
     folders = glob.glob(os.path.join(dir, '*')) # Get all the files in the current directory
     rasters = {}
@@ -253,6 +282,7 @@ def addKPN(df, dir=os.path.join('..', 'Data', 'KPN')):
 
 # Function to read in the data from the file
 def read_data(file_path: str) -> gpd.GeoDataFrame:
+    logger.info('Load in saved data')
     try:
         data = pd.read_csv(file_path)
         data['Date'] = pd.to_datetime(data['Date'], utc=True)
@@ -297,6 +327,7 @@ def grab_altitude(gdf_unique: gpd.GeoDataFrame, ds: xr.Dataset, var_name: str) -
 # Function to add teleconnection indices to the dataframe
 # Open the dataset containing the teleconnection indices
 def openTeleInd(dir=os.path.join('Teleconnection_Indices', 'teleconnection_indices.csv')):
+    logger.info('Read in Teleconnection Indices')
     tele_df = pd.read_csv(dir)
     return tele_df
 
@@ -312,23 +343,70 @@ def addTeleconnectionData(df, dir=os.path.join('..', 'Data', 'Teleconnection_Ind
     df.drop(columns=['Year', 'Month'], inplace=True)
 
     return df
+
+def batch_global_setup(global_path: str, index: int) -> gpd.GeoDataFrame:
+    # Read in the setup file from the global directory
+    file_path = os.path.join(global_path, 'adaptive_boxes.geojson')
+    adaptive_boxes = gpd.read_file(file_path)
+    #adaptive_boxes = pd.read_csv(file_path)
+    #adaptive_boxes['bound_box'] = adaptive_boxes.apply(lambda row: box(row['min_lon'], row['min_lat'], row['max_lon'], row['max_lat']), axis=1)
+    #adaptive_boxes = gpd.GeoDataFrame(adaptive_boxes, geometry='geometry', crs='EPSG:4326')
+
+    # Grab the row that matches the index and year
+    return adaptive_boxes.iloc[index]
+
+def read_setup_data(dir_path: str) -> dict:
+    # File will be labeled as setup.txt and will contain the following information:
+    # Column names for the isotope data, if they exist. If they do not exist setup N/A
+    # Start and end date for the data
+    file_path = os.path.join(dir_path, 'setup.txt')
+
+    with open(file_path, 'r') as f:
+        lines = f.readlines()
+        lines = [line.strip() for line in lines]
+        setup_data = {}
+        for line in lines:
+            key, value = line.split(':')
+            setup_data[key.strip()] = value.strip()
     
+    if args.batch:
+        # If running in batch mode, override the start and end dates to be the values provided in arguments
+        dates = args.batch.split('-')
+        start_date = pd.to_datetime(f'{dates[0]}-01-01', utc=True)
+        end_date = pd.to_datetime(f'{dates[1]}-12-31', utc=True)
+        setup_data['Start Date'] = start_date
+        setup_data['End Date'] = end_date
+
+    elif args.batch_global:
+        # If running in batch_global mode, this will read setup document from the global directory
+        # Setup file contains boxes for data to be contained in separated into by geography
+        index, year = args.batch_global.split(' ')
+        bbox = batch_global_setup(global_path='Global_Modelling', index=int(index))
+        setup_data['Start Date'] = pd.to_datetime(f'{year}-01-01', utc=True)
+        setup_data['End Date'] = pd.to_datetime(f'{year}-12-31', utc=True)
+        setup_data['bbox'] = bbox
+
+
+    return setup_data
 
 if __name__ == "__main__":
     # Read in the necessary data
-    file_path = sys.argv[1]
+    file_path = args.file_path
 
-    # Check to see if there is more than one argument (if yes, the following arguments are the isotope columns)
-    isoCols = None
-    if len(sys.argv) > 2:
-        isoCols = sys.argv[2:]
-   
     dir_path = os.path.dirname(file_path)
-    gdf = read_data(file_path)
+
+    setup_data = read_setup_data(dir_path)
+
+    if args.batch_global:
+        allPoints = gpd.read_file(file_path)
+        gdf = allPoints[allPoints.geometry.intersects(setup_data['bbox'].geometry)]
+    else:
+        gdf = read_data(file_path)
     
     # Add a check to see if the altitude data has already been pulled for the unique coordinates, if so, use that file instead of pulling the data again
     altitudes_path = os.path.join(dir_path, 'altitudes.geojson')
     if not os.path.exists(altitudes_path):
+        logger.info('Retreive Altitude data')
         unique_gdf = get_unique_coordinates(gdf)
 
         # Open the dataset from EarthData
@@ -346,23 +424,35 @@ if __name__ == "__main__":
         # Save to the directory (NOTE: Add a check for later to see if one already exists and use that instead)
         gdf_unique.to_file(os.path.join(dir_path, 'altitudes.geojson'), driver='GeoJSON')
     else:
+        logger.info('Load in saved Altitude data')
         gdf_unique = gpd.read_file(altitudes_path)
 
     # Go through and grab the min and max range of date values from the original dataframe
     # Then create a new dataframe with all the combinations of unique coordinates and dates within that range
-    min_date, max_date = gdf['Date'].min(), gdf['Date'].max()
-    date_range = pd.date_range(start=min_date, end=max_date, freq='D')
-    runs_df = pd.DataFrame(list(product(date_range, gdf_unique.geometry)), columns=['Date', 'geometry'])
+    startDate, endDate = pd.to_datetime(setup_data['Start Date'], utc=True), pd.to_datetime(setup_data['End Date'], utc=True)
+    date_range = pd.date_range(start=startDate, end=endDate, freq='MS') # Monthly frequency, start of month
+    mid_range = date_range + pd.DateOffset(days=14) # Add 14 days to the start of the month to get the middle of the month (15th of the month)
+    runs_df = pd.DataFrame(list(product(mid_range, gdf_unique.geometry)), columns=['Date', 'geometry'])
     runs_gdf = gpd.GeoDataFrame(runs_df, geometry='geometry', crs=gdf.crs)
     
     # Attach the latitude and longitude to the new dataframe
     runs_gdf['Lat'] = runs_gdf.geometry.y
     runs_gdf['Lon'] = runs_gdf.geometry.x
 
+    isoCols = [setup_data['dO18'], setup_data['dH2']]
     # Attach the original data to the new dataframe by matching on the date and geometry, this will add the d18O and d2H values to the new dataframe 
     # where they exist in the original dataframe. Only do this if there are isotope columns specified in the arguments, otherwise skip this step.
-    if isoCols is not None:
+    if isoCols[0] != None or isoCols[1] != None:
+        logger.info('Attach original isotope values')
         runs_gdf = runs_gdf.join(gdf.set_index(['Date', 'geometry'])[isoCols], on=['Date', 'geometry'], how='left')
+    elif isoCols[0] == None and isoCols[1] != None:
+        logger.info('Attach original d2H values')
+        runs_gdf = runs_gdf.join(gdf.set_index(['Date', 'geometry'])[isoCols[1]], on=['Date', 'geometry'], how='left')
+    elif isoCols[0] != None and isoCols[1] == None:
+        logger.info('Attach original d18O values')
+        runs_gdf = runs_gdf.join(gdf.set_index(['Date', 'geometry'])[isoCols[0]], on=['Date', 'geometry'], how='left')
+    else:
+        logger.info('No isotope columns specified, skipping attachment of original isotope values')
 
     # Add the KPN data to the dataframe
     runs_gdf = addKPN(runs_gdf, dir=os.path.join('..', 'Data', 'KPN'))
@@ -372,11 +462,28 @@ if __name__ == "__main__":
 
     # Add the climate data to the dataframe
     ds = read_climate_data(dir_path=os.path.join('..', 'Data', 'HydroGFD', 'data_files'))
-    runs_gdf['Temperature'] = attach_nearest_value_vectorized(ds, runs_gdf, var='tasAdjust')
-    runs_gdf['Precipitation'] = attach_nearest_value_vectorized(ds, runs_gdf, var='prAdjust')
+    logger.debug('Attach Temperature')
+    runs_gdf['Temp'] = attach_nearest_value_vectorized(ds, runs_gdf, var='tasAdjust')
+    logger.debug('Attach Precipitation')
+    runs_gdf['Precip'] = attach_nearest_value_vectorized(ds, runs_gdf, var='prAdjust')
 
     # Add Altitude data to the dataframe by joining on the geometry column
     runs_gdf = runs_gdf.join(gdf_unique.set_index('geometry')['Alt'], on='geometry', how='left')
 
-    # Save the new dataframe to a new file in the same directory as the original file, with the name input_data.csv
-    runs_gdf.to_csv(os.path.join(dir_path, 'input_data.csv'), index=False)
+    # ADD CHECK FOR GLOBAL BATCH
+
+    # Drop the geometry column, as it is no longer needed
+    runs_gdf.drop(columns=['geometry'], inplace=True)
+
+    if args.batch:
+        batch_dir = os.path.join(dir_path, 'batch_files')
+        os.makedirs(batch_dir, exist_ok=True)
+        runs_gdf.to_csv(os.path.join(batch_dir, f'{setup_data["Name"]}_{startDate.strftime("%Y")}_{endDate.strftime("%Y")}_monthly.csv'), index=False)
+    elif args.batch_global:
+        batch_dir = os.path.join(dir_path, 'batch_files')
+        os.makedirs(batch_dir, exist_ok=True)
+        minx, miny, maxx, maxy = setup_data['bbox'].geometry.bounds
+        runs_gdf.to_csv(os.path.join(batch_dir, f'{setup_data["Name"]}_{setup_data['Start Date'].strftime("%Y")}_({minx:.2f}_{miny:.2f}_{maxx:.2f}_{maxy:.2f})_monthly.csv'), index=False)
+    else:
+        # Save the new dataframe to a new file in the same directory as the original file, with the name input_data.csv
+        runs_gdf.to_csv(os.path.join(dir_path, f'{setup_data["Name"]}_{startDate.strftime("%Y")}_{endDate.strftime("%Y")}_monthly.csv'), index=False)
