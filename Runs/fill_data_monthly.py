@@ -34,6 +34,10 @@ args = parser.parse_args()
 # Setup Logger
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
+
+# Set a check for the logger if in batch mode, set the logger to have a different name for the log file, otherwise use the default name
+if args.batch or args.batch_global:
+    fh = logging.FileHandler(os.path.join('..', 'Logs', f'FillData_batch_{args.batch if args.batch else args.batch_global}.log'), mode='w') 
 fh = logging.FileHandler(os.path.join('..', 'Logs', 'FillData.log'), mode='w')
 formatter = logging.Formatter('%(asctime)s - %(module)s - %(levelname)s - Line: %(lineno)d - Message: %(message)s')
 fh.setFormatter(formatter)
@@ -360,6 +364,7 @@ def read_setup_data(dir_path: str) -> dict:
     # Column names for the isotope data, if they exist. If they do not exist setup N/A
     # Start and end date for the data
     file_path = os.path.join(dir_path, 'setup.txt')
+    logger.debug(f'Reading setup data from {file_path}')
 
     with open(file_path, 'r') as f:
         lines = f.readlines()
@@ -407,6 +412,7 @@ if __name__ == "__main__":
     altitudes_path = os.path.join(dir_path, 'altitudes.geojson')
     if not os.path.exists(altitudes_path):
         logger.info('Retreive Altitude data')
+            
         unique_gdf = get_unique_coordinates(gdf)
 
         # Open the dataset from EarthData
@@ -419,10 +425,20 @@ if __name__ == "__main__":
             mask_and_scale=False,
         )
 
-        # Attach the altitude data to the unique gdf
-        gdf_unique = grab_altitude(unique_gdf, copDEM, var_name='dsm')
-        # Save to the directory (NOTE: Add a check for later to see if one already exists and use that instead)
-        gdf_unique.to_file(os.path.join(dir_path, 'altitudes.geojson'), driver='GeoJSON')
+        if args.batch_global:
+            # If running in batch_global mode, find all the alitudes for the global points then a box at a time and save them to a file for later use
+            logger.info('Grab Altitude data for global points')
+            # Grab the unique coordinates for the global points
+            unique_gdf_global = get_unique_coordinates(allPoints)
+            # Attach the altitude data to the unique gdf
+            gdf_unique_global = grab_altitude(unique_gdf_global, copDEM, var_name='dsm')
+            # Save to the directory (NOTE: Should only have to do this once)
+            gdf_unique_global.to_file(os.path.join(dir_path, 'altitudes.geojson'), driver='GeoJSON')
+        else:
+            # Attach the altitude data to the unique gdf
+            gdf_unique = grab_altitude(unique_gdf, copDEM, var_name='dsm')
+            # Save to the directory (NOTE: Add a check for later to see if one already exists and use that instead)
+            gdf_unique.to_file(os.path.join(dir_path, 'altitudes.geojson'), driver='GeoJSON')
     else:
         logger.info('Load in saved Altitude data')
         gdf_unique = gpd.read_file(altitudes_path)
