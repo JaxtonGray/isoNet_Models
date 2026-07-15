@@ -50,6 +50,7 @@ test.ipynb
 # Ignore the Combined Results, as they are too big to be stored on GitHub, can just rerun the script loadResults.py to generate them
 Results/Combined_Leave_Out_Results.csv
 Results/Combined_Test_Results.csv
+Results/leave_out_monthly.csv
 
 # Ignore any PNG files
 Results/**/*.png
