@@ -208,7 +208,17 @@ def getKPN(df, rasters):
 
         # Get the climate classification
         row, col = rasters[date][0].index(point.geometry.x, point.geometry.y)
-        kpnValue = rasters[date][1][row, col].item()
+        
+        try:
+            kpnValue = rasters[date][1][row, col].item()
+        except IndexError:
+            # Edge case where the index is out of bounds, adjust to the last valid index
+            # Check if the row index or column index is out of bounds and adjust accordingly
+            if col >= rasters[date][1].shape[1]:
+                col = rasters[date][1].shape[1] - 1
+            if row >= rasters[date][1].shape[0]:
+                row = rasters[date][1].shape[0] - 1
+            kpnValue = rasters[date][1][row, col].item()
 
         # If the value is 0, check the nearest non-zero value within a grid selection distance of 2
         if kpnValue == 0:
