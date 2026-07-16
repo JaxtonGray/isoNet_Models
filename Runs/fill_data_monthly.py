@@ -394,6 +394,8 @@ def read_setup_data(dir_path: str) -> dict:
         setup_data['Name'] = f'Global'
         setup_data['Start Date'] = pd.to_datetime(f'{year}-01-01', utc=True)
         setup_data['End Date'] = pd.to_datetime(f'{year}-12-31', utc=True)
+        setup_data['dO18'] = None
+        setup_data['dH2'] = None
         setup_data['bbox'] = bbox
 
 
