@@ -13,7 +13,12 @@
 
 # !/bin/bash
 # This section will grab the years to run
-index=$(sed -n ${SLURM_ARRAY_TASK_ID}p Global_Modelling/batch_index.txt)
+batchInfo=$(sed -n ${SLURM_ARRAY_TASK_ID}p Global_Modelling/batch_index.txt)
+
+# Split the batchInfo into index and year
+IFS=' ' read -ra arr <<< "$batchInfo"
+index=${arr[0]}
+year=${arr[1]}
 
 # Set up the environment
 module --force purge
@@ -29,4 +34,4 @@ pip install --no-index --upgrade pip
 pip install --no-index pandas geopandas numpy scipy rasterio xarray dask netcdf4
 
 # Run the training script
-python fill_data_monthly.py Global_Modelling\grid_points.geojson --batch_global "$index 2010"
+python fill_data_monthly.py Global_Modelling\grid_points.geojson --batch_global "$index $year"
