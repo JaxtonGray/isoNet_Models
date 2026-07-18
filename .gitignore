@@ -54,3 +54,6 @@ Results/leave_out_monthly.csv
 
 # Ignore any PNG files
 Results/**/*.png
+
+# Ignore batch indexing for global
+Runs/batch_indexing.ipynb
