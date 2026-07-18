@@ -34,4 +34,4 @@ pip install --no-index --upgrade pip
 pip install --no-index pandas geopandas numpy scipy rasterio xarray dask netcdf4
 
 # Run the training script
-python fill_data_monthly.py Global_Modelling\grid_points.geojson --batch_global "$index $year"
+python fill_data_monthly.py Global_Modelling/grid_points.geojson --batch_global "$index $year"
