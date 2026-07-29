@@ -458,7 +458,8 @@ if __name__ == "__main__":
             gdf_unique.to_file(os.path.join(dir_path, 'altitudes.geojson'), driver='GeoJSON')
     else:
         logger.info('Load in saved Altitude data')
-        gdf_unique = gpd.read_file(altitudes_path)
+        altitudes = gpd.read_file(altitudes_path)
+        gdf_unique = get_unique_coordinates(gdf)
 
     # Go through and grab the min and max range of date values from the original dataframe
     # Then create a new dataframe with all the combinations of unique coordinates and dates within that range
@@ -501,7 +502,7 @@ if __name__ == "__main__":
     runs_gdf['Precip'] = attach_nearest_value_vectorized(ds, runs_gdf, var='prAdjust')
 
     # Add Altitude data to the dataframe by joining on the geometry column
-    runs_gdf = runs_gdf.join(gdf_unique.set_index('geometry')['Alt'], on='geometry', how='left')
+    runs_gdf = runs_gdf.join(altitudes.set_index('geometry')['Alt'], on='geometry', how='left')
 
     # ADD CHECK FOR GLOBAL BATCH
 
