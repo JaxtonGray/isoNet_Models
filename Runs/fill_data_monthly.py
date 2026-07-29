@@ -425,6 +425,7 @@ if __name__ == "__main__":
     else:
         gdf = read_data(file_path)
     
+    print("Read in altitude data")
     # Add a check to see if the altitude data has already been pulled for the unique coordinates, if so, use that file instead of pulling the data again
     altitudes_path = os.path.join(dir_path, 'altitudes.geojson')
     if not os.path.exists(altitudes_path):
@@ -471,6 +472,7 @@ if __name__ == "__main__":
     # Attach the latitude and longitude to the new dataframe
     runs_gdf['Lat'] = runs_gdf.geometry.y
     runs_gdf['Lon'] = runs_gdf.geometry.x
+    print('Create runs gdf')
 
     isoCols = [setup_data['dO18'], setup_data['dH2']]
     # Attach the original data to the new dataframe by matching on the date and geometry, this will add the d18O and d2H values to the new dataframe 
@@ -488,15 +490,19 @@ if __name__ == "__main__":
         logger.info('No isotope columns specified, skipping attachment of original isotope values')
 
     # Add the KPN data to the dataframe
+    print('ADd KPN')
     runs_gdf = addKPN(runs_gdf, dir=os.path.join('..', 'Data', 'KPN'))
 
     # Add the teleconnection indices to the dataframe
+    print('Add teleconnections')
     runs_gdf = addTeleconnectionData(runs_gdf, dir=os.path.join('..', 'Data', 'Teleconnection_Indices', 'teleconnection_indices.csv'))
 
     # Add the climate data to the dataframe
     ds = read_climate_data(dir_path=os.path.join('..', 'Data', 'HydroGFD', 'data_files'))
     logger.debug('Attach Temperature')
+    print('Add temperature')
     runs_gdf['Temp'] = attach_nearest_value_vectorized(ds, runs_gdf, var='tasAdjust')
+    print('Add precipitation')
     logger.debug('Attach Precipitation')
     runs_gdf['Precip'] = attach_nearest_value_vectorized(ds, runs_gdf, var='prAdjust')
 
@@ -508,6 +514,7 @@ if __name__ == "__main__":
     # Drop the geometry column, as it is no longer needed
     runs_gdf.drop(columns=['geometry'], inplace=True)
 
+    print('Save file')
     if args.batch:
         batch_dir = os.path.join(dir_path, 'batch_files')
         os.makedirs(batch_dir, exist_ok=True)
