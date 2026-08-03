@@ -1,14 +1,23 @@
 # This script will be used to attach ERA5 data to any values in the Antarctica dataset. It will be used to test the process of attaching ERA5 data to the Antarctica dataset, and to ensure that the process is working correctly.
-import os
+import os, argparse
 import xarray as xr
 import pandas as pd
 import geopandas as gpd
 import numpy as np
 
+
+# Set up the argument parser to allow for command line arguments
+parser = argparse.ArgumentParser(description='Attach ERA5 data to Antarctica dataset.')
+parser.add_argument('path', type=str, help='Path to data that will be used to attach ERA5 data to')
+args = parser.parse_args()
+
 # This function will read in the total original dataset and find only the Antarctica data points
 # Defined here as any data point with a latitude less than or equal to -60 degrees.
-def read_antartica_data(file_path):
-    df = pd.read_csv(file_path)
+def read_antartica_data(file_path, isCSV=True):
+    if isCSV:
+        df = pd.read_csv(file_path)
+    else:
+        df = gpd.read_file(file_path)
     df['Date'] = pd.to_datetime(df['Date'], utc=True)
     gdf = gpd.GeoDataFrame(df, geometry=gpd.points_from_xy(df.Lon, df.Lat), crs='EPSG:4326')
     gdf_ant = gdf[gdf['Lat'] <= -60].reset_index(drop=True)
@@ -61,8 +70,11 @@ if __name__ == "__main__":
             engine="zarr",
         )
 
-    # Read in the Antarctica dataset
-    gdf_ant = read_antartica_data(os.path.join('..', 'GNIP', 'GNIP_Data (2025-07-22).csv'))
+    # Check if args.path is a GeoJson or CSV file, and read in the data accordingly
+    if args.path.endswith('.geojson'):
+        gdf_ant = read_antartica_data(args.path, isCSV=False)
+    else:
+        gdf_ant = read_antartica_data(args.path, isCSV=True)
 
     # Cycle through each row in the Antarctica dataset and attach the corresponding ERA5 data
     for index, row in gdf_ant.iterrows():
@@ -75,6 +87,13 @@ if __name__ == "__main__":
         # Attach the ERA5 data to the Antarctica dataset
         for var, value in era5_data.items():
             gdf_ant.at[index, var] = value
+
+    # Detrermine new file name based on the original file name
+    original_file_name = os.path.basename(args.path)
+    newFile_name = f'ERA5_{original_file_name}'
     
     # Save the updated Antarctica dataset with ERA5 data attached
-    gdf_ant.to_csv('GNIP_With_ERA5.csv', index=False)
+    if args.path.endswith('.geojson'):
+        gdf_ant.to_file(os.path.join(os.path.dirname(args.path), newFile_name), driver='GeoJSON')
+    else:
+        gdf_ant.to_csv(os.path.join(os.path.dirname(args.path), newFile_name), index=False)
