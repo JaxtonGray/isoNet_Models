@@ -19,4 +19,4 @@ pip install --no-index xarray dask geopandas requests aiohttp h5netcdf netcdf4 m
 pip install --no-index pandas
 
 # Run the script
-python antarctica_ERA5.py ../../Runs/Global_Modelling/grid_points.geojson
+python antarctica_ERA5.py ../../Runs/Global_Modelling/grid_points_runs.geojson
