@@ -4,6 +4,7 @@ import xarray as xr
 import pandas as pd
 import geopandas as gpd
 import numpy as np
+import zarr.core.dtype.wrapper as zarr_dtype_wrapper
 
 
 # Set up the argument parser to allow for command line arguments
@@ -63,12 +64,15 @@ def get_era5_data(lat, lon, date, ds, variable=['t2m', 'tp']):
 if __name__ == "__main__":
     # First, we will read in the ERA5 data. This will be done using the earthdata.destine API
     # Which requires an account and an API key. Follow their instructions to set up an account and obtain an API key.
-    ds = xr.open_dataset(
-            "https://data.earthdatahub.destine.eu/era5/reanalysis-era5-single-levels-v0.zarr",
-            storage_options={"client_kwargs":{"trust_env":True}},
-            chunks={},
-            engine="zarr",
-        )
+    if not hasattr(zarr_dtype_wrapper.ZDType, "value"):
+    zarr_dtype_wrapper.ZDType.value = property(lambda self: self.to_native_dtype())
+    ds = xr.open_dataset(    
+    "https://data.earthdatahub.destine.eu/era5/era5-single-levels-atmosphere-v0.zarr",    
+    storage_options={"client_kwargs":{"trust_env":True}}    ,
+    chunks={    },
+    engine="z
+    r",
+)
 
     # Check if args.path is a GeoJson or CSV file, and read in the data accordingly
     if args.path.endswith('.geojson'):
