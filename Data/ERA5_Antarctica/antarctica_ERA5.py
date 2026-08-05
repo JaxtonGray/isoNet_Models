@@ -65,14 +65,14 @@ if __name__ == "__main__":
     # First, we will read in the ERA5 data. This will be done using the earthdata.destine API
     # Which requires an account and an API key. Follow their instructions to set up an account and obtain an API key.
     if not hasattr(zarr_dtype_wrapper.ZDType, "value"):
-    zarr_dtype_wrapper.ZDType.value = property(lambda self: self.to_native_dtype())
-    ds = xr.open_dataset(    
-    "https://data.earthdatahub.destine.eu/era5/era5-single-levels-atmosphere-v0.zarr",    
-    storage_options={"client_kwargs":{"trust_env":True}}    ,
-    chunks={    },
-    engine="z
-    r",
-)
+        zarr_dtype_wrapper.ZDType.value = property(lambda self: self.to_native_dtype())
+    ds =xr.open_dataset(
+        "https://data.earthdatahub.destine.eu/era5/era5-single-levels-atmosphere-v0.zarr",
+        storage_options={"client_kwargs":{"trust_env":True}},
+        chunks={},
+        engine="zarr",
+    )
+
 
     # Check if args.path is a GeoJson or CSV file, and read in the data accordingly
     if args.path.endswith('.geojson'):
