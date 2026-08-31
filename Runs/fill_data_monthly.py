@@ -537,7 +537,6 @@ if __name__ == "__main__":
     logger.debug('Attach Precipitation')
     runs_gdf['Precip'] = attach_nearest_value_vectorized(ds, runs_gdf, var='prAdjust')
     logger.debug('Attach ERA5 Antarctica Data')
-    runs_gdf = fillAntarcticaData(runs_gdf, 'Precip', antDF_Path=os.path.join('..', 'Data', 'ERA5_Antarctica', 'GNIP_With_ERA5.csv'))
 
     # Add Altitude data to the dataframe by joining on the geometry column
     runs_gdf = runs_gdf.join(altitudes.set_index('geometry')['Alt'], on='geometry', how='left')
